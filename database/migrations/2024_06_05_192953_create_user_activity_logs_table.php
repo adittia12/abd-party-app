@@ -11,19 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user_activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('user_id')->index();
-            $table->string('email')->unique();
-            $table->string('join_date')->nullable();
+            $table->string('user_name')->nullable();
+            $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('status')->nullable();
             $table->string('role_name')->nullable();
-            $table->string('avatar')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('modify_user')->nullable();
+            $table->string('date_time')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user_activity_logs');
     }
 };
