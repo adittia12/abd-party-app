@@ -7,60 +7,94 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# ✨ Application ABD Party App
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Fitur
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Manajemen pengguna dengan sistem RBAC (Role-Based Access Controll)
+-   Master (Data Product)
+-   Graphic Base Reporting
+-   Transaction Invoice by digital
+-   Proses Approvel Order product
+-   Export
 
-## Learning Laravel
+Untuk menjalankan aplikasi ini, sistem minimal yang dibutuhkan adalah sebagai berikut:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   PHP 8.1 atau yang lebih tinggi
+-   MySQL 5.7 atau yang lebih tinggi
+-   Composer
+-   Node.js 18 atau yang lebih tinggi
+-   NPM 7 atau yang lebih tinggi
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 💻 Cara Install dan Menjalankan Aplikasi
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Clone repository ini dengan perintah
 
-## Laravel Sponsors
+```
+git clone https://github.com/bloomingbug/report-tenaga-kerja.git
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+2. Masuk ke direktori aplikasi dengan perintah
 
-### Premium Partners
+```
+cd abd-party-app
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+3. Salin file .env.example menjadi .env dengan perintah
 
-## Contributing
+```
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Sesuaikan konfigurasi database pada file .env sesuai dengan database yang akan digunakan
 
-## Code of Conduct
+5. Jalankan perintah
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+composer install
+```
 
-## Security Vulnerabilities
+untuk menginstal semua package PHP yang dibutuhkan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. Jalankan perintah
 
-## License
+```
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+untuk menginstal semua package JavaScript yang dibutuhkan
+
+7. Jalankan perintah
+
+```
+php artisan key:generate
+```
+
+untuk menghasilkan application key yang diperlukan
+
+8. Jalankan perintah
+
+```
+php artisan storage:link
+```
+
+untuk membuat symbolic link ke direktori storage
+
+9. Jalankan perintah
+
+```
+php artisan migrate --seed
+```
+
+untuk menjalankan migrasi database dan menambahkan data awal. Kamu bisa merubah data awal pada file database/seeders/
+
+10. Jalankan perintah
+
+```
+php artisan serve
+```
+
+untuk menjalankan aplikasi pada http://localhost:8000/
+
+Sekarang kamu bisa mengakses aplikasi ini pada http://localhost:8000/
