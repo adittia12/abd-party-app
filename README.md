@@ -19,6 +19,11 @@
 -   Proses Approvel Order product
 -   Export
 
+## 🛠 Teknologi
+
+-   [Laravel v10](https://laravel.com/docs/10.x)
+-   [Bootstrap](https://getbootstrap.com/)
+
 Untuk menjalankan aplikasi ini, sistem minimal yang dibutuhkan adalah sebagai berikut:
 
 -   PHP 8.1 atau yang lebih tinggi
@@ -32,7 +37,7 @@ Untuk menjalankan aplikasi ini, sistem minimal yang dibutuhkan adalah sebagai be
 1. Clone repository ini dengan perintah
 
 ```
-git clone https://github.com/bloomingbug/report-tenaga-kerja.git
+git clone https://github.com/adittia12/abd-party-app.git
 ```
 
 2. Masuk ke direktori aplikasi dengan perintah
