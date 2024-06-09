@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -60,32 +61,42 @@ class LoginController extends Controller
             'password' => 'required|string'
         ]);
 
-        $username = $request->email;
-        $password = $request->password;
-        $dt = Carbon::now('Asia/Jakarta');
-        $todayDate = $dt->toDayDateTimeString();
+        try {
+            $username = $request->email;
+            $password = $request->password;
+            $dt = Carbon::now('Asia/Jakarta');
+            $todayDate = $dt->toDayDateTimeString();
 
-        if (Auth::attempt(['email' => $username, 'password' => $password, 'status' => 'Active'])) {
-            // Get Session
-            $user = Auth::user();
-            Session::put('name', $user->name);
-            Session::put('email', $user->email);
-            Session::put('user_id', $user->user_id);
-            Session::put('join_date', $user->join_date);
-            Session::put('phone_number', $user->phone_number);
-            Session::put('status', $user->status);
-            Session::put('role_name', $user->role_name);
-            Session::put('avatar', $user->avatar);
+            if (Auth::attempt(['email' => $username, 'password' => $password, 'status' => 'Active'])) {
+                // Get Session
+                $user = Auth::user();
+                Session::put('name', $user->name);
+                Session::put('email', $user->email);
+                Session::put('user_id', $user->user_id);
+                Session::put('join_date', $user->join_date);
+                Session::put('phone_number', $user->phone_number);
+                Session::put('status', $user->status);
+                Session::put('role_name', $user->role_name);
+                Session::put('avatar', $user->avatar);
 
-            $activityLog = ['name' => Session::get('name'), 'email' => $username, 'description' => 'Has Log in', 'date_time' => $todayDate];
-            DB::table('activity_logs')->insert($activityLog);
+                $updateLastLogin = ['last_login' => $todayDate,];
+                User::where('email',$username)->update($updateLastLogin);
+                $activityLog = ['name' => Session::get('name'), 'email' => $username, 'description' => 'Has Log in', 'date_time' => $todayDate];
+                DB::table('activity_logs')->insert($activityLog);
 
-            Alert::success('Congrats', 'Login successfully :)');
-            return redirect()->route('home');
-        } else {
-            Alert::error('Oops!', 'Invalid email or password :(')->persistent("Close");
-            return redirect('login');
+                Alert::success('Congrats', 'Login successfully :)');
+                return redirect()->route('home');
+            } else {
+                Alert::error('Oops!', 'Invalid email or password :(')->persistent("Close");
+                return redirect('login');
+            }
+        } catch (\Throwable $e) {
+            \Log::info($e);
+            DB::rollBack();
+            Alert::error('error','Add new user fail :)');
+            return redirect()->back();
         }
+
     }
 
     public function logout(Request $request)
@@ -110,7 +121,7 @@ class LoginController extends Controller
 
         Auth::logout();
         // if (Auth::logout()) {
-            Alert::success('Congrats', 'Logout successfully :)');
+        Alert::success('Congrats', 'Logout successfully :)');
         // }
         return redirect()->route('login');
     }

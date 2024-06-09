@@ -23,29 +23,32 @@ class RegisterController extends Controller
         $request->validate([
             'name'      => 'required|string|max:255',
             'email'     => 'required|string|email|max:255|unique:users',
-            'role_name' => 'required|string|max:255',
             'password'  => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required',
         ]);
 
-        $dt       = Carbon::now('Asia/Jakarta');
-        $todayDate = $dt->toDayDateTimeString();
+        try {
+            $dt       = Carbon::now('Asia/Jakarta');
+            $todayDate = $dt->toDayDateTimeString();
 
-        $save = User::create([
-                'name'      => $request->name,
-                'avatar'    => $request->image,
-                'email'     => $request->email,
-                'join_date' => $todayDate,
-                'role_name' => $request->role_name,
-                'status'    => 'Active',
-                'password'  => Hash::make($request->password),
-            ]);
-        if($save){
+            User::create([
+                    'name'      => $request->name,
+                    'email'     => $request->email,
+                    'join_date' => $todayDate,
+                    'last_login'=> $todayDate,
+                    'status'    => 'Active',
+                    'role_name' => 'Super Admin',
+                    'avatar'    => 'avatar-1.png',
+                    'password'  => Hash::make($request->password),
+                ]);
             Alert::success('Congrats', 'You\'ve login in system application');
             return redirect()->route('login');
-        } else {
+        } catch (\Throwable $e) {
+            \Log::info($e);
+            DB::rollback();
             Alert::error('Oops', 'Something went wrong! Please try again later');
             return redirect()->route('register');
         }
+
     }
 }
