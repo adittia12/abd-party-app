@@ -21,7 +21,7 @@ class UserManagementController extends Controller
             $role_name = DB::table('role_type_users')->get();
             $status_user = DB::table('user_types')->get();
 
-            return view('admin.userManagement.user_control', compact('result', 'role_name', 'status_user'));
+            return view('admin.user_management.user_control', compact(['result', 'role_name', 'status_user']));
         } else {
             return redirect()->route('home');
         }
@@ -30,13 +30,13 @@ class UserManagementController extends Controller
     public function activityLog()
     {
         $activityLog = DB::table('user_activity_logs')->get();
-        return view('admin.userManagement.user_activity_log',compact('activityLog'));
+        return view('admin.activity_user.user_activity_log',compact('activityLog'));
     }
 
     public function activityLogInLogOut()
     {
         $activityLog = DB::table('activity_logs')->get();
-        return view('admin.userManagement.activity_log', compact('activityLog'));
+        return view('admin.activity_user.activity_log', compact('activityLog'));
     }
 
     // public function profile()
@@ -50,10 +50,8 @@ class UserManagementController extends Controller
         $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|string|email|max:255|unique:users',
-            'phone_number'        => 'required|min:11|numeric',
             'role_name'    => 'required|string|max:255',
             'status'       => 'required|string|max:255',
-            'image'        => 'required|image',
             'password'     => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required'
         ]);
@@ -63,17 +61,18 @@ class UserManagementController extends Controller
             $dt = Carbon::now('Asia/Jakarta');
             $todayDate = $dt->toDayDateTimeString();
 
-            $image = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('assets/img'), $image);
+            // $image = time() . '.' . $request->image->extension();
+            // $request->image->move(public_path('assets/img'), $image);
 
             $user = new User;
             $user->name        = $request->name;
             $user->email       = $request->email;
             $user->join_date   = $todayDate;
+            // $user->last_login   = $todayDate;
             $user->phone_number       = $request->phone_number;
             $user->role_name   = $request->role_name;
             $user->status      = $request->status;
-            $user->avatar      = $image;
+            $user->avatar      = 'avatar-1.png';
             $user->password    = Hash::make($request->password);
             $user->save();
             // dd($check);
@@ -105,21 +104,21 @@ class UserManagementController extends Controller
             $todayDate = $dt->toDayDateTimeString();
             $image_name = $request->hidden_image;
             $image = $request->file('images');
-            if($image_name =='photo_defaults.jpg')
+            if($image_name =='avatar-1.png')
             {
                 if($image != '')
                 {
                     $image_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('/assets/img/'), $image_name);
+                    $image->move(public_path('/admin/assets/img/avatar/'), $image_name);
                 }
             }
             else{
 
                 if($image != '')
                 {
-                    unlink('assets/img/'.$image_name);
+                    unlink('admin/assets/img/avatar/'.$image_name);
                     $image_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('/assets/img/'), $image_name);
+                    $image->move(public_path('/admin/assets/img/avatar/'), $image_name);
                 }
             }
 
@@ -184,11 +183,11 @@ class UserManagementController extends Controller
 
             DB::table('user_activity_logs')->insert($activityLog);
 
-            if ($request->avatar == 'photo_default.jpg') {
+            if ($request->avatar == 'avatar-1.png') {
                 User::destroy($request->id);
             } else {
                 User::destroy($request->id);
-                unlink('assets/img/' . $request->avatar);
+                unlink('admin/assets/img/avatar/' . $request->avatar);
             }
 
             DB::commit();
@@ -203,7 +202,7 @@ class UserManagementController extends Controller
 
     public function changePasswordView()
     {
-        return view('settings.changepassword');
+        return view('settings.changePassword');
     }
 
     public function changePasswordDB(Request $request)

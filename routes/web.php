@@ -21,19 +21,19 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Auth::routes();
+// Auth::rouwtes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
 Route::controller(LoginController::class)->group(function() {
-    Route::get('/login', 'login')->name('login');
-    Route::post('/login', 'authenticate');
+    Route::get('/', 'login')->name('login');
+    Route::post('/', 'authenticate');
     Route::get('/logout', 'logout')->name('logoutUser');
 });
 
