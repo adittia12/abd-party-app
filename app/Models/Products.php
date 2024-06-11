@@ -21,8 +21,29 @@ class Products extends Model
         'updated_at',
     ];
 
-    // public function transaction()
-    // {
-    //     return $this->hasMany(Employees::class, 'id_product');
-    // }
+    public function transaction()
+    {
+        return $this->hasMany(Transactions::class, 'id_product');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model){
+            $getProduct = self::orderBy('inter_ref', 'desc')->first();
+
+            if ($getProduct) {
+                $latestID = intval(substr($getProduct->inter_ref, 5));
+                $nextID = $latestID + 1;
+            } else {
+                $nextID = 1;
+            }
+
+            $model->inter_ref = 'AB' . sprintf("%05s", $nextID);
+            while (self::where('inter_ref', $model->inter_ref)->exists()) {
+                $nextID++;
+                $model->inter_ref = 'AB' . sprintf("%05s", $nextID);
+            }
+        });
+    }
 }
