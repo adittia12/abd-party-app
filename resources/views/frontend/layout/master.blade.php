@@ -21,6 +21,7 @@
     <link rel="stylesheet"
         href="{{ asset('admin/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
 
+
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
@@ -91,6 +92,7 @@
     <script src="{{ asset('admin/assets/modules/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('admin/assets/datatables/js/pdfmake.min.js') }}"></script>
     <script src="{{ asset('admin/assets/datatables/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/sweetalert.min.js') }}"></script>
 
 
     <!-- Page Specific JS File -->

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Master\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,4 +75,11 @@ Route::middleware('auth')->group(function(){
         Route::get('change/password', 'changePasswordView')->name('change/password');
         Route::post('change/password/db', 'changePasswordDB')->name('change/password/db');
     });
+
+    // Master data
+    Route::resource('/product', ProductController::class);
+    Route::controller(ProductController::class)->group(function () {
+        Route::post('product/update', 'update')->name('updateProduct');
+    });
+
 });

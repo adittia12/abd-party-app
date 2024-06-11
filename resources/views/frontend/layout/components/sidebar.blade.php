@@ -32,14 +32,22 @@
             </li>
         @endif
         <li class="menu-header">Master Data</li>
-        <li class="dropdown">
+        <li class="dropdown {{ Request::is(['product*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i>
                 <span>Master</span></a>
             <ul class="dropdown-menu">
-                <li><a class="nav-link" href="#">Product</a></li>
+                <li class="{{ Request::is('product*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('product.index') }}">Product</a></li>
             </ul>
         </li>
         <li class="menu-header">Transaksi</li>
-        <li><a class="nav-link" href="#"><i class="fas fa-pencil-ruler"></i> <span>Credits</span></a></li>
+        <li class="dropdown">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
+                <span>Order & Invoice</span></a>
+            <ul class="dropdown-menu">
+                <li class=""><a class="nav-link" href="#">Order</a></li>
+                <li class=""><a class="nav-link" href="#">Cetak Invoice</a></li>
+            </ul>
+        </li>
     </ul>
 </aside>
