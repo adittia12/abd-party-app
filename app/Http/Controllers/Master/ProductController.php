@@ -26,14 +26,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(ProductStoreRequest $request)
@@ -45,7 +37,7 @@ class ProductController extends Controller
             $product->sales_price      = $request->sales_price;
             $product->unit_measure     = $request->unit_measure;
             $product->save();
-            // dd($check);
+
             DB::commit();
             Alert::success('Success', 'Product berhasil ditambah :)');
 
@@ -55,22 +47,6 @@ class ProductController extends Controller
             Alert::error('Error', 'Product gagal ditambahkan :[');
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Products $products)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Products $products)
-    {
-        //
     }
 
     /**

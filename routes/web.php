@@ -1,15 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleUserController;
 use App\Http\Controllers\LockScreen;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\UserManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,10 +77,15 @@ Route::middleware('auth')->group(function(){
         Route::post('change/password/db', 'changePasswordDB')->name('change/password/db');
     });
 
+    Route::resource('/user_role', RoleUserController::class);
+    Route::controller(RoleUserController::class)->group(function(){
+        Route::post('/role/update_role', 'update')->name('updateRole');
+    });
+
     // Master data
     Route::resource('/product', ProductController::class);
     Route::controller(ProductController::class)->group(function () {
-        Route::post('product/update', 'update')->name('updateProduct');
+        Route::post('/product/update', 'update')->name('updateProduct');
     });
 
 });

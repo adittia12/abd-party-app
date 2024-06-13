@@ -1,12 +1,12 @@
 @extends('frontend.layout.master')
 @section('title')
-    Master | Product
+    Admin | Role User
 @endsection
 @section('content')
     <section class="section">
         @include('sweetalert::alert')
         <div class="section-header">
-            <h1>Data Product</h1>
+            <h1>Data Role User</h1>
         </div>
         <div class="row">
             <div class="col-12">
@@ -14,11 +14,11 @@
                     <div class="card-header mt-2">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="">List Data Product</h3>
+                                <h3 class="">List Role User</h3>
                             </div>
                             <div class="col-auto float-right ml-auto">
                                 <button href="#" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#add_product"><i class="fa fa-plus"></i> Add Product</button>
+                                    data-target="#add_role"><i class="fa fa-plus"></i> Add Role</button>
                             </div>
                         </div>
                     </div>
@@ -29,22 +29,16 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Product</th>
-                                        <th>Name Product</th>
-                                        {{-- <th></th> --}}
-                                        <th>Sales Price</th>
-                                        <th>Unit Measure</th>
-                                        <th>Action</th>
+                                        <th>Role</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($product as $key => $item)
+                                    @foreach ($role as $key => $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td class="inter_ref">{{ $item->inter_ref }}</td>
-                                            <td class="name_product">{{ $item->name_product }}</td>
-                                            <td class="sales_price">{{ $item->sales_price }}</td>
-                                            <td class="unit_measure">{{ $item->unit_measure }}</td>
+                                            <td class="role_type">{{ $item->role_type }}</td>
+                                            <td class="id_role" hidden>{{ $item->id }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-info dropdown-toggle btn-sm"
@@ -52,15 +46,15 @@
                                                         More Action
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item productUpdate" data-toggle="modal"
-                                                                data-id="'.$item->id.'" data-target="#edit_product"><i
+                                                        <li><a class="dropdown-item roleUpdate" data-toggle="modal"
+                                                                data-id="'.$item->id.'" data-target="#edit_role"><i
                                                                     class="fas fa-pen-square"></i> Edit</a></li>
-                                                        <form action="{{ route('product.destroy', $item->inter_ref) }}"
+                                                        <form action="{{ route('user_role.destroy', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <li><a class="dropdown-item delete-button"
-                                                                    data-id="{{ $item->inter_ref }}"><i
+                                                                    data-id="{{ $item->id }}"><i
                                                                         class="fas fa-trash"></i>
                                                                     Delete</a></li>
                                                         </form>
@@ -80,23 +74,18 @@
         </div>
     </section>
 
-    @include('master.product.components.modal_add_product')
-    @include('master.product.components.modal_edit_product')
+    @include('admin.role_user.components.modal_add_role')
+    @include('admin.role_user.components.modal_edit_role')
 
 
 @section('script')
     <script>
-        $(document).on('click', '.productUpdate', function() {
+        $(document).on('click', '.roleUpdate', function() {
             var _this = $(this).parents('tr');
-            var salesPriceText = _this.find('.sales_price').text();
-            var salesPriceNumber = parseFloat(
-                salesPriceText); // atau parseInt(salesPriceText) jika ingin nilai bulat
-            $('#e_inter_ref').val(_this.find('.inter_ref').text());
-            $('#e_name_product').val(_this.find('.name_product').text());
-            $('#e_sales_price').val(salesPriceNumber);;
-            $('#e_unit_measure').val(_this.find('.unit_measure').text());
+            $('#e_id').val(_this.find('.id_role').text());
+            $('#e_role_type').val(_this.find('.role_type').text());
         });
     </script>
-    @include('master.product.components.script')
+    @include('admin.role_user.components.script')
 @endsection
 @endsection
