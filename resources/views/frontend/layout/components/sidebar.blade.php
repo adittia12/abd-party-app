@@ -17,13 +17,15 @@
         @if (Auth::user()->role_name == 'Admin')
             <li class="menu-header">Management Admin</li>
             <li
-                class="dropdown {{ Request::is(['userManagement', 'activity/log', 'activity/login/logout']) ? 'active' : '' }}">
+                class="dropdown {{ Request::is(['userManagement', 'activity/log', 'activity/login/logout', 'user_role*']) ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
                     <span>Admin</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::is('userManagement') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('userManagement') }}">All
                             User</a></li>
+                    <li class="{{ Request::is('user_role*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('user_role.index') }}">Role Type</a></li>
                     <li class="{{ Request::is('activity/log') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('activity/log') }}">Activity Log</a></li>
                     <li class="{{ Request::is('activity/login/logout') ? 'active' : '' }}"><a class="nav-link"
