@@ -43,11 +43,13 @@
             </ul>
         </li>
         <li class="menu-header">Transaksi</li>
-        <li class="dropdown">
+        <li class="dropdown {{ Request::is(['order*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
                 <span>Order & Invoice</span></a>
             <ul class="dropdown-menu">
-                <li class=""><a class="nav-link" href="#">Order</a></li>
+                <li class="{{ Request::is('order*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('order.index') }}">Order</a>
+                </li>
                 <li class=""><a class="nav-link" href="#">Cetak Invoice</a></li>
             </ul>
         </li>
