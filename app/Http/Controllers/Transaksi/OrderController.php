@@ -13,7 +13,19 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        // Mengambil nilai start_event terakhir
+        $lastDate = Orders::select('start_event')->orderBy('start_event', 'DESC')->first();
+
+        // Mengecek apakah $lastDate ada
+        if ($lastDate) {
+            $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'order_date')
+                ->where('start_event', $lastDate->start_event)
+                ->get();
+        } else {
+            // Penanganan jika tidak ada data ditemukan
+            $datasetOrder = collect(); // Atau Anda bisa mengatur sesuai kebutuhan
+        }
+        return view('transaksi.order.index', compact(['datasetOrder']));
     }
 
     /**
@@ -21,7 +33,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        return view('transaksi.order.add_order');
     }
 
     /**
