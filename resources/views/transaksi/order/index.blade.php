@@ -44,16 +44,44 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="order_number">{{ $item->order_number }}</td>
-                                            <td class="order_date">{{ $item->order_date }}</td>
+                                            <td class="order_date">{{ $item->tgl_order }}</td>
                                             <td class="name_customer">{{ $item->name_customer }}</td>
                                             <td class="date_pasang">{{ $item->date_pasang }}</td>
                                             <td class="start_event">{{ $item->start_event }}</td>
                                             <td class="end_event">{{ $item->end_event }}</td>
                                             <td class="status_order">
-                                                {{ $item->status_order }}
                                                 @if ($item->status_order === 'Pengajuan')
-                                                    <span class="badge badge-secondary">{{ $item->status_order }}</span>
-                                                @elseif ($item->status_order === 'Sudah ok')
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="p-2">
+                                                            <span
+                                                                class="badge badge-secondary">{{ $item->status_order }}</span>
+                                                        </div>
+                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                            <div class="p-2">
+                                                                <form action="{{ route('order.approve_ok') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="order_id"
+                                                                        value="{{ $item->id }}">
+                                                                    <button type="submit"
+                                                                        class="btn btn-success btn-sm rounded-full">Approve</button>
+                                                                </form>
+                                                            </div>
+                                                            <div class="p-2">
+                                                                <form action="{{ route('order.approve_cancel') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="order_id_cancel"
+                                                                        value="{{ $item->id }}">
+                                                                    <button type="submit"
+                                                                        class="btn btn-danger btn-sm rounded-full">Cancel</button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @elseif ($item->status_order === 'Order Cancel')
+                                                    <span class="badge badge-danger">{{ $item->status_order }}</span>
+                                                @elseif ($item->status_order === 'Sudah Ok')
                                                     <span class="badge badge-primary">{{ $item->status_order }}</span>
                                                 @elseif ($item->status_order === 'Invoice')
                                                     <span class="badge badge-success">{{ $item->status_order }}</span>
@@ -66,10 +94,15 @@
                                                         More Action
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        @if ($item->status_order === 'Pengajuan' || $item->status_order === 'Sudah ok')
-                                                            <li><a class="dropdown-item productUpdate" data-toggle="modal"
-                                                                    data-id="'.$item->id.'" data-target="#edit_product"><i
-                                                                        class="fas fa-pen-square"></i> Edit</a></li>
+                                                        <li><a class="dropdown-item"
+                                                                href="{{ route('order.show', Crypt::encrypt($item->id)) }}"><i
+                                                                    class="fas fa-info-circle"></i>
+                                                                Detail</a></li>
+                                                        @if ($item->status_order === 'Pengajuan' || $item->status_order === 'Sudah Ok')
+                                                            <li><a class="dropdown-item"
+                                                                    href="{{ route('order.edit', $item->id) }}"><i
+                                                                        class="fas fa-pen-square"></i>
+                                                                    Edit</a></li>
                                                         @endif
                                                         <form action="{{ route('order.destroy', $item->id) }}"
                                                             method="POST">
@@ -96,5 +129,6 @@
         </div>
     </section>
 @section('script')
+    @include('transaksi.order.components.script_order')
 @endsection
 @endsection

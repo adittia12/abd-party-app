@@ -97,6 +97,6 @@
             $('#e_unit_measure').val(_this.find('.unit_measure').text());
         });
     </script>
-    @include('master.product.components.script')
+    @include('master.product.components.')
 @endsection
 @endsection

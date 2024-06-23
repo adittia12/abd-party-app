@@ -1,0 +1,68 @@
+<table class="table table-hover table-striped" id="transaksiOrder">
+    <thead class="thead-light">
+        <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Descriptions</th>
+            <th>Days</th>
+            <th>Quantity</th>
+            <th>Jenis Satuan</th>
+            <th>Harga Satuan</th>
+            <th>Jumlah Harga</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>
+                <select name="id_product[]" id="id_product"
+                    class="productSearch select2 @error('id_product.*') is-invalid @enderror">
+                    <option value="">Select Product (Barang)</option>
+                    @foreach ($dataProduct as $item)
+                        <option value="{{ $item->id }}">
+                            ({{ $item->inter_ref }})
+                            - {{ $item->name_product }}
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('id_product.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('id_product.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <input type="text" name="description[]" id="description" value="{{ old('description[]') }}"
+                    placeholder="Ketik Deskripsi" class="@error('description.*') is-invalid @enderror">
+                @if ($errors->has('description.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <input type="number" name="days[]" id="days" placeholder="Hari">
+            </td>
+            <td>
+                <input type="number" name="qty[]" id="qty" value="{{ old('qty[]') }}"
+                    class="@error('qty.*') is-invalid @enderror" placeholder="Quantity">
+                @if ($errors->has('qty.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <input type="text" name="measure_list[]" id="measure_list" placeholder="Jenis Satuan">
+            </td>
+            <td>
+                <input type="number" name="price[]" id="price" class="@error('price.*') is-invalid @enderror"
+                    placeholder="Ketik harga">
+                @if ($errors->has('price.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <input type="text" name="total_harga" placeholder="Jumlah Harga" readonly>
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm" title="Add" id="addBtn">Add Row</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

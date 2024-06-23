@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('tgl_order')->nullable();
             $table->string('company_type')->nullable();
             $table->string('name_customer')->nullable();
-            $table->integer('no_phone')->nullable();
+            $table->unsignedBigInteger('no_phone')->nullable();
             $table->string('invoice_address')->nullable();
             $table->string('delivery_address')->nullable();
             $table->integer('initial_terms')->nullable();
