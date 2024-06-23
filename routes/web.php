@@ -33,7 +33,6 @@ use App\Http\Controllers\UserManagementController;
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-
 Route::controller(LoginController::class)->group(function() {
     Route::get('/', 'login')->name('login');
     Route::post('/', 'authenticate');
@@ -91,4 +90,16 @@ Route::middleware('auth')->group(function(){
 
     // Transaksi Order barang
     Route::resource('/order', OrderController::class);
+    Route::controller(OrderController::class)->group(function () {
+        Route::post('/autofill-product', 'autofillProduct')->name('order.autofill_product');
+        Route::post('/autofill-product-order', 'autofillProductOrder')->name('order.autofill_product_order');
+        Route::delete('/order/delete-transaction/{id}', 'deleteTransaction')->name('order.delete_transaction');
+        Route::post('/order/update', 'update')->name('order.update_order_transaksi');
+        Route::post('/order/approve_order', 'approveOrder')->name('order.approve_ok');
+        Route::post('/order/approve_order_cancel', 'approveCancelOrder')->name('order.approve_cancel');
+        Route::get('/order/cetak_order_trans/{id}', 'cetak_order')->name('order.cetak_order');
+    });
+
 });
+
+
