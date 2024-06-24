@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\Transasksi\OrderStoreRequest;
 use App\Http\Requests\Transasksi\OrderUpdateRequest;
+use App\Models\Invoices;
 use PDF;
 
 class OrderController extends Controller
@@ -271,10 +272,10 @@ class OrderController extends Controller
 
         if ($order) {
             $order->update(['status_order' => 'Sudah Ok']);
-            Alert::success('Success', 'Order sewa barang dengan kode ' . $order->order_number . 'sudah ok !!!');
+            Alert::success('Success', 'Order sewa barang dengan kode ' . $order->order_number . ' sudah ok !!!');
             return redirect()->back();
         } else {
-            Alert::error('Failed', 'Order sewa ' . $order->order_number . 'gagal di approve');
+            Alert::error('Failed', 'Order sewa ' . $order->order_number . ' gagal di approve');
             return redirect()->back();
         }
     }
@@ -291,6 +292,26 @@ class OrderController extends Controller
             return redirect()->back();
         } else {
             Alert::error('Failed', 'Order sewa ' . $order->order_number . ' gagal dicancel');
+            return redirect()->back();
+        }
+    }
+
+    public function approveInvoice(Request $request)
+    {
+        $orderId = $request->input('order_id_invoice');
+
+        $orderInvoice = Orders::find($orderId);
+        $priodeData = date('Y-m-d');
+        if ($orderInvoice) {
+            $orderInvoice->update(['status_order' => 'Invoice']);
+            Invoices::create([
+                'id_order' => $orderId,
+                'period_date' => $priodeData
+            ]);
+            Alert::success('Success', 'Invoice order sewa dengan kode ' . $orderInvoice->order_number . ' berhasil di approve');
+            return redirect()->back();
+        } else {
+            Alert::error('Failed', 'Invoice order sewa ' . $orderInvoice->order_number . ' gagal di approve');
             return redirect()->back();
         }
     }
@@ -314,7 +335,37 @@ class OrderController extends Controller
         return $pdf->stream();
     }
 
+    public function cetakInvoice($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return redirect()->back()->withErrors(['msg' => 'Invalid ID.']);
+        }
 
+        // Temukan order berdasarkan ID
+        $cetakInvoice = Orders::findOrFail($encId);
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $cetakInvoice->id)
+            ->get();
+
+        // Mengambil invoice terkait dengan order yang sesuai
+        $dataInvoice = Invoices::where('id_order', $cetakInvoice->id)->first();;
+
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.order.cetak_invoice', [
+            'cetakInvoice' => $cetakInvoice,
+            'dataTransaksiCetak' => $dataTransaksiCetak,
+            'dataInvoice' => $dataInvoice
+        ]);
+
+        // Return PDF
+        return $pdf->stream();
+    }
 
 
     /**

@@ -16,6 +16,31 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $id_order
+ * @property string $invoice_number
+ * @property string|null $no_po_manual
+ * @property string|null $period_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereIdOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereInvoiceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereNoPoManual($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices wherePeriodDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoices whereUpdatedAt($value)
+ */
+	class Invoices extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string|null $order_number
  * @property string|null $tgl_order
  * @property string|null $company_type
