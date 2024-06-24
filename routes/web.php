@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\Transaksi\InvoiceController;
 use App\Http\Controllers\Transaksi\OrderController;
 use App\Http\Controllers\UserManagementController;
 
@@ -98,6 +99,15 @@ Route::middleware('auth')->group(function(){
         Route::post('/order/approve_order', 'approveOrder')->name('order.approve_ok');
         Route::post('/order/approve_order_cancel', 'approveCancelOrder')->name('order.approve_cancel');
         Route::get('/order/cetak_order_trans/{id}', 'cetak_order')->name('order.cetak_order');
+        Route::post('/order/approve-invoice', 'approveInvoice')->name('order.approve_invoice');
+        Route::get('/order/cetak_invoice/{id}', 'cetakInvoice')->name('order.cetak_invoice');
+    });
+
+    Route::resource('/invoice', InvoiceController::class);
+    Route::controller(InvoiceController::class)->group(function () {
+        Route::get('/invoice/cetak-invoice/{id}', 'cetakInvoice')->name('invoice.cetakInvoice');
+        Route::post('/invoice/create-po', 'createPo')->name('invoice.create_po');
+        Route::post('/invoice/update', 'update')->name('invoice.update_invo');
     });
 
 });

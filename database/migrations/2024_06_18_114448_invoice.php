@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->integer('id_order');
             $table->string('invoice_number');
-            $table->date('period_date');
+            $table->string('no_po_manual')->nullable();
+            $table->date('period_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('id_order')->references('id')->onDelete('cascade')->onUpdate('cascade')->on('orders');
         });
     }
 

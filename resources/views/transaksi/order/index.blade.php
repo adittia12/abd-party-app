@@ -80,42 +80,81 @@
                                                         @endif
                                                     </div>
                                                 @elseif ($item->status_order === 'Order Cancel')
-                                                    <span class="badge badge-danger">{{ $item->status_order }}</span>
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="p-2">
+                                                            <span
+                                                                class="badge badge-danger">{{ $item->status_order }}</span>
+                                                        </div>
+                                                    </div>
                                                 @elseif ($item->status_order === 'Sudah Ok')
-                                                    <span class="badge badge-primary">{{ $item->status_order }}</span>
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="p-2">
+                                                            <span
+                                                                class="badge badge-primary">{{ $item->status_order }}</span>
+                                                        </div>
+                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                            <div class="p-2">
+                                                                <form action="{{ route('order.approve_invoice') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="order_id_invoice"
+                                                                        value="{{ $item->id }}">
+                                                                    <button type="submit"
+                                                                        class="btn btn-success btn-sm rounded-full">Approve</button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 @elseif ($item->status_order === 'Invoice')
                                                     <span class="badge badge-success">{{ $item->status_order }}</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-info dropdown-toggle btn-sm"
-                                                        data-toggle="dropdown" aria-expanded="false">
-                                                        More Action
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item"
-                                                                href="{{ route('order.show', Crypt::encrypt($item->id)) }}"><i
-                                                                    class="fas fa-info-circle"></i>
-                                                                Detail</a></li>
-                                                        @if ($item->status_order === 'Pengajuan' || $item->status_order === 'Sudah Ok')
-                                                            <li><a class="dropdown-item"
-                                                                    href="{{ route('order.edit', $item->id) }}"><i
-                                                                        class="fas fa-pen-square"></i>
-                                                                    Edit</a></li>
-                                                        @endif
-                                                        <form action="{{ route('order.destroy', $item->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <li><a class="dropdown-item delete-button"
-                                                                    data-id="{{ $item->id }}"><i
-                                                                        class="fas fa-trash"></i>
-                                                                    Delete</a></li>
-                                                        </form>
-                                                    </ul>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    @if ($item->status_order == 'Invoice')
+                                                        <div class="p-2">
+                                                            <a href="{{ route('order.cetak_invoice', Crypt::encrypt($item->id)) }}"
+                                                                class="btn btn-danger btn-sm" target="_blank"><i
+                                                                    class="fas fa-print"></i>
+                                                                Invoice</a>
+                                                        </div>
+                                                    @endif
+                                                    <div class="p-2">
+                                                        <div class="btn-group">
+                                                            <button type="button"
+                                                                class="btn btn-info dropdown-toggle btn-sm"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                                More Action
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('order.show', Crypt::encrypt($item->id)) }}"><i
+                                                                            class="fas fa-info-circle"></i>
+                                                                        Detail</a></li>
+                                                                @if ($item->status_order === 'Pengajuan' || $item->status_order === 'Sudah Ok')
+                                                                    <li><a class="dropdown-item"
+                                                                            href="{{ route('order.edit', $item->id) }}"><i
+                                                                                class="fas fa-pen-square"></i>
+                                                                            Edit</a></li>
+                                                                @elseif (Auth::user()->role_name == 'Admin')
+                                                                    <li><a class="dropdown-item"
+                                                                            href="{{ route('order.edit', $item->id) }}"><i
+                                                                                class="fas fa-pen-square"></i>
+                                                                            Edit</a></li>
+                                                                @endif
+                                                                <form action="{{ route('order.destroy', $item->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <li><a class="dropdown-item delete-button"
+                                                                            data-id="{{ $item->id }}"><i
+                                                                                class="fas fa-trash"></i>
+                                                                            Delete</a></li>
+                                                                </form>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
                                             </td>
                                         </tr>
                                     @endforeach

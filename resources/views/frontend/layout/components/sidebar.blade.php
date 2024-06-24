@@ -43,14 +43,15 @@
             </ul>
         </li>
         <li class="menu-header">Transaksi</li>
-        <li class="dropdown {{ Request::is(['order*']) ? 'active' : '' }}">
+        <li class="dropdown {{ Request::is(['order*', 'invoice*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
                 <span>Order & Invoice</span></a>
             <ul class="dropdown-menu">
                 <li class="{{ Request::is('order*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('order.index') }}">Order</a>
                 </li>
-                <li class=""><a class="nav-link" href="#">Cetak Invoice</a></li>
+                <li class="{{ Request::is('invoice*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('invoice.index') }}">Invoice</a></li>
             </ul>
         </li>
     </ul>

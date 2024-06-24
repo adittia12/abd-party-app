@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cetak Order</title>
+    <title>Invoice {{ $cetakInvoice ? $cetakInvoice->invoice_number : 'No Invoice Found' }}</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
@@ -39,45 +39,38 @@
             <div class="row">
                 <div class="card">
                     <div class="card-body">
-                        <p class="mt-3">Kepada : <b>{{ $cetakOrder->name_customer }}</b></p>
-                        <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
-                        <div class="section-title mt-0">Order : <b>{{ $cetakOrder->order_number }}</b></div>
-                        <small class="text-sm">Berikut kami kirimkan untuk pengajuan harga sewa pakai perlengkapan
-                            sebagai
-                            berikut :</small>
-                    </div>
-                    <div class="table-responsive">
                         <table class="table">
-                            <thead class="small">
-                                <tr>
-                                    <th scope="col">Tanggal Pasang</th>
-                                    <th scope="col">Mulai Acara</th>
-                                    <th scope="col">Selesai</th>
-                                    <th scope="col">Tanggal Order</th>
-                                    <th scope="col">PIC</th>
-                                </tr>
-                            </thead>
-                            <tbody class="small">
-                                <tr>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->date_pasang)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->start_event)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->end_event)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->tgl_order)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ Auth::user()->name }}</td>
-                                </tr>
-                            </tbody>
+                            <tr>
+                                <td>{{ $cetakInvoice->name_customer }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <h5>KWITANSI</h5>
+                                    <p class="small">
+                                        <span class="text-secondary">Tanggal Kwitansi : </span> <br>
+                                        {{ \Carbon\Carbon::parse($cetakInvoice->start_event)->translatedFormat('d F Y') }}
+                                        <br>
+                                        <span class="text-secondary">Kwitansi No. : </span> <br>
+                                        {{ $cetakInvoice->invoice_number }} <br>
+                                        @if ($cetakInvoice->no_po_manual)
+                                            <span class="text-secondary">Nomor PO : </span> <br>
+                                            {{ $cetakInvoice->no_po_manual }}
+                                        @endif
+                                    </p>
+                                </td>
+                            </tr>
                         </table>
                     </div>
-                    <table class="table table-striped table-hover mt-2">
+                    <table class="table table-striped table-hover">
                         <thead class="small">
                             <tr>
                                 <th>#</th>
                                 <th>PRODUK</th>
-                                <th>URAIAN</th>
                                 <th>JUMLAH</th>
                                 <th>HARGA</th>
                                 <th>SUB TOTAL</th>
@@ -98,9 +91,6 @@
                                         {{ $transaksi->name_product }}
                                     </td>
                                     <td>
-                                        {{ $transaksi->description }}
-                                    </td>
-                                    <td>
                                         {{ $transaksi->qty }} {{ $transaksi->measure_list }}
                                     </td>
                                     <td>
@@ -117,49 +107,64 @@
                                 $totalAkhir = $totalNominal;
                                 $diskon = 0;
                                 $dp = 0;
-                                if ($cetakOrder->discount_rate) {
-                                    $diskon = $cetakOrder->discount_rate;
+                                if ($cetakInvoice->discount_rate) {
+                                    $diskon = $cetakInvoice->discount_rate;
                                     $totalAkhir -= $diskon;
                                 }
-                                if ($cetakOrder->dp) {
-                                    $dp = $cetakOrder->dp;
+                                if ($cetakInvoice->dp) {
+                                    $dp = $cetakInvoice->dp;
                                     $totalAkhir -= $dp;
                                 }
                             @endphp
                             <tr>
-                                <th colspan="5" class="text-right">Total Nominal</th>
+                                <th colspan="4" class="text-right">Total Nominal</th>
                                 <th>{{ 'Rp ' . number_format($totalNominal, 2, ',', '.') }}</th>
                             </tr>
                             @if ($diskon)
                                 <tr>
-                                    <th colspan="5" class="text-right">Diskon</th>
+                                    <th colspan="4" class="text-right">Diskon</th>
                                     <th>{{ 'Rp ' . number_format($diskon, 2, ',', '.') }}</th>
                                 </tr>
                             @endif
                             @if ($dp)
                                 <tr>
-                                    <th colspan="5" class="text-right">Uang Muka (DP)</th>
+                                    <th colspan="4" class="text-right">Uang Muka (DP)</th>
                                     <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
                                 </tr>
                             @endif
                             <tr>
-                                <th colspan="5" class="text-right">Total Akhir</th>
+                                <th colspan="4" class="text-right">Total Akhir</th>
                                 <th>{{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</th>
                             </tr>
                         </tfoot>
                     </table>
 
-                    <div class="d-flex flex-row mt-3">
-                        <div class="p-2">
-                            <div class="text-center small">
-                                <p>
-                                    Karawang, {{ \Carbon\Carbon::now()->format('d F Y') }} <br>
-                                    <b>Hormat kami</b>
-                                </p>
-                                <br><br><br> <!-- Space for the actual signature -->
-                                <p>(Abdul Basit)</p>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <table class="table table-hover">
+                            <tr>
+                                <td style="width: 350px" class="small">
+                                    <div class="card-body" style="background: #e8e8e8">
+                                        <p>
+                                            <span class="text-secondary"><b>REKENING BANK</b></span> <br>
+                                            BANK MANDIRI : 1730025222226 <br>
+                                            Atas Nama : CV ABD KAUM 1 <br>
+                                            NPWP : 436648703408000 <br>
+                                            Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center small">
+                                        <p>
+                                            Karawang, {{ \Carbon\Carbon::now()->format('d F Y') }} <br>
+                                            <b>Hormat kami</b>
+                                        </p>
+                                        <br><br>
+                                        <p>(Abdul Basit)</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
