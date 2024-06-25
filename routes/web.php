@@ -101,6 +101,9 @@ Route::middleware('auth')->group(function(){
         Route::get('/order/cetak_order_trans/{id}', 'cetak_order')->name('order.cetak_order');
         Route::post('/order/approve-invoice', 'approveInvoice')->name('order.approve_invoice');
         Route::get('/order/cetak_invoice/{id}', 'cetakInvoice')->name('order.cetak_invoice');
+        Route::post('/order/approve_surat_kembali', 'approveSuratKembali')->name('order.approveSuratKembali');
+        Route::get('/order/cetak_surat_jalan/{id}', 'suratJalan')->name('order.suratJalan');
+        Route::get('/order/cetak_surat_kembali/{id}', 'suratKembali')->name('order.suratKembali');
     });
 
     Route::resource('/invoice', InvoiceController::class);
@@ -108,6 +111,9 @@ Route::middleware('auth')->group(function(){
         Route::get('/invoice/cetak-invoice/{id}', 'cetakInvoice')->name('invoice.cetakInvoice');
         Route::post('/invoice/create-po', 'createPo')->name('invoice.create_po');
         Route::post('/invoice/update', 'update')->name('invoice.update_invo');
+        Route::get('/invoice/doc-konsumen/{id}', 'docKonsumen')->name('invoice.doc-konsumen');
+        Route::get('/invoice/doc-kantor/{id}', 'docKantor')->name('invoice.doc-kantor');
+        Route::get('/invoice/doc-employee/{id}', 'docEmployee')->name('invoice.docEmployee');
     });
 
 });

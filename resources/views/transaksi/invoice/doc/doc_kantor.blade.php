@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOC KANTOR - {{ $cetakKantor->invoice_number }}</title>
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <style>
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            transform: translate(-50%, -50%);
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Watermark image -->
+    <div class="watermark">
+        <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="300px" alt="Watermark">
+    </div>
+
+    <div class="main-content">
+        <section class="section">
+            <section class="section-header">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex justify-content-start">
+                            <div class="p-2">
+                                <p style="font-size: 10px">
+                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
+                                        alt="">
+                                    <br>
+                                    Jl. KH. Ahmad Dahlan No.7 <br>
+                                    Belakang Masjid Agung Karawang , Karawang , Indonesia <br>
+                                    Telp 0267 - 401440 , HP <a href="https://wa.me/628562003009">08562003009</a> <br>
+                                    e-mail <a
+                                        href="mailto:abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a> <br>
+                                    website <a href="https://www.abdrent.com">https://www.abdrent.com</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row">
+                <div>
+                    <div>
+                        <p class="mt-3">Kepada : <b>{{ $cetakKantor->name_customer }}</b> <br>
+                            {{ $cetakKantor->invoice_address }}
+                        </p>
+                        <input type="hidden" name="id" value="{{ Crypt::encrypt($cetakKantor->id_invoice) }}">
+                        <div class="section-title mt-0">Order : <b>{{ $cetakKantor->order_number }}</b></div>
+                        <small class="text-sm" style="font-size: 15px;"><b>Berikut kami kirimkan untuk pengajuan harga
+                                sewa
+                                pakai perlengkapan
+                                sebagai
+                                berikut :</b></small>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="small">
+                                <tr>
+                                    <th scope="col">Tanggal Pasang</th>
+                                    <th scope="col">Mulai Acara</th>
+                                    <th scope="col">Selesai</th>
+                                    <th scope="col">Tanggal Order</th>
+                                    <th scope="col">PIC</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->date_pasang)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->start_event)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->end_event)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->tgl_order)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ Auth::user()->name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <table class="table table-striped table-hover mt-2">
+                        <thead class="small">
+                            <tr>
+                                <th>#</th>
+                                <th>PRODUK</th>
+                                <th>URAIAN</th>
+                                <th>JUMLAH</th>
+                                <th>HARGA</th>
+                                <th>SUB TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            @php
+                                $totalNominal = 0;
+                            @endphp
+                            @foreach ($dataTransaksiCetak as $key => $transaksi)
+                                @php
+                                    $jumlahHarga = $transaksi->price * $transaksi->qty;
+                                    $totalNominal += $jumlahHarga;
+                                @endphp
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        {{ $transaksi->name_product }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->description }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->price }}
+                                    </td>
+                                    <td>
+                                        {{ $jumlahHarga == 0 ? '0' : 'Rp ' . number_format($jumlahHarga, 2, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot class="small">
+                            @php
+                                $totalAkhir = $totalNominal;
+                                $diskon = 0;
+                                $dp = 0;
+                                $pajak = 0;
+
+                                if ($cetakKantor->discount_rate) {
+                                    $diskon = $cetakKantor->discount_rate;
+                                    $totalAkhir -= $diskon;
+                                }
+                                if ($cetakKantor->dp) {
+                                    $dp = $cetakKantor->dp;
+                                    $totalAkhir -= $dp;
+                                }
+
+                                if ($cetakKantor->pajak) {
+                                    $pajak = $cetakKantor->pajak;
+                                    $totalAkhir += $pajak;
+                                }
+                            @endphp
+                            <tr>
+                                <th colspan="5" class="text-right">Total Nominal</th>
+                                <th>{{ 'Rp ' . number_format($totalNominal, 2, ',', '.') }}</th>
+                            </tr>
+                            @if ($diskon)
+                                <tr>
+                                    <th colspan="5" class="text-right">Diskon</th>
+                                    <th>{{ 'Rp ' . number_format($diskon, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($dp)
+                                <tr>
+                                    <th colspan="5" class="text-right">Uang Muka (DP)</th>
+                                    <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($pajak)
+                                <tr>
+                                    <th colspan="5" class="text-right">Pajak ({{ $cetakKantor->jenis_pajak }})</th>
+                                    <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th colspan="5" class="text-right">Total Akhir</th>
+                                <th>{{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</th>
+                            </tr>
+                            <tr class="mt-2">
+                                <td colspan="5"></td>
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Hormat kami</b>
+                                        </p>
+                                        <br>
+                                        <p>(Abdul Basit)</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="section">
+            <section class="section-header">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex justify-content-start">
+                            <div class="p-2">
+                                <p style="font-size: 10px">
+                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
+                                        alt="">
+                                    <br>
+                                    Jl. KH. Ahmad Dahlan No.7 <br>
+                                    Belakang Masjid Agung Karawang , Karawang , Indonesia <br>
+                                    Telp 0267 - 401440 , HP <a href="https://wa.me/628562003009">08562003009</a> <br>
+                                    e-mail <a
+                                        href="mailto:abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a> <br>
+                                    website <a href="https://www.abdrent.com">https://www.abdrent.com</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row">
+                <div class="">
+                    <div class="">
+                        <table class="table">
+                            <tr>
+                                <td>{{ $cetakKantor->name_customer }} <br> {{ $cetakKantor->invoice_address }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <h5>KWITANSI</h5>
+                                    <p class="small">
+                                        <span class="text-secondary">Tanggal Kwitansi : </span> <br>
+                                        {{ \Carbon\Carbon::parse($cetakKantor->start_event)->translatedFormat('d F Y') }}
+                                        <br>
+                                        <span class="text-secondary">Kwitansi No. : </span> <br>
+                                        {{ $cetakKantor->invoice_number }} <br>
+                                        @if ($cetakKantor->no_po_manual)
+                                            <span class="text-secondary">Nomor PO : </span> <br>
+                                            {{ $cetakKantor->no_po_manual }}
+                                        @endif
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead class="small">
+                            <tr>
+                                <th>#</th>
+                                <th>PRODUK</th>
+                                <th>JUMLAH</th>
+                                <th>HARGA</th>
+                                <th>SUB TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            @php
+                                $totalNominal = 0;
+                            @endphp
+                            @foreach ($dataTransaksiCetak as $key => $transaksi)
+                                @php
+                                    $jumlahHarga = $transaksi->price * $transaksi->qty;
+                                    $totalNominal += $jumlahHarga;
+                                @endphp
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        {{ $transaksi->name_product }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->price }}
+                                    </td>
+                                    <td>
+                                        {{ $jumlahHarga == 0 ? '0' : 'Rp ' . number_format($jumlahHarga, 2, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot class="small">
+                            @php
+                                $totalAkhir = $totalNominal;
+                                $diskon = 0;
+                                $dp = 0;
+                                $pajak = 0;
+                                if ($cetakKantor->discount_rate) {
+                                    $diskon = $cetakKantor->discount_rate;
+                                    $totalAkhir -= $diskon;
+                                }
+                                if ($cetakKantor->dp) {
+                                    $dp = $cetakKantor->dp;
+                                    $totalAkhir -= $dp;
+                                }
+                                if ($cetakKantor->pajak) {
+                                    $pajak = $cetakKantor->pajak;
+                                    $totalAkhir += $pajak;
+                                }
+                            @endphp
+                            <tr>
+                                <th colspan="4" class="text-right">Total Nominal</th>
+                                <th>{{ 'Rp ' . number_format($totalNominal, 2, ',', '.') }}</th>
+                            </tr>
+                            @if ($diskon)
+                                <tr>
+                                    <th colspan="4" class="text-right">Diskon</th>
+                                    <th>{{ 'Rp ' . number_format($diskon, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($dp)
+                                <tr>
+                                    <th colspan="4" class="text-right">Uang Muka (DP)</th>
+                                    <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($pajak)
+                                <tr>
+                                    <th colspan="4" class="text-right">Pajak ({{ $cetakKantor->jenis_pajak }})</th>
+                                    <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th colspan="4" class="text-right">Total Akhir</th>
+                                <th>{{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <table class="table table-hover">
+                            <tr>
+                                <td style="width: 350px" class="small">
+                                    <div class="card-body" style="background: #e8e8e8">
+                                        <p>
+                                            <span class="text-secondary"><b>REKENING BANK</b></span> <br>
+                                            BANK MANDIRI : 1730025222226 <br>
+                                            Atas Nama : CV ABD KAUM 1 <br>
+                                            NPWP : 436648703408000 <br>
+                                            Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center small">
+                                        <p>
+                                            <b>Hormat kami</b>
+                                        </p>
+                                        <br><br>
+                                        <p>(Abdul Basit)</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="page-break"></div>
+        <section class="section">
+            <section class="section-header">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex justify-content-start">
+                            <div class="p-2">
+                                <p style="font-size: 10px">
+                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
+                                        alt="">
+                                    <br>
+                                    Jl. KH. Ahmad Dahlan No.7 <br>
+                                    Belakang Masjid Agung Karawang , Karawang , Indonesia <br>
+                                    Telp 0267 - 401440 , HP <a href="https://wa.me/628562003009">08562003009</a> <br>
+                                    e-mail <a
+                                        href="mailto:abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a>
+                                    <br>
+                                    website <a href="https://www.abdrent.com">https://www.abdrent.com</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row">
+                <div>
+                    <div>
+                        <p class="mt-3">Kepada : <b>{{ $cetakKantor->name_customer }}</b> <br>
+                            {{ $cetakKantor->delivery_address }}
+                        </p>
+                        <div class="section-title mt-0">Order : <b>{{ $cetakKantor->order_number }}</b></div>
+                        <small class="text-sm" style="font-size: 15px;"><b>Berikut kami kirimkan untuk pengajuan harga
+                                sewa
+                                pakai perlengkapan
+                                sebagai
+                                berikut :</b></small>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="small">
+                                <tr>
+                                    <th scope="col">Tanggal Pasang</th>
+                                    <th scope="col">Mulai Acara</th>
+                                    <th scope="col">Selesai</th>
+                                    <th scope="col">Tanggal Order</th>
+                                    <th scope="col">PIC</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->date_pasang)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->start_event)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->end_event)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($cetakKantor->tgl_order)->translatedFormat('d F Y') }}
+                                    </td>
+                                    <td>{{ Auth::user()->name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover mt-2">
+                        <thead class="small">
+                            <tr>
+                                <th>#</th>
+                                <th>PRODUK</th>
+                                <th>URAIAN</th>
+                                <th>JUMLAH</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            @foreach ($dataTransaksiCetak as $key => $transaksi)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        {{ $transaksi->name_product }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->description }}
+                                    </td>
+                                    <td>
+                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="justify-content-center">
+                        <table class="table mt-3">
+                            <tr class="mt-2">
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Pengirim</b>
+                                        </p>
+                                        <br>
+                                        <p>____________________</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Penerima</b>
+                                        </p>
+                                        <br>
+                                        <p>____________________</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Hormat kami</b>
+                                        </p>
+                                        <br>
+                                        <p>(Abdul Basit)</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

@@ -57,15 +57,33 @@
                     class="form-control">{{ \Carbon\Carbon::parse($order->date_pasang)->translatedFormat('d F Y') }}</span>
             </div>
         </div>
-        <div class="form-group">
-            <label>Warehouse</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Jenis Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <span class="form-control">{{ $order->jenis_pajak }}</span>
                     </div>
                 </div>
-                <span class="form-control">{{ $order->warehouse }}</span>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ $order->pajak == 0 ? '0' : 'Rp ' . number_format($order->pajak, 2, ',', '.') }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

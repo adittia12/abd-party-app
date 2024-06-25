@@ -75,20 +75,38 @@
                     class="form-control datepicker">
             </div>
         </div>
-        <div class="form-group">
-            <label>Warehouse</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Jenis Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <select name="jenis_pajak" id="jenis_pajak" class="form-control select2">
+                            <option>Pilih Jenis Pajak</option>
+                            <option value="PPH">PPH</option>
+                            <option value="PPN">PPN</option>
+                        </select>
                     </div>
                 </div>
-                <input type="text" name="warehouse" id="warehouse" value="{{ old('warehouse') }}"
-                    class="form-control @error('warehouse') is-invalid @enderror">
             </div>
-            @if ($errors->has('warehouse'))
-                <span class="text-danger text-sm">{{ $errors->first('warehouse') }}</span>
-            @endif
+            <div class="col">
+                <div class="form-group">
+                    <label>Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="pajak" id="pajak" value="{{ old('pajak') }}"
+                            class="form-control" placeholder="Masukan nominal pajak">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col">
@@ -146,7 +164,7 @@
                             </div>
                         </div>
                         <input type="date" name="start_event" id="start_event" value="{{ old('start_event') }}"
-                            class="form-control datepicker @error('start_event') is-invalid @enderror">
+                            class="form-control @error('start_event') is-invalid @enderror">
                     </div>
                     @if ($errors->has('start_event'))
                         <span class="text-danger text-sm">{{ $errors->first('start_event') }}</span>
@@ -163,7 +181,7 @@
                             </div>
                         </div>
                         <input type="date" name="end_event" id="end_event" value="{{ old('end_event') }}"
-                            class="form-control datepicker @error('end_event') is-invalid @enderror">
+                            class="form-control @error('end_event') is-invalid @enderror">
                     </div>
                     @if ($errors->has('end_event'))
                         <span class="text-danger text-sm">{{ $errors->first('end_event') }}</span>

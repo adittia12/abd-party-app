@@ -132,3 +132,18 @@
         rowIdx--;
     });
 </script>
+
+<script>
+    document.getElementById('start_event').addEventListener('change', function() {
+        var startDate = new Date(this.value);
+        if (!isNaN(startDate.getTime())) {
+            var endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 1);
+            var year = endDate.getFullYear();
+            var month = (endDate.getMonth() + 1).toString().padStart(2, '0');
+            var day = endDate.getDate().toString().padStart(2, '0');
+            var formattedEndDate = year + '-' + month + '-' + day;
+            document.getElementById('end_event').value = formattedEndDate;
+        }
+    });
+</script>

@@ -10,9 +10,29 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <style>
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            transform: translate(-50%, -50%);
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Watermark image -->
+    <div class="watermark">
+        <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="300px" alt="Watermark">
+    </div>
     <div class="main-content">
         <section class="section">
             <section class="section-header">
@@ -20,8 +40,8 @@
                     <div class="col">
                         <div class="d-flex justify-content-start">
                             <div class="p-2">
-                                <small style="font-size: 12px">
-                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="180px"
+                                <p style="font-size: 10px">
+                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
                                         alt="">
                                     <br>
                                     Jl. KH. Ahmad Dahlan No.7 <br>
@@ -30,18 +50,18 @@
                                     e-mail <a
                                         href="mailto:abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a> <br>
                                     website <a href="https://www.abdrent.com">https://www.abdrent.com</a>
-                                </small>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             <div class="row">
-                <div class="card">
-                    <div class="card-body">
+                <div class="">
+                    <div class="">
                         <table class="table">
                             <tr>
-                                <td>{{ $cetakInvoice->name_customer }}</td>
+                                <td>{{ $cetakInvoice->name_customer }} <br> {{ $cetakInvoice->invoice_address }}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -107,6 +127,7 @@
                                 $totalAkhir = $totalNominal;
                                 $diskon = 0;
                                 $dp = 0;
+                                $pajak = 0;
                                 if ($cetakInvoice->discount_rate) {
                                     $diskon = $cetakInvoice->discount_rate;
                                     $totalAkhir -= $diskon;
@@ -114,6 +135,10 @@
                                 if ($cetakInvoice->dp) {
                                     $dp = $cetakInvoice->dp;
                                     $totalAkhir -= $dp;
+                                }
+                                if ($cetakInvoice->pajak) {
+                                    $pajak = $cetakInvoice->pajak;
+                                    $totalAkhir += $pajak;
                                 }
                             @endphp
                             <tr>
@@ -130,6 +155,12 @@
                                 <tr>
                                     <th colspan="4" class="text-right">Uang Muka (DP)</th>
                                     <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($pajak)
+                                <tr>
+                                    <th colspan="4" class="text-right">Pajak ({{ $cetakInvoice->jenis_pajak }})</th>
+                                    <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
                                 </tr>
                             @endif
                             <tr>
@@ -156,7 +187,6 @@
                                 <td>
                                     <div class="text-center small">
                                         <p>
-                                            Karawang, {{ \Carbon\Carbon::now()->format('d F Y') }} <br>
                                             <b>Hormat kami</b>
                                         </p>
                                         <br><br>

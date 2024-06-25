@@ -27,7 +27,10 @@ class Orders extends Model
         'close_date',
         'discount_rate',
         'dp',
+        'jenis_pajak',
+        'pajak',
         'status_order',
+        'status_driver'
     ];
 
     protected $hidden = [

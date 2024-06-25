@@ -209,13 +209,19 @@ class UserManagementController extends Controller
     {
         $request->validate([
             'current_password' => ['required'],
-            'new_password'     => ['required'],
-            'new_confirm_password' => ['required|confirmed|min:8|same:new_password']
+            'new_password'     => ['required', 'min:8'],
+            'new_confirm_password' => ['required', 'same:new_password']
         ]);
 
-        User::find(auth()->user()->id)->Update(['password' => Hash::make($request->new_password)]);
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
+        }
+
+        $user->update(['password' => Hash::make($request->new_password)]);
         DB::commit();
-        Alert::success('Success', 'User change successfully');
+        Alert::success('Success', 'Password changed successfully');
         return redirect()->intended('home');
     }
 }

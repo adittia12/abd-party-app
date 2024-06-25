@@ -30,7 +30,10 @@ return new class extends Migration
             $table->date('close_date')->nullable();
             $table->integer('discount_rate')->nullable();
             $table->integer('dp')->nullable();
+            $table->string('jenis_pajak')->nullable();
+            $table->integer('pajak')->nullable();
             $table->string('status_order')->nullable();
+            $table->string('status_driver')->nullable();
             $table->timestamps();
         });
     }

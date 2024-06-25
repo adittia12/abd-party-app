@@ -29,7 +29,6 @@ class OrderUpdateRequest extends FormRequest
             'delivery_address'    => ['required', 'string'],
             'start_event'         => ['required', 'date'],
             'end_event'           => ['required', 'date'],
-            'warehouse'           => ['required', 'string'],
             'id_product.*'          => ['required'],
             'description.*'         => ['required', 'string'],
             'qty.*'                   => ['required', 'numeric'],
@@ -70,10 +69,6 @@ class OrderUpdateRequest extends FormRequest
             'end_event' => [
                 'required' => 'Tanggal akhir event harus diisi',
                 'date'     => 'Tanggal akhir event harus dalam format tanggal'
-            ],
-            'warehouse' => [
-                'required' => 'Gudang harus diisi',
-                'string'   => 'Gudang harus dalam format text'
             ],
             'id_product.*' => [
                 'required' => 'Produk harus diisi',

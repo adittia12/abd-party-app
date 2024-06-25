@@ -25,7 +25,7 @@ class OrderController extends Controller
         // $lastDate = Orders::select('start_event')->orderBy('start_event', 'DESC')->first()?->start_event;
 
         // Mengecek apakah $lastDate ada
-        $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id')->orderBy('start_event', 'DESC')->get();
+        $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id', 'status_driver')->orderBy('start_event', 'DESC')->get();
         return view('transaksi.order.index', compact(['datasetOrder']));
     }
 
@@ -45,6 +45,7 @@ class OrderController extends Controller
     {
         $statusOrder = 'Pengajuan';
         $jenisTerm = 'Days';
+        $tempat = 'Gudang Karawang';
         DB::beginTransaction();
         try {
             $order = Orders::create([
@@ -59,9 +60,10 @@ class OrderController extends Controller
                 'start_event' => $request['start_event'],
                 'end_event' => $request['end_event'],
                 'date_pasang' => $request['date_pasang'],
-                'warehouse' => $request['warehouse'],
+                'warehouse' => $tempat,
                 'price_list' => 'IDR',
                 'discount_rate' => $request['discount_rate'],
+                'jenis_pajak' => $request['jenis_pajak'],
                 'dp' => $request['dp'],
                 'status_order' => $statusOrder,
             ]);
@@ -184,7 +186,8 @@ class OrderController extends Controller
                 'start_event' => $request->start_event,
                 'end_event' => $request->end_event,
                 'date_pasang' => $request->date_pasang,
-                'warehouse' => $request->warehouse,
+                'jenis_pajak' => $request->jenis_pajak,
+                'pajak' => $request->pajak,
                 'price_list' => $request->price_list,
                 'discount_rate' => $request->discount_rate,
                 'dp' => $request->dp,
@@ -219,7 +222,9 @@ class OrderController extends Controller
             }
 
             // Process new transactions (create)
-            $newTransactionsCount = count($request->new_id_product);
+            // Ensure $request->new_id_product is an array
+            $new_id_product = $request->new_id_product ?? [];
+            $newTransactionsCount = count($new_id_product);
             if ($newTransactionsCount > 0) {
                 for ($i = 0; $i < $newTransactionsCount; $i++) {
                     Transactions::create([
@@ -246,6 +251,7 @@ class OrderController extends Controller
         }
     }
 
+
     public function autofillProductOrder(Request $request)
     {
         $product = $request->input('new_id_product');
@@ -271,7 +277,7 @@ class OrderController extends Controller
         $order = Orders::find($orderId);
 
         if ($order) {
-            $order->update(['status_order' => 'Sudah Ok']);
+            $order->update(['status_order' => 'Sudah Ok', 'status_driver' => 'Surat Jalan']);
             Alert::success('Success', 'Order sewa barang dengan kode ' . $order->order_number . ' sudah ok !!!');
             return redirect()->back();
         } else {
@@ -314,6 +320,71 @@ class OrderController extends Controller
             Alert::error('Failed', 'Invoice order sewa ' . $orderInvoice->order_number . ' gagal di approve');
             return redirect()->back();
         }
+    }
+
+    public function approveSuratKembali(Request $request)
+    {
+        $orderId = $request->input('order_id_surat_kembali');
+        $order = Orders::find($orderId);
+
+        if ($order) {
+            $order->update(['status_driver' => 'Surat Kembali']);
+            Alert::success('Success', 'Surat Kembali Telah dibuat');
+            return redirect()->back();
+        } else {
+            Alert::error('Failed', 'Surat Kembali gagal dibuat');
+            return redirect()->back();
+        }
+    }
+
+    public function suratJalan($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Alert::error('Error', 'Invalid ID :[');
+            return redirect()->back();
+        }
+
+        // Temukan order berdasarkan ID
+        $cetakOrder = Orders::findOrFail($encId);
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+                                        ->join('products', 'transactions.id_product', '=', 'products.id')
+                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+                                        ->where('transactions.id_order', $cetakOrder->id)
+                                        ->get();
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.order.letters.surat_jalan', ['cetakOrder' => $cetakOrder, 'dataTransaksiCetak' => $dataTransaksiCetak]);
+
+        // Return PDF
+        return $pdf->stream();
+    }
+
+    public function suratKembali($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Alert::error('Error', 'Invalid ID :[');
+            return redirect()->back();
+        }
+
+        // Temukan order berdasarkan ID
+        $cetakOrder = Orders::findOrFail($encId);
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+                                        ->join('products', 'transactions.id_product', '=', 'products.id')
+                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+                                        ->where('transactions.id_order', $cetakOrder->id)
+                                        ->get();
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.order.letters.surat_kembali', ['cetakOrder' => $cetakOrder, 'dataTransaksiCetak' => $dataTransaksiCetak]);
+
+        // Return PDF
+        return $pdf->stream();
     }
 
 

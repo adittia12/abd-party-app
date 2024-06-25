@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cetak Order</title>
+    <title>SURAT KEMBALI - ORDER {{ $cetakOrder->order_number }}</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
@@ -61,15 +61,13 @@
                 <div>
                     <div>
                         <p class="mt-3">Kepada : <b>{{ $cetakOrder->name_customer }}</b> <br>
-                            {{ $cetakOrder->invoice_address }}
+                            {{ $cetakOrder->delivery_address }}
                         </p>
                         <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
+                        <div class="section-title mt-0"><b>Surat Kembali</b></div>
                         <div class="section-title mt-0">Order : <b>{{ $cetakOrder->order_number }}</b></div>
-                        <small class="text-sm" style="font-size: 15px;"><b>Berikut kami kirimkan untuk pengajuan harga
-                                sewa
-                                pakai perlengkapan
-                                sebagai
-                                berikut :</b></small>
+                        <small class="text-sm" style="font-size: 15px;"><b>Berikut data barang yang harus dikirimkan
+                                :</b></small>
                     </div>
                     <br>
                     <div class="table-responsive">
@@ -98,26 +96,17 @@
                             </tbody>
                         </table>
                     </div>
-                    <table class="table table-striped table-hover mt-2">
+                    <table class="table table-striped table-bordered table-hover mt-2">
                         <thead class="small">
                             <tr>
                                 <th>#</th>
                                 <th>PRODUK</th>
                                 <th>URAIAN</th>
                                 <th>JUMLAH</th>
-                                <th>HARGA</th>
-                                <th>SUB TOTAL</th>
                             </tr>
                         </thead>
                         <tbody class="small">
-                            @php
-                                $totalNominal = 0;
-                            @endphp
                             @foreach ($dataTransaksiCetak as $key => $transaksi)
-                                @php
-                                    $jumlahHarga = $transaksi->price * $transaksi->qty;
-                                    $totalNominal += $jumlahHarga;
-                                @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
@@ -129,64 +118,32 @@
                                     <td>
                                         {{ $transaksi->qty }} {{ $transaksi->measure_list }}
                                     </td>
-                                    <td>
-                                        {{ $transaksi->price }}
-                                    </td>
-                                    <td>
-                                        {{ $jumlahHarga == 0 ? '0' : 'Rp ' . number_format($jumlahHarga, 2, ',', '.') }}
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot class="small">
-                            @php
-                                $totalAkhir = $totalNominal;
-                                $diskon = 0;
-                                $dp = 0;
-                                $pajak = 0;
+                    </table>
 
-                                if ($cetakOrder->discount_rate) {
-                                    $diskon = $cetakOrder->discount_rate;
-                                    $totalAkhir -= $diskon;
-                                }
-                                if ($cetakOrder->dp) {
-                                    $dp = $cetakOrder->dp;
-                                    $totalAkhir -= $dp;
-                                }
-
-                                if ($cetakOrder->pajak) {
-                                    $pajak = $cetakOrder->pajak;
-                                    $totalAkhir += $pajak;
-                                }
-                            @endphp
-                            <tr>
-                                <th colspan="5" class="text-right">Total Nominal</th>
-                                <th>{{ 'Rp ' . number_format($totalNominal, 2, ',', '.') }}</th>
-                            </tr>
-                            @if ($diskon)
-                                <tr>
-                                    <th colspan="5" class="text-right">Diskon</th>
-                                    <th>{{ 'Rp ' . number_format($diskon, 2, ',', '.') }}</th>
-                                </tr>
-                            @endif
-                            @if ($dp)
-                                <tr>
-                                    <th colspan="5" class="text-right">Uang Muka (DP)</th>
-                                    <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
-                                </tr>
-                            @endif
-                            @if ($pajak)
-                                <tr>
-                                    <th colspan="5" class="text-right">Pajak ({{ $cetakOrder->jenis_pajak }})</th>
-                                    <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
-                                </tr>
-                            @endif
-                            <tr>
-                                <th colspan="5" class="text-right">Total Akhir</th>
-                                <th>{{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</th>
-                            </tr>
+                    <div class="justify-content-center">
+                        <table class="table mt-3">
                             <tr class="mt-2">
-                                <td colspan="5"></td>
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Pengirim</b>
+                                        </p>
+                                        <br>
+                                        <p>____________________</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <p>
+                                            <b>Penerima</b>
+                                        </p>
+                                        <br>
+                                        <p>____________________</p>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="text-center">
                                         <p>
@@ -197,8 +154,8 @@
                                     </div>
                                 </td>
                             </tr>
-                        </tfoot>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
