@@ -51,7 +51,12 @@
                                 <div class="col-md-6 text-md-right">
                                     <address>
                                         <strong>Order Date:</strong><br>
-                                        {{ \Carbon\Carbon::parse($dataInvoice->tgl_order)->translatedFormat('d F Y') }}<br><br>
+                                        {{ \Carbon\Carbon::parse($dataInvoice->tgl_order)->translatedFormat('d F Y') }}<br>
+                                        @if ($dataInvoice->no_po_manual)
+                                            <strong>Nomor PO : </strong> <br>
+                                            {{ $dataInvoice->no_po_manual }}
+                                        @endif
+                                        <br>
                                     </address>
                                 </div>
                             </div>
@@ -112,6 +117,7 @@
                                         $totalAkhir = $totalNominal;
                                         $diskon = 0;
                                         $dp = 0;
+                                        $pajak = 0;
                                         if ($dataInvoice->discount_rate) {
                                             $diskon = $dataInvoice->discount_rate;
                                             $totalAkhir -= $diskon;
@@ -119,6 +125,10 @@
                                         if ($dataInvoice->dp) {
                                             $dp = $dataInvoice->dp;
                                             $totalAkhir -= $dp;
+                                        }
+                                        if ($dataInvoice->pajak) {
+                                            $pajak = $dataInvoice->pajak;
+                                            $totalAkhir += $pajak;
                                         }
                                     @endphp
                                     <div class="invoice-detail-item">
@@ -139,6 +149,14 @@
                                             <div class="invoice-detail-name">Uang Muka (DP)</div>
                                             <div class="invoice-detail-value">
                                                 {{ 'Rp ' . number_format($dp, 2, ',', '.') }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($pajak)
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Pajak ({{ $dataInvoice->jenis_pajak }})</div>
+                                            <div class="invoice-detail-value">
+                                                {{ 'Rp ' . number_format($pajak, 2, ',', '.') }}
                                             </div>
                                         </div>
                                     @endif

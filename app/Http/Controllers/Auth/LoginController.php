@@ -88,7 +88,7 @@ class LoginController extends Controller
                 return redirect()->route('home');
             } else {
                 Alert::error('Oops!', 'Invalid email or password :(')->persistent("Close");
-                return redirect('login');
+                return redirect()->back();
             }
         } catch (\Throwable $e) {
             \Log::info($e);

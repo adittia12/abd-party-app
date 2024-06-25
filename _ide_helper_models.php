@@ -58,6 +58,8 @@ namespace App\Models{
  * @property string|null $close_date
  * @property int|null $discount_rate
  * @property int|null $dp
+ * @property string|null $jenis_pajak
+ * @property int|null $pajak
  * @property string|null $status_order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -75,10 +77,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereInitialTerms($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereInvoiceAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereJenisPajak($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereJenisTerm($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNameCustomer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNoPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajak($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStartEvent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStatusOrder($value)

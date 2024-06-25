@@ -35,7 +35,7 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetakInvoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak')
                                 ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
@@ -53,6 +53,105 @@ class InvoiceController extends Controller
 
         // Return PDF
         return $pdf->stream();
+    }
+
+    public function docKonsumen($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Alert::error('Error', 'Invalid ID.');
+            return redirect()->back();
+        }
+
+        // Temukan order berdasarkan ID
+        $cetakonsumen = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak')
+                                ->where('invoices.id', $encId)->first();
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $cetakonsumen->id_order)
+            ->get();
+
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.invoice.doc.doc_konsumen', [
+            'cetakonsumen' => $cetakonsumen,
+            'dataTransaksiCetak' => $dataTransaksiCetak,
+        ]);
+        // Specify the file name
+        $fileName = 'DOC-KONSUMEN-' . $cetakonsumen->name_customer . '-' . $cetakonsumen->invoice_number . '.pdf';
+
+        // Stream PDF with specified file name
+        return $pdf->stream($fileName);
+    }
+
+    public function docKantor($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Alert::error('Error', 'Invalid ID.');
+            return redirect()->back();
+        }
+
+        // Temukan order berdasarkan ID
+        $cetakKantor = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak')
+                                ->where('invoices.id', $encId)->first();
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $cetakKantor->id_order)
+            ->get();
+
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.invoice.doc.doc_kantor', [
+            'cetakKantor' => $cetakKantor,
+            'dataTransaksiCetak' => $dataTransaksiCetak,
+        ]);
+        // Specify the file name
+        $fileName = 'DOC-KANTOR-' . $cetakKantor->name_customer . '-' . $cetakKantor->invoice_number . '.pdf';
+
+        // Stream PDF with specified file name
+        return $pdf->stream($fileName);
+    }
+
+    public function docEmployee($id)
+    {
+        try {
+            $encId = decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Alert::error('Error', 'Invalid ID.');
+            return redirect()->back();
+        }
+
+        // Temukan order berdasarkan ID
+        $cetaEmployee = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address')
+                                ->where('invoices.id', $encId)->first();
+
+        // Mengambil transaksi terkait dengan order yang sesuai
+        $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $cetaEmployee->id_order)
+            ->get();
+
+        // Generate PDF
+        $pdf = PDF::loadView('transaksi.invoice.doc.doc_karyawan', [
+            'cetaEmployee' => $cetaEmployee,
+            'dataTransaksiCetak' => $dataTransaksiCetak,
+        ]);
+        // Specify the file name
+        $fileName = 'DOC-KARYAWAN-' . $cetaEmployee->name_customer . '-' . $cetaEmployee->invoice_number . '.pdf';
+
+        // Stream PDF with specified file name
+        return $pdf->stream($fileName);
     }
 
     public function createPo(Request $request)
@@ -85,7 +184,7 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $dataInvoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.tgl_order', 'orders.invoice_address', 'orders.delivery_address', 'orders.discount_rate', 'orders.dp')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.tgl_order', 'orders.invoice_address', 'orders.delivery_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak')
                                 ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
@@ -134,11 +233,11 @@ class InvoiceController extends Controller
             $invoices = Invoices::where('id', $invoice)->first();
             $invoices->delete();
             DB::commit();
-            Alert::success('Success', 'Data invoice ' . $invoice->invoice_number . ' berhasil dihapus');
+            Alert::success('Success', 'Data invoice berhasil dihapus');
             return redirect()->back();
         } catch (\Throwable $e) {
             DB::rollBack();
-            Alert::error('Failed', 'Data invoice ' . $invoice->invoice_number . ' gagal dihapus');
+            Alert::error('Failed', 'Data invoice gagal dihapus');
             return redirect()->back();
         }
     }

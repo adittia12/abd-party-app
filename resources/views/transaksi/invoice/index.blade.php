@@ -30,6 +30,9 @@
                                         <th>No Invoice</th>
                                         <th>Periode Date</th>
                                         <th>No PO</th>
+                                        <th>Doc Konsumen</th>
+                                        <th>Doc Kantor</th>
+                                        <th>Doc Karyawan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -56,6 +59,24 @@
                                                     <span class="badge badge-danger">Tidak ada Nomor PO</span>
                                                 @endif
                                             </td>
+                                            <td>
+                                                <a href="{{ route('invoice.doc-konsumen', Crypt::encrypt($item->id)) }}"
+                                                    class="btn btn-primary btn-sm" target="_blank">
+                                                    <i class="fas fa-print"></i> Doc Konsumen
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('invoice.doc-kantor', Crypt::encrypt($item->id)) }}"
+                                                    class="btn btn-primary btn-sm" target="_blank">
+                                                    <i class="fas fa-print"></i> Doc Kantor
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('invoice.docEmployee', Crypt::encrypt($item->id)) }}"
+                                                    class="btn btn-primary btn-sm" target="_blank">
+                                                    <i class="fas fa-print"></i> Doc Karyawan
+                                                </a>
+                                            </td>
                                             <td class="text-center">
                                                 <div class="row">
                                                     <div class="col">
@@ -76,7 +97,8 @@
                                                                         data-target="#edit_invoice"><i
                                                                             class="fas fa-pen-square"></i> Edit</a></li>
                                                                 @if (Auth::user()->role_name == 'Admin')
-                                                                    <form action="{{ route('invoice.destroy', $item->id) }}"
+                                                                    <form
+                                                                        action="{{ route('invoice.destroy', $item->id) }}"
                                                                         method="POST">
                                                                         @csrf
                                                                         @method('DELETE')

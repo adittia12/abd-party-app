@@ -36,6 +36,7 @@
                                         <th>Mulai Acara</th>
                                         <th>Selesai Acara</th>
                                         <th>Status Order</th>
+                                        <th>Status Driver</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -44,20 +45,28 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="order_number">{{ $item->order_number }}</td>
-                                            <td class="order_date">{{ $item->tgl_order }}</td>
+                                            <td class="order_date">
+                                                {{ \Carbon\Carbon::parse($item->tgl_order)->translatedFormat('d F Y') }}
+                                            </td>
                                             <td class="name_customer">{{ $item->name_customer }}</td>
-                                            <td class="date_pasang">{{ $item->date_pasang }}</td>
-                                            <td class="start_event">{{ $item->start_event }}</td>
-                                            <td class="end_event">{{ $item->end_event }}</td>
+                                            <td class="date_pasang">
+                                                {{ \Carbon\Carbon::parse($item->date_pasang)->translatedFormat('d F Y') }}
+                                            </td>
+                                            <td class="start_event">
+                                                {{ \Carbon\Carbon::parse($item->start_event)->translatedFormat('d F Y') }}
+                                            </td>
+                                            <td class="end_event">
+                                                {{ \Carbon\Carbon::parse($item->end_event)->translatedFormat('d F Y') }}
+                                            </td>
                                             <td class="status_order">
                                                 @if ($item->status_order === 'Pengajuan')
                                                     <div class="d-flex justify-content-center">
-                                                        <div class="p-2">
+                                                        <div class="p-1">
                                                             <span
                                                                 class="badge badge-secondary">{{ $item->status_order }}</span>
                                                         </div>
                                                         @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
-                                                            <div class="p-2">
+                                                            <div class="p-1">
                                                                 <form action="{{ route('order.approve_ok') }}"
                                                                     method="POST">
                                                                     @csrf
@@ -67,7 +76,7 @@
                                                                         class="btn btn-success btn-sm rounded-full">Approve</button>
                                                                 </form>
                                                             </div>
-                                                            <div class="p-2">
+                                                            <div class="p-1">
                                                                 <form action="{{ route('order.approve_cancel') }}"
                                                                     method="POST">
                                                                     @csrf
@@ -81,14 +90,14 @@
                                                     </div>
                                                 @elseif ($item->status_order === 'Order Cancel')
                                                     <div class="d-flex justify-content-center">
-                                                        <div class="p-2">
+                                                        <div class="p-1">
                                                             <span
                                                                 class="badge badge-danger">{{ $item->status_order }}</span>
                                                         </div>
                                                     </div>
                                                 @elseif ($item->status_order === 'Sudah Ok')
                                                     <div class="d-flex justify-content-center">
-                                                        <div class="p-2">
+                                                        <div class="p-1">
                                                             <span
                                                                 class="badge badge-primary">{{ $item->status_order }}</span>
                                                         </div>
@@ -111,15 +120,56 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
+                                                    @if ($item->status_driver == 'Surat Jalan')
+                                                        <div class="p-1">
+                                                            <a href="{{ route('order.suratJalan', Crypt::encrypt($item->id)) }}"
+                                                                class="btn btn-warning btn-sm" target="_blank">
+                                                                <i class="fas fa-print"></i> Surat Jalan
+                                                            </a>
+                                                        </div>
+                                                        <div class="p-1">
+                                                            <form action="{{ route('order.approveSuratKembali') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="order_id_surat_kembali"
+                                                                    value="{{ $item->id }}" />
+                                                                <button type="submit"
+                                                                    class="btn btn-primary btn-sm rounded-full">
+                                                                    Buat Surat Kembali
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @elseif ($item->status_driver == 'Surat Kembali' || $item->status_order == 'Invoice')
+                                                        <div class="p-1">
+                                                            <a href="{{ route('order.suratJalan', Crypt::encrypt($item->id)) }}"
+                                                                class="btn btn-warning btn-sm" target="_blank">
+                                                                <i class="fas fa-print"></i> Surat Jalan
+                                                            </a>
+                                                        </div>
+                                                        <div class="p-1">
+                                                            <a href="{{ route('order.suratKembali', Crypt::encrypt($item->id)) }}"
+                                                                class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-print"></i> Surat Kembali
+                                                            </a>
+                                                        </div>
+                                                    @else
+                                                        <div class="p-1">
+                                                            <span class="badge badge-danger">Belum di approve</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
                                                     @if ($item->status_order == 'Invoice')
-                                                        <div class="p-2">
+                                                        <div class="p-1">
                                                             <a href="{{ route('order.cetak_invoice', Crypt::encrypt($item->id)) }}"
                                                                 class="btn btn-danger btn-sm" target="_blank"><i
                                                                     class="fas fa-print"></i>
                                                                 Invoice</a>
                                                         </div>
                                                     @endif
-                                                    <div class="p-2">
+                                                    <div class="p-1">
                                                         <div class="btn-group">
                                                             <button type="button"
                                                                 class="btn btn-info dropdown-toggle btn-sm"

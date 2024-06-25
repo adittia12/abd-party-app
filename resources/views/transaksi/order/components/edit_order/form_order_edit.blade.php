@@ -74,20 +74,39 @@
                     class="form-control">
             </div>
         </div>
-        <div class="form-group">
-            <label>Warehouse</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Jenis Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <select name="jenis_pajak" id="jenis_pajak" class="form-control select2">
+                            <option value="{{ $order->jenis_pajak }}">{{ $order->jenis_pajak ?? 'Pilih Jenis Pajak' }}
+                            </option>
+                            <option value="PPH">PPH</option>
+                            <option value="PPN">PPN</option>
+                        </select>
                     </div>
                 </div>
-                <input type="text" name="warehouse" id="warehouse" value="{{ $order->warehouse }}"
-                    class="form-control @error('warehouse') is-invalid @enderror">
             </div>
-            @if ($errors->has('warehouse'))
-                <span class="text-danger text-sm">{{ $errors->first('warehouse') }}</span>
-            @endif
+            <div class="col">
+                <div class="form-group">
+                    <label>Pajak</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="pajak" id="pajak" value="{{ $order->pajak }}"
+                            class="form-control" placeholder="Masukan nominal pajak">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col">

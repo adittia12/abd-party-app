@@ -52,6 +52,7 @@
             $totalAkhir = $totalNominal;
             $diskon = 0;
             $dp = 0;
+            $pajak = 0;
             if ($order->discount_rate) {
                 $diskon = $order->discount_rate;
                 $totalAkhir -= $diskon;
@@ -59,6 +60,10 @@
             if ($order->dp) {
                 $dp = $order->dp;
                 $totalAkhir -= $dp;
+            }
+            if ($order->pajak) {
+                $pajak = $order->pajak;
+                $totalAkhir += $pajak;
             }
         @endphp
         <tr>
@@ -75,6 +80,12 @@
             <tr>
                 <th colspan="7" class="text-right">Uang Muka (DP)</th>
                 <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
+            </tr>
+        @endif
+        @if ($pajak)
+            <tr>
+                <th colspan="7" class="text-right">Pajak ({{ $order->jenis_pajak }})</th>
+                <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
             </tr>
         @endif
         <tr>
