@@ -23,22 +23,49 @@ class DatabaseSeeder extends Seeder
         // ]);
         $products = [
             [
-                'inter_ref' => 'ABD0001',
-                'name_product' => 'Meja',
+                'name_product' => 'Tenda',
                 'sales_price' => 1,
-                'unit_measure' => 'Unit'
+                'unit_measure' => 'm2'
             ],
             [
-                'inter_ref' => 'ABD0002',
-                'name_product' => 'Kursi',
+                'name_product' => 'floring',
                 'sales_price' => 1,
-                'unit_measure' => 'Unit'
-            ]
+                'unit_measure' => 'm2'
+            ],
+            [
+                'name_product' => 'Kursi Futura',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
+            [
+                'name_product' => 'Kipas',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
+            [
+                'name_product' => 'Meja Sofa',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
+            [
+                'name_product' => 'Vas Bunga',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
+            [
+                'name_product' => 'Podium',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
+            [
+                'name_product' => 'Mini Garden',
+                'sales_price' => 1,
+                'unit_measure' => 'Units'
+            ],
         ];
 
         foreach ($products as $product) {
             Products::create([
-                'inter_ref' => $product['inter_ref'],
                 'name_product' => $product['name_product'],
                 'sales_price' => $product['sales_price'],
                 'unit_measure' => $product['unit_measure']

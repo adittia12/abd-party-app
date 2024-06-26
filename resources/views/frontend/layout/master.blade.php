@@ -115,60 +115,6 @@
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
 
     @yield('script')
-
-    {{--
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Datatables Fixed Header
-            $("#datatables-fixed-header").DataTable({
-                fixedHeader: true,
-                pageLength: 10,
-                responsive: true,
-                dom: 'B<"top"flp>rti<"bottom"p><"clear">',
-                buttons: [
-                    'copy', 'csv', 'excel', {
-                        extend: 'pdf',
-                        text: 'PDF',
-                        orientation: 'landscape',
-                        exportOptions: {
-                            columns: ':not(.no-export)' // Tambahkan kelas 'no-export' pada kolom 'Action' yang tidak ingin diekspor atau dicetak
-                        } // Tambahkan ini untuk orientasi landscape pada PDF
-                    }, {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':not(.no-export)'
-                        }
-                    },
-                ],
-                initComplete: function() {
-                    this.api().columns().every(function() {
-                        var column = this;
-                        var select = $(
-                                "<select class=\"form-control\"><option value=\"\"></option></select>"
-                            )
-                            .appendTo($(column.footer()).empty())
-                            .on("change", function() {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-                                column
-                                    .search(val ? "^" + val + "$" : "", true, false)
-                                    .draw();
-                            });
-                        column.data().unique().sort().each(function(d, j) {
-                            select.append("<option value=\"" + d + "\">" + d +
-                                "</option>")
-                        });
-                    });
-                },
-                lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, 'All']
-                ]
-
-            });
-        });
-    </script> --}}
 </body>
 
 </html>

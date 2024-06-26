@@ -34,25 +34,12 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="phone_number">Phone</label>
-                        <input type="tel" class="form-control" id="e_phone_number" name="phone" value=""
-                            placeholder="Number Phone">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="image">Upload Photo</label>
-                        <input type="file" class="form-control" id="image" name="images" value=""
-                            accept="image/png, image/jpeg">
-                        <input type="hidden" name="hidden_image" id="e_image" name="image">
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col-md-5">
-                            <label class="form-label" for="status">Status</label>
-                            <select id="e_status" class="form-control selected" name="status" value="">
-                                @foreach ($status_user as $item)
-                                    <option value="{{ $item->type_name }}">{{ $item->type_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <label class="form-label" for="status">Status</label>
+                        <select id="e_status" class="form-control selected" name="status" value="">
+                            @foreach ($status_user as $item)
+                                <option value="{{ $item->type_name }}">{{ $item->type_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
             </div>
             <div class="modal-footer">

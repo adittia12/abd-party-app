@@ -10,22 +10,7 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
-    <style>
-        .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 250px;
-            transform: translate(-50%, -50%);
-            opacity: 0.2;
-            z-index: -1;
-        }
-
-        .page-break {
-            page-break-before: always;
-        }
-    </style>
+    @include('transaksi.order.components.css.surat_jalan_css')
 </head>
 
 <body>
@@ -40,7 +25,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="d-flex justify-content-start">
-                            <div class="p-2">
+                            <div class="p-1">
                                 <p style="font-size: 10px">
                                     <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
                                         alt="">
@@ -60,60 +45,56 @@
             <div class="row">
                 <div>
                     <div>
-                        <p class="mt-3">Kepada : <b>{{ $cetakOrder->name_customer }}</b> <br>
+                        <p class="text-info-jalan">Kepada : <b>{{ $cetakOrder->name_customer }}</b> <br>
                             {{ $cetakOrder->delivery_address }}
                         </p>
                         <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
-                        <div class="section-title mt-0"><b>Surat Jalan</b></div>
-                        <div class="section-title mt-0">Order : <b>{{ $cetakOrder->order_number }}</b></div>
-                        <small class="text-sm" style="font-size: 15px;"><b>Berikut kami kirimkan untuk pengajuan harga
+                        <div class="section-title "><b class="text-info-jalan">Surat Jalan</b></div>
+                        <div class="section-title text-info-jalan">Order : <b>{{ $cetakOrder->order_number }}</b></div>
+                        <small class="text-info-jalan"><b>Berikut kami kirimkan untuk pengajuan
+                                harga
                                 sewa
                                 pakai perlengkapan
                                 sebagai
                                 berikut :</b></small>
                     </div>
-                    <br>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="small">
-                                <tr>
-                                    <th scope="col">Tanggal Pasang</th>
-                                    <th scope="col">Mulai Acara</th>
-                                    <th scope="col">Selesai</th>
-                                    <th scope="col">Tanggal Order</th>
-                                    <th scope="col">PIC</th>
-                                </tr>
-                            </thead>
-                            <tbody class="small">
-                                <tr>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->date_pasang)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->start_event)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->end_event)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($cetakOrder->tgl_order)->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ Auth::user()->name }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <table class="table table-striped table-bordered table-hover mt-2">
-                        <thead class="small">
+                    <table class="table-id">
+                        <thead>
                             <tr>
-                                <th>#</th>
+                                <th scope="col">Tanggal Pasang</th>
+                                <th scope="col">Mulai Acara</th>
+                                <th scope="col">Selesai</th>
+                                <th scope="col">Tanggal Order</th>
+                                <th scope="col">PIC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($cetakOrder->date_pasang)->translatedFormat('d F Y') }}
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($cetakOrder->start_event)->translatedFormat('d F Y') }}
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($cetakOrder->end_event)->translatedFormat('d F Y') }}
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($cetakOrder->tgl_order)->translatedFormat('d F Y') }}
+                                </td>
+                                <td>{{ Auth::user()->name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table-id">
+                        <thead>
+                            <tr>
                                 <th>PRODUK</th>
                                 <th>URAIAN</th>
                                 <th>JUMLAH</th>
                             </tr>
                         </thead>
-                        <tbody class="small">
+                        <tbody>
                             @foreach ($dataTransaksiCetak as $key => $transaksi)
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
                                     <td>
-                                        {{ $transaksi->name_product }}
+                                        {{ $transaksi->name_product }} - {{ $transaksi->description }}
                                     </td>
                                     <td>
                                         {{ $transaksi->description }}
@@ -127,10 +108,10 @@
                     </table>
 
                     <div class="justify-content-center">
-                        <table class="table mt-3">
-                            <tr class="mt-2">
+                        <table class="table mt-1">
+                            <tr>
                                 <td>
-                                    <div class="text-center">
+                                    <div class="text-signature">
                                         <p>
                                             <b>Pengirim</b>
                                         </p>
@@ -139,7 +120,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="text-center">
+                                    <div class="text-signature">
                                         <p>
                                             <b>Penerima</b>
                                         </p>
@@ -148,7 +129,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="text-center">
+                                    <div class="text-signature">
                                         <p>
                                             <b>Hormat kami</b>
                                         </p>

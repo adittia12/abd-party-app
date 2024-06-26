@@ -148,7 +148,7 @@
                                                         </div>
                                                         <div class="p-1">
                                                             <a href="{{ route('order.suratKembali', Crypt::encrypt($item->id)) }}"
-                                                                class="btn btn-danger btn-sm">
+                                                                class="btn btn-danger btn-sm" target="_blank">
                                                                 <i class="fas fa-print"></i> Surat Kembali
                                                             </a>
                                                         </div>

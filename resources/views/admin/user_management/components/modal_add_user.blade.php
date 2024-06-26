@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('user/add/save') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('user/add/save') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="mb-3 col-md-6">
@@ -43,23 +43,6 @@
                             <span class="text-danger text-sm">{{ $errors->first('role_name') }}</span>
                         @endif
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="phone_number">Phone</label>
-                        <input type="tel" class="form-control @error('phone_number') is-invalid @enderror"
-                            id="phone_number" name="phone_number" value="{{ old('phone_number') }}"
-                            placeholder="Number Phone">
-                        @if ($errors->has('phone_number'))
-                            <span class="text-danger text-sm">{{ $errors->first('phone_number') }}</span>
-                        @endif
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="image">Upload Photo</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" id="image"
-                            name="image" value="{{ old('image') }}" accept="image/png, image/jpeg">
-                        @if ($errors->has('image'))
-                            <span class="text-danger text-sm">{{ $errors->first('image') }}</span>
-                        @endif
-                    </div>
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label class="form-label" for="status">Status</label>
@@ -88,7 +71,7 @@
                             <input type="password"
                                 class="form-control @error('password_confirmation') is-invalid @enderror"
                                 id="password_confirmation" name="password_confirmation"
-                                value="{{ old('password_confirmation') }}" placeholder="Choose Repat Password">
+                                value="{{ old('password_confirmation') }}" placeholder="Repeat Password">
                             @if ($errors->has('password_confirmation'))
                                 <span class="text-danger text-sm">{{ $errors->first('password_confirmation') }}</span>
                             @endif
