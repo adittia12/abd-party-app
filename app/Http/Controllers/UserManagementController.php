@@ -68,18 +68,17 @@ class UserManagementController extends Controller
             $user->name        = $request->name;
             $user->email       = $request->email;
             $user->join_date   = $todayDate;
+            $user->last_login   = $todayDate;
             // $user->last_login   = $todayDate;
-            $user->phone_number       = $request->phone_number;
             $user->role_name   = $request->role_name;
             $user->status      = $request->status;
             $user->avatar      = 'avatar-1.png';
             $user->password    = Hash::make($request->password);
             $user->save();
-            // dd($check);
             DB::commit();
             Alert::success('Success', 'Create new account succesfully :)');
 
-            return redirect()->route('userManagement');
+            return redirect()->back();
         } catch (\Exception $e) {
             // dd($e->getMessage());
             // die;
@@ -97,7 +96,7 @@ class UserManagementController extends Controller
             $name           = $request->name;
             $email          = $request->email;
             $role_name      = $request->role_name;
-            $phone          = $request->phone;
+            // $phone          = $request->phone;
             $status         = $request->status;
 
             $dt       = Carbon::now();
@@ -127,15 +126,15 @@ class UserManagementController extends Controller
                 'name'          => $name,
                 'role_name'     => $role_name,
                 'email'         => $email,
-                'phone_number'  => $phone,
+                // 'phone_number'  => $phone,
                 'status'        => $status,
-                'avatar'        => $image_name
+                // 'avatar'        => $image_name
             ];
 
             $activityLog = [
                 'user_name'     => $name,
                 'email'         => $email,
-                'phone_number'  => $phone,
+                // 'phone_number'  => $phone,
                 'status'        => $status,
                 'role_name'     => $role_name,
                 'modify_user'   => 'Update',
