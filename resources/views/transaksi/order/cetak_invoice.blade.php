@@ -152,9 +152,9 @@
                             <td>
                                 <div class="signature">
                                     <div class="signature-content">
-                                        <p><b>Hormat kami</b></p>
+                                        <p style="font-size: 15px"><b>Hormat kami</b></p>
                                         <br>
-                                        <p>(Abdul Basit)</p>
+                                        <p style="font-size: 15px">(Abdul Basit)</p>
                                     </div>
                                 </div>
                             </td>

@@ -17,7 +17,7 @@
                         <div class="d-flex">
                             <div class="w-100">
                                 <h3 class="mb-4">Sign In</h3>
-                                <a href="{{ route('register') }}">Test</a>
+                                {{-- <a href="{{ route('register') }}">Test</a> --}}
                             </div>
                         </div>
                         <form method="POST" action="{{ route('login') }}">
@@ -45,11 +45,11 @@
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary submit px-3">Login</button>
                             </div>
-                            <div class="form-group d-md-flex">
+                            {{-- <div class="form-group d-md-flex">
                                 <div class="w-50 text-md-right">
                                     <a href="{{ route('forget-password') }}">Forgot Password</a>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>

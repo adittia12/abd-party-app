@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Products;
 use Illuminate\Database\Seeder;
@@ -21,6 +22,18 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $dt       = Carbon::now('Asia/Jakarta');
+        $todayDate = $dt->toDayDateTimeString();
+        User::create([
+            'name'  => 'Adittia Agustian',
+            'email' => 'agustianaa12adit@gmail.com',
+            'join_date' => $todayDate,
+            'status' => 'Active',
+            'role_name' => 'Admin',
+            'avatar' => 'avatar-1.png',
+            'password'  => bcrypt('admin098')
+        ]);
+
         $products = [
             [
                 'name_product' => 'Tenda',
