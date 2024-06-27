@@ -40,7 +40,7 @@
                                     @foreach ($invoice as $key => $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td class="order_number">{{ $item->order_number }}}</span></td>
+                                            <td class="order_number">{{ $item->order_number }}</span></td>
                                             <td class="name_customer">{{ $item->name_customer }}</td>
                                             <td class="invoice_number">{{ $item->invoice_number }}</td>
                                             <td class="period_date">

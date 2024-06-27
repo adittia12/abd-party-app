@@ -31,7 +31,8 @@ class Invoices extends Model
 
             // Inisialisasi nextID
             if ($lastInvoice) {
-                $latestID = intval(substr($lastInvoice->invoice_number, strlen('KWITANSI'), strpos($lastInvoice->invoice_number, '/') - strlen('KWITANSI')));
+                // Ambil angka setelah 'KWITANSI' dan sebelum '/'
+                $latestID = intval(substr($lastInvoice->invoice_number, strlen('KWITANSI/'), strpos($lastInvoice->invoice_number, '/', strlen('KWITANSI/')) - strlen('KWITANSI/')));
                 $nextID = $latestID + 1;
             } else {
                 $nextID = 1;
