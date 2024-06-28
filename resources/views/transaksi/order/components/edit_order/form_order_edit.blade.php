@@ -62,16 +62,40 @@
                     value="{{ $order->initial_terms }}" placeholder="Ketik jumlah hari">
             </div>
         </div>
-        <div class="form-group">
-            <label>Tanggal Pasang</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-calendar-alt"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Tanggal Pasang</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <input type="date" name="date_pasang" id="date_pasang" value="{{ $order->date_pasang }}"
+                            class="form-control">
                     </div>
                 </div>
-                <input type="date" name="date_pasang" id="date_pasang" value="{{ $order->date_pasang }}"
-                    class="form-control">
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Status Order</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <select name="status_order" id="status_order" class="form-control select2">
+                            <option value="{{ $order->status_order }}">
+                                {{ $order->status_order ?? 'Pilih status Order' }}
+                            </option>
+                            <option value="Pengajuan">Pengajuan</option>
+                            <option value="Sudah Ok">Sudah Ok</option>
+                            <option value="Invoice">Invoice</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">

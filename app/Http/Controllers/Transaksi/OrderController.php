@@ -25,7 +25,8 @@ class OrderController extends Controller
         // $lastDate = Orders::select('start_event')->orderBy('start_event', 'DESC')->first()?->start_event;
 
         // Mengecek apakah $lastDate ada
-        $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id', 'status_driver')->orderBy('start_event', 'DESC')->get();
+        $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id', 'status_driver')
+        ->orderBy('start_event', 'DESC')->get();
         return view('transaksi.order.index', compact(['datasetOrder']));
     }
 
@@ -43,7 +44,6 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        $statusOrder = 'Pengajuan';
         $jenisTerm = 'Days';
         $tempat = 'Gudang Karawang';
         DB::beginTransaction();
@@ -65,8 +65,16 @@ class OrderController extends Controller
                 'discount_rate' => $request['discount_rate'],
                 'jenis_pajak' => $request['jenis_pajak'],
                 'dp' => $request['dp'],
-                'status_order' => $statusOrder,
+                'status_order' => $request['status_order'],
             ]);
+
+            if ($order && $order->status_order == 'Invoice') {
+                $periodeData = date('Y-m-d');
+                Invoices::create([
+                    'id_order' => $order->id,
+                    'period_date' => $periodeData
+                ]);
+            }
 
             foreach ($request['id_product'] as $key => $product) {
                 $existInMasterProduct = Products::where('id', $product)->exists();
@@ -187,11 +195,20 @@ class OrderController extends Controller
                 'end_event' => $request->end_event,
                 'date_pasang' => $request->date_pasang,
                 'jenis_pajak' => $request->jenis_pajak,
+                'status_order' => $request->status_order,
                 'pajak' => $request->pajak,
                 'price_list' => $request->price_list,
                 'discount_rate' => $request->discount_rate,
                 'dp' => $request->dp,
             ]);
+
+            if ($order && $order->status_order == 'Invoice') {
+                $periodeData = date('Y-m-d');
+                Invoices::create([
+                    'id_order' => $order->id,
+                    'period_date' => $periodeData
+                ]);
+            }
 
             // Initialize array to store IDs of updated transactions
             $updatedTransactionIds = [];

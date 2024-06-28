@@ -176,7 +176,7 @@
     }
 
     .card-bank {
-        background: #e8e8e8;
+        background: #e8e8e88c;
         padding: 10px;
         width: 220px;
         font-size: 10px;
