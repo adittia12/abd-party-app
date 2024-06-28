@@ -29,10 +29,11 @@ class OrderStoreRequest extends FormRequest
             'delivery_address'    => ['required', 'string'],
             'start_event'         => ['required', 'date'],
             'end_event'           => ['required', 'date'],
-            'id_product.*'          => ['required'],
-            'description.*'         => ['required', 'string'],
-            'qty.*'                   => ['required', 'numeric'],
-            'price.*'                 => ['required', 'numeric']
+            'status_order'        => ['required'],
+            'id_product.*'        => ['required'],
+            'description.*'       => ['required', 'string'],
+            'qty.*'               => ['required', 'numeric'],
+            'price.*'             => ['required', 'numeric']
         ];
     }
 
@@ -65,6 +66,9 @@ class OrderStoreRequest extends FormRequest
             'end_event' => [
                 'required' => 'Tanggal akhir event harus diisi',
                 'date'     => 'Tanggal akhir event harus dalam format tanggal'
+            ],
+            'status_order' => [
+                'required' => 'Status Order harus diisi',
             ],
             'id_product.*' => [
                 'required' => 'Produk harus diisi',
