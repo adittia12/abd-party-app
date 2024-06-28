@@ -48,7 +48,7 @@
                         <p class="text-info-jalan">Kepada : <b>{{ $cetakOrder->name_customer }}</b> <br>
                             {{ $cetakOrder->delivery_address }}
                         </p>
-                        <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
+                        <input type="hidden" name="id" value="{{ Crypt::encrypt($cetakOrder->id) }}">
                         <div class="section-title "><b class="text-info-jalan">Surat Jalan</b></div>
                         <div class="section-title text-info-jalan">Order : <b>{{ $cetakOrder->order_number }}</b></div>
                         <small class="text-info-jalan"><b>Berikut kami kirimkan untuk pengajuan
