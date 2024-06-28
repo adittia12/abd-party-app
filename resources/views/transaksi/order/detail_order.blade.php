@@ -36,6 +36,13 @@
                                         <span class="badge badge-danger">{{ $order->status_order }}</span>
                                     @endif
                                 </div>
+                                @if ($order->status_order == 'Invoice')
+                                    <div class="p-2">
+                                        <a href="{{ route('order.cetak_invoice', Crypt::encrypt($order->id)) }}"
+                                            class="btn btn-danger" target="_blank"><i class="fas fa-print"></i>
+                                            Invoice</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

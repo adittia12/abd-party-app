@@ -161,14 +161,6 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
-                                                    @if ($item->status_order == 'Invoice')
-                                                        <div class="p-1">
-                                                            <a href="{{ route('order.cetak_invoice', Crypt::encrypt($item->id)) }}"
-                                                                class="btn btn-danger btn-sm" target="_blank"><i
-                                                                    class="fas fa-print"></i>
-                                                                Invoice</a>
-                                                        </div>
-                                                    @endif
                                                     <div class="p-1">
                                                         <div class="btn-group">
                                                             <button type="button"
