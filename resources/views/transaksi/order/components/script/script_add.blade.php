@@ -33,7 +33,7 @@
             var qty = parseFloat($row.find('input[name="qty[]"]').val()) || 0;
             var price = parseFloat($row.find('input[name="price[]"]').val()) || 0;
             var totalHarga = qty * price;
-            $row.find('input[name="total_harga"]').val(formatRupiah(totalHarga, 'Rp. '));
+            $row.find('input[name="total_harga"]').val(formatRupiah(totalHarga));
         }
     });
 
@@ -50,7 +50,7 @@
         }
 
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
     }
 </script>
 <script>
@@ -82,33 +82,33 @@
                         class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
                 @endif
             </td>
-            <td>
+            <td hidden>
                 <input type="number" name="days[]" id="days" placeholder="Hari">
             </td>
             <td>
                 <input type="number" name="qty[]" id="qty"
                     value="{{ old('qty[]') }}"
                     class="@error('qty.*') is-invalid @enderror"
-                    placeholder="Quantity">
+                    placeholder="Quantity" style="width: 100px;">
                 @if ($errors->has('qty.*'))
                     <span
                         class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
                 @endif
             </td>
-            <td>
+            <td hidden>
                 <input type="text" name="measure_list[]" id="measure_list" placeholder="Jenis Satuan">
             </td>
             <td>
                 <input type="number" name="price[]" id="price"
                     class="@error('price.*') is-invalid @enderror"
-                    placeholder="Ketik harga">
+                    placeholder="Ketik harga" style="width: 150px;">
                 @if ($errors->has('price.*'))
                     <span
                         class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
                 @endif
             </td>
             <td>
-                <input type="text" name="total_harga" placeholder="Jumlah Harga" readonly>
+                <input type="text" name="total_harga" placeholder="Jumlah Harga" style="width: 150px;" readonly>
             </td>
             <td>
                 <a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a>

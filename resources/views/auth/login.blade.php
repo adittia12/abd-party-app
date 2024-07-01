@@ -9,7 +9,9 @@
                 <div class="wrap d-md-flex">
                     <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
                         <div class="text w-100">
-                            <h2>Welcome to login</h2>
+                            <div class="card rounded-5 transition">
+                                <img src="{{ asset('admin/assets/img/logo_abd-removebg-preview.png') }}" alt="logo abd">
+                            </div>
                         </div>
                     </div>
                     @include('sweetalert::alert')
