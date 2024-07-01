@@ -27,11 +27,14 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/izitoast/css/iziToast.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('admin/assets/css/font-awesome.css') }}"> --}}
 
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    @yield('header')
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -73,7 +76,9 @@
     </div>
 
     <!-- General JS Scripts -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="{{ asset('admin/assets/modules/jquery.min.js') }}"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script src="{{ asset('admin/assets/modules/popper.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/tooltip.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -99,12 +104,15 @@
     <script src="{{ asset('admin/assets/modules/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('admin/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/modules/izitoast/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/alphine.min.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/forms-advanced-forms.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/modules-datatables.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/page/modules-toastr.js') }}"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('admin/assets/js/page/index-0.js') }}"></script>
@@ -113,6 +121,10 @@
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
     {{-- <script src="{{ asset('admin/assets/js/font-awesome.all.min.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+        integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
     @yield('script')
 </body>
