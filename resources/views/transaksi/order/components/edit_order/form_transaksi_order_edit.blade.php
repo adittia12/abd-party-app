@@ -4,9 +4,7 @@
             <th>#</th>
             <th>Product</th>
             <th>Descriptions</th>
-            <th>Days</th>
             <th>Quantity</th>
-            <th>Jenis Satuan</th>
             <th>Harga Satuan</th>
             <th>Jumlah Harga</th>
             <th>Action</th>
@@ -42,31 +40,31 @@
                         <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
                     @endif
                 </td>
-                <td>
+                <td hidden>
                     <input type="number" name="days[]" value="{{ $transaksi->days }}" placeholder="Hari">
                 </td>
                 <td>
                     <input type="number" name="qty[]" id="qty" value="{{ $transaksi->qty }}"
-                        class="@error('qty.*') is-invalid @enderror" placeholder="Quantity">
+                        class="@error('qty.*') is-invalid @enderror" placeholder="Quantity" style="width: 50px">
                     @if ($errors->has('qty.*'))
                         <span class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
                     @endif
                 </td>
-                <td>
+                <td hidden>
                     <input type="text" name="measure_list[]" value="{{ $transaksi->measure_list }}"
                         id="measure_list" placeholder="Jenis Satuan">
                 </td>
                 <td>
                     <input type="number" name="price[]" value="{{ $transaksi->price }}" id="price"
-                        class="@error('price.*') is-invalid @enderror" placeholder="Ketik harga">
+                        class="@error('price.*') is-invalid @enderror" placeholder="Ketik harga" style="width: 120px">
                     @if ($errors->has('price.*'))
                         <span class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
                     @endif
                 </td>
                 <td>
                     <input type="text" name="total_harga[]"
-                        value="{{ $transaksi->price * $transaksi->qty == 0 ? '0' : 'Rp ' . number_format($transaksi->price * $transaksi->qty, 2, ',', '.') }}"
-                        placeholder="Jumlah Harga" readonly>
+                        value="{{ $transaksi->price * $transaksi->qty == 0 ? '0' : number_format($transaksi->price * $transaksi->qty, 0, ',', '.') }}"
+                        placeholder="Jumlah Harga" style="width: 150px" readonly>
                 </td>
 
                 <td>

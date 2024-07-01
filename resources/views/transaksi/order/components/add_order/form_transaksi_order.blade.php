@@ -4,11 +4,9 @@
             <th>#</th>
             <th>Product</th>
             <th>Descriptions</th>
-            <th>Days</th>
             <th>Quantity</th>
-            <th>Jenis Satuan</th>
             <th>Harga Satuan</th>
-            <th>Jumlah Harga</th>
+            <th>Total</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -37,28 +35,28 @@
                     <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
                 @endif
             </td>
-            <td>
+            <td hidden>
                 <input type="number" name="days[]" id="days" placeholder="Hari">
             </td>
             <td>
                 <input type="number" name="qty[]" id="qty" value="{{ old('qty[]') }}"
-                    class="@error('qty.*') is-invalid @enderror" placeholder="Quantity">
+                    class="@error('qty.*') is-invalid @enderror" placeholder="Quantity" style="width: 100px;">
                 @if ($errors->has('qty.*'))
                     <span class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
                 @endif
             </td>
-            <td>
+            <td hidden>
                 <input type="text" name="measure_list[]" id="measure_list" placeholder="Jenis Satuan">
             </td>
             <td>
                 <input type="number" name="price[]" id="price" class="@error('price.*') is-invalid @enderror"
-                    placeholder="Ketik harga">
+                    placeholder="Ketik harga" style="width: 150px;">
                 @if ($errors->has('price.*'))
                     <span class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
                 @endif
             </td>
             <td>
-                <input type="text" name="total_harga" placeholder="Jumlah Harga" readonly>
+                <input type="text" name="total_harga" placeholder="Jumlah Harga" style="width: 150px;" readonly>
             </td>
             <td>
                 <a href="javascript:void(0)" class="btn btn-success btn-sm" title="Add" id="addBtn">Add Row</a>

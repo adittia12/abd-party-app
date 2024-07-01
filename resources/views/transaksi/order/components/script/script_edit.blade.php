@@ -66,14 +66,14 @@
             var qty = parseFloat($row.find('input[name="qty[]"]').val()) || 0;
             var price = parseFloat($row.find('input[name="price[]"]').val()) || 0;
             var totalHarga = qty * price;
-            $row.find('input[name="total_harga[]"]').val(formatRupiah(totalHarga, 'Rp. '));
+            $row.find('input[name="total_harga[]"]').val(formatRupiah(totalHarga));
         }
 
         function updateTotalHargaOrder($row) {
             var qty = parseFloat($row.find('input[name="new_qty[]"]').val()) || 0;
             var price = parseFloat($row.find('input[name="new_price[]"]').val()) || 0;
             var totalHarga = qty * price;
-            $row.find('input[name="new_total_harga[]"]').val(formatRupiah(totalHarga, 'Rp. '));
+            $row.find('input[name="new_total_harga[]"]').val(formatRupiah(totalHarga));
         }
 
         // Add new row for transaction
@@ -100,26 +100,26 @@
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </td>
-                    <td>
+                    <td hidden>
                         <input type="number" name="new_days[]" placeholder="Hari">
                     </td>
                     <td>
-                        <input type="number" name="new_qty[]" value="{{ old('new_qty[]') }}" class="@error('new_qty.*') is-invalid @enderror" placeholder="Quantity">
+                        <input type="number" name="new_qty[]" value="{{ old('new_qty[]') }}" class="@error('new_qty.*') is-invalid @enderror" style="width: 50px" placeholder="Quantity">
                         @error('new_qty.*')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </td>
-                    <td>
+                    <td hidden>
                         <input type="text" name="new_measure_list[]" placeholder="Jenis Satuan">
                     </td>
                     <td>
-                        <input type="number" name="new_price[]" class="@error('new_price.*') is-invalid @enderror" placeholder="Ketik harga">
+                        <input type="number" name="new_price[]" class="@error('new_price.*') is-invalid @enderror" style="width: 120px" placeholder="Ketik harga">
                         @error('new_price.*')
                             <span class="text-danger text-sm">{{ $message }}</span>
                         @enderror
                     </td>
                     <td>
-                        <input type="text" name="new_total_harga[]" placeholder="Jumlah Harga" readonly>
+                        <input type="text" name="new_total_harga[]" placeholder="Jumlah Harga" style="width: 150px" readonly>
                     </td>
                     <td>
                         <a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a>
@@ -214,7 +214,7 @@
         }
 
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
     }
 </script>
 
