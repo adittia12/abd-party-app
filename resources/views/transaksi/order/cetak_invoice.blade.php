@@ -73,7 +73,7 @@
                             @endphp
                             <tr>
                                 <td>
-                                    {{ $transaksi->name_product }}
+                                    {{ $transaksi->name_product }} - {{ $transaksi->description }}
                                 </td>
                                 <td>
                                     {{ $transaksi->qty }} {{ $transaksi->measure_list }}
