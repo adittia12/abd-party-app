@@ -16,18 +16,21 @@ use PDF;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil nilai start_event terakhir
-        // $lastDate = Orders::select('start_event')->orderBy('start_event', 'DESC')->first()?->start_event;
-
+        $filterMonth = $request->input('filteringMonth');
         // Mengecek apakah $lastDate ada
         $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id', 'status_driver')
-        ->orderBy('start_event', 'DESC')->get();
-        return view('transaksi.order.index', compact(['datasetOrder']));
+        ->orderBy('start_event', 'DESC');
+
+        if ($filterMonth) {
+            $filterMonth = date('Y-m', strtotime($filterMonth));
+            $datasetOrder->where('start_event', 'LIKE', '%' . $filterMonth . '%');
+        }
+
+        $orderData = $datasetOrder->get();
+
+        return view('transaksi.order.index', compact(['orderData', 'filterMonth']));
     }
 
     /**
@@ -48,6 +51,9 @@ class OrderController extends Controller
         $tempat = 'Gudang Karawang';
         DB::beginTransaction();
         try {
+            if ($request['status_order'] == 'Pilih Status') {
+                $request['status_order'] = 'Pengajuan';
+            }
             $order = Orders::create([
                 'name_customer' => $request['name_customer'],
                 'tgl_order' => $request['tgl_order'],
@@ -209,7 +215,6 @@ class OrderController extends Controller
                     'period_date' => $periodeData
                 ]);
             }
-
             // Initialize array to store IDs of updated transactions
             $updatedTransactionIds = [];
 

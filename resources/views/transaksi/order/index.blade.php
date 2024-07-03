@@ -20,6 +20,26 @@
                                 <a href="{{ route('order.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add
                                     Order</a>
                             </div>
+                            <div class="col-auto float-right ml-auto">
+                                <a href="{{ route('export_transaksi', ['filteringMonth' => $filterMonth]) }}"
+                                    class="btn btn-success">
+                                    <i class="fas fa-file-excel"></i> Download
+                                </a>
+                            </div>
+                            <div class="col-auto float-left mr-auto">
+                                <form action="{{ route('order.index') }}" method="GET">
+                                    <div class="d-flex flex-row">
+                                        <div class="p-2">
+                                            <input type="month" class="form-control bg-warning" id="filteringMonth"
+                                                name="filteringMonth" aria-describedby="filteringMonth">
+                                        </div>
+                                        <div class="p-2">
+                                            <button class="btn btn-outline-success btn-sm"><i
+                                                    class="fa-regular fa-circle-dot"></i> Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     @include('sweetalert::alert')
@@ -41,7 +61,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($datasetOrder as $key => $item)
+                                    @foreach ($orderData as $key => $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="order_number">{{ $item->order_number }}</td>

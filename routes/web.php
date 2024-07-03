@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\Transaksi\InvoiceController;
 use App\Http\Controllers\Transaksi\OrderController;
+use App\Http\Controllers\Transaksi\ReportTransController;
 use App\Http\Controllers\UserManagementController;
 
 /*
@@ -114,6 +115,10 @@ Route::middleware('auth')->group(function(){
         Route::get('/invoice/doc-konsumen/{id}', 'docKonsumen')->name('invoice.doc-konsumen');
         Route::get('/invoice/doc-kantor/{id}', 'docKantor')->name('invoice.doc-kantor');
         Route::get('/invoice/doc-employee/{id}', 'docEmployee')->name('invoice.docEmployee');
+    });
+
+    Route::controller( ReportTransController::class)->group(function () {
+        Route::get('/report/transaksi/', 'export')->name('export_transaksi');
     });
 
 });
