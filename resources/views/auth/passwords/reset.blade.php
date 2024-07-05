@@ -8,7 +8,7 @@
     <div class="container">
         <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <div class="login-brand">
-                <img src="{{ asset('admin/assets/img/stisla-fill.svg') }}" alt="logo" width="100"
+                <img src="{{ asset('admin/assets/img/logo_abd-removebg-preview.png') }}" alt="logo" width="300"
                     class="shadow-light rounded-circle">
             </div>
 
@@ -21,6 +21,7 @@
                     <p class="text-muted">We will send a link to reset your password</p>
                     <form method="POST" action="/reset-password">
                         @csrf
+                        <input type="hidden" name="token" value="{{ $token }}">
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
