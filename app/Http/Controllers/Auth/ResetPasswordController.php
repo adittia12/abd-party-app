@@ -24,17 +24,24 @@ class ResetPasswordController extends Controller
             'password_confirmation' => 'required'
         ]);
 
-        $updatePassword = DB::table('password_resets')->where(['email' => $request->email, 'token' => $request->token])->first();
+        $updatePassword = DB::table('password_resets')
+            ->where([
+                'email' => $request->email,
+                'token' => $request->token
+            ])
+            ->first();
 
-        if (!$updatePassword){
+        if (!$updatePassword) {
             Alert::error('Wrong', 'Invalid token! :)');
             return back();
-        } else {
-            User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
-            DB::table('password_resets')->where(['email' => $request->email])->delete();
-
-            Alert::success('Congrastt', 'Your password has been changed! :)');
-            return redirect('/login');
         }
+
+        User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+
+        DB::table('password_resets')->where(['email' => $request->email])->delete();
+
+        Alert::success('Congrats', 'Your password has been changed! :)');
+        return redirect()->route('login');
     }
 }
