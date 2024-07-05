@@ -61,7 +61,7 @@ Route::controller(ForgotPasswordController::class)->group(function () {
 // Reset Password
 Route::controller(ResetPasswordController::class)->group(function () {
     Route::get('reset-password/{token}', 'getPassword');
-    Route::post('reset-password', 'updatePassword');
+    Route::post('/reset-password', 'updatePassword');
 });
 
 Route::middleware('auth')->group(function(){
