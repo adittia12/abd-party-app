@@ -86,14 +86,27 @@
                                 <i class="fas fa-money-check"></i>
                             </div>
                         </div>
+                        @php
+                            $statusOptions = [
+                                'Invoice' => ['Order Cancel'],
+                                'Pengajuan' => ['Sudah Ok', 'Invoice'],
+                                'Sudah Ok' => ['Invoice'],
+                                'default' => ['Pengajuan', 'Sudah Ok', 'Invoice'],
+                            ];
+
+                            $currentStatus = $order->status_order;
+                            $options = $statusOptions[$currentStatus] ?? $statusOptions['default'];
+                        @endphp
+
                         <select name="status_order" id="status_order" class="form-control select2">
-                            <option value="{{ $order->status_order }}">
-                                {{ $order->status_order ?? 'Pilih status Order' }}
+                            <option value="{{ $currentStatus }}">
+                                {{ $currentStatus ?? 'Pilih status Order' }}
                             </option>
-                            <option value="Pengajuan">Pengajuan</option>
-                            <option value="Sudah Ok">Sudah Ok</option>
-                            <option value="Invoice">Invoice</option>
+                            @foreach ($options as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
                         </select>
+
                     </div>
                 </div>
             </div>
@@ -109,7 +122,8 @@
                             </div>
                         </div>
                         <select name="jenis_pajak" id="jenis_pajak" class="form-control select2">
-                            <option value="{{ $order->jenis_pajak }}">{{ $order->jenis_pajak ?? 'Pilih Jenis Pajak' }}
+                            <option value="{{ $order->jenis_pajak }}">
+                                {{ $order->jenis_pajak ?? 'Pilih Jenis Pajak' }}
                             </option>
                             <option value="PPH">PPH</option>
                             <option value="PPN">PPN</option>
