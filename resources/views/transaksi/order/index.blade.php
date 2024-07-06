@@ -193,9 +193,17 @@
                                                                         href="{{ route('order.show', Crypt::encrypt($item->id)) }}"><i
                                                                             class="fas fa-info-circle"></i>
                                                                         Detail</a></li>
-                                                                @if ($item->status_order === 'Pengajuan' || $item->status_order === 'Sudah Ok')
+                                                                @if (
+                                                                    $item->status_order === 'Pengajuan' ||
+                                                                        $item->status_order === 'Sudah Ok' ||
+                                                                        ($item->status_order == 'Invoice' && Auth::user()->role_name == 'Super Admin'))
                                                                     <li><a class="dropdown-item"
                                                                             href="{{ route('order.edit', $item->id) }}"><i
+                                                                                class="fas fa-pen-square"></i>
+                                                                            Edit</a></li>
+                                                                @elseif ($item->status_order == 'Order Cancel' && Auth::user()->role_name == 'Super Admin')
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            @disabled(true)><i
                                                                                 class="fas fa-pen-square"></i>
                                                                             Edit</a></li>
                                                                 @elseif (Auth::user()->role_name == 'Admin')
