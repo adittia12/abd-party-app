@@ -27,25 +27,28 @@
                                 </a>
                             </div>
                             <div class="col-auto float-left mr-auto">
-                                <form action="{{ route('order.index') }}" method="GET">
-                                    <div class="d-flex flex-row">
-                                        <div class="p-2">
-                                            <input type="month" class="form-control bg-warning" id="filteringMonth"
-                                                name="filteringMonth" aria-describedby="filteringMonth">
-                                        </div>
-                                        <div class="p-2">
-                                            <button class="btn btn-outline-success btn-sm"><i
-                                                    class="fa-regular fa-circle-dot"></i> Filter</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <div class="d-flex flex-row">
+                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                        data-target="#filterData">
+                                        Filter Data
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                     @include('sweetalert::alert')
                     <div class="card-body">
+                        <div class="d-flex flex-row-reverse mb-3">
+                            <div class="p-2">
+                                <form action="{{ route('order.index') }}" method="get">
+                                    <input type="text" class="form-control" placeholder="Pencarian" name="q"
+                                        value="{{ request('q') }}" width="200px" autofocus>
+                                </form>
+                            </div>
+                        </div>
                         <div class="table-responsive">
-                            <table id="table-1" class="table table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -63,7 +66,9 @@
                                 <tbody>
                                     @foreach ($orderData as $key => $item)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>
+                                                {{ $orderData->perPage() * ($orderData->currentPage() - 1) + $key + 1 }}
+                                            </td>
                                             <td class="order_number">{{ $item->order_number }}</td>
                                             <td class="order_date">
                                                 {{ \Carbon\Carbon::parse($item->tgl_order)->translatedFormat('d F Y') }}
@@ -216,8 +221,9 @@
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <li><a class="dropdown-item delete-button"
-                                                                            data-id="{{ $item->id }}"><i
+                                                                    <li><a type="button"
+                                                                            class="dropdown-item delete-button"
+                                                                            data-id-order="{{ $item->id }}"><i
                                                                                 class="fas fa-trash"></i>
                                                                             Delete</a></li>
                                                                 </form>
@@ -230,6 +236,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $orderData->links('pagination::bootstrap-4') }}
                         </div>
 
                     </div>
@@ -237,6 +244,8 @@
             </div>
         </div>
     </section>
+
+    @include('transaksi.order.components.modal_filter')
 @section('script')
     @include('transaksi.order.components.script_order')
 @endsection
