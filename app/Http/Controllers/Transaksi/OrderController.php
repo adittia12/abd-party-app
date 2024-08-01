@@ -19,19 +19,44 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $filterMonth = $request->input('filteringMonth');
-        // Mengecek apakah $lastDate ada
-        $datasetOrder = Orders::select('order_number', 'name_customer', 'date_pasang', 'start_event', 'end_event', 'status_order', 'tgl_order', 'id', 'status_driver')
-        ->orderBy('start_event', 'DESC');
+        $filterDate = $request->input('filterDate');
+
+        $datasetOrder = Orders::when($request->input('q'), function($query, $q) {
+            // Cek apakah q adalah tanggal yang valid
+            $timestamp = strtotime($q);
+
+            if ($timestamp) {
+                // Jika q adalah tanggal yang valid, format menjadi Y-m-d
+                $formattedQDate = date('Y-m-d', $timestamp);
+                $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
+
+                return $query->where('name_customer', 'LIKE', '%' . $q . '%')
+                             ->orWhereDate('start_event', $formattedQDate)
+                             ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
+                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+            } else {
+                // Jika q bukan tanggal yang valid, gunakan q apa adanya
+                return $query->where('name_customer', 'LIKE', '%' . $q . '%')
+                             ->orWhere('start_event', 'LIKE', '%' . $q . '%')
+                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+            }
+        });
 
         if ($filterMonth) {
             $filterMonth = date('Y-m', strtotime($filterMonth));
             $datasetOrder->where('start_event', 'LIKE', '%' . $filterMonth . '%');
         }
+        if ($filterDate) {
+            $filterDate = date('Y-m-d', strtotime($filterDate));
+            $datasetOrder->whereDate('start_event', $filterDate);
+        }
 
-        $orderData = $datasetOrder->get();
+        $orderData = $datasetOrder->orderBy('start_event', 'asc')->paginate(10);
 
-        return view('transaksi.order.index', compact(['orderData', 'filterMonth']));
+        return view('transaksi.order.index', compact('orderData', 'filterMonth'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.

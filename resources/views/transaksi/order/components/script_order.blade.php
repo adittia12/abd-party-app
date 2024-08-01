@@ -4,7 +4,7 @@
         const deleteButtons = document.querySelectorAll('.delete-button');
         deleteButtons.forEach((button) => {
             button.addEventListener('click', function() {
-                const id = button.getAttribute('data-id');
+                const id = button.getAttribute('data-id-order');
                 Swal.fire({
                     title: 'Delete Confirmation',
                     text: 'Do you want to delete this order?',
