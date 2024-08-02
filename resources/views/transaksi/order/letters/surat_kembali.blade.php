@@ -48,6 +48,9 @@
                     <div>
                         <p class="text-info-jalan">Kepada : <b>{{ $cetakOrder->name_customer }}</b> <br>
                             {{ $cetakOrder->delivery_address }}
+                            @if ($cetakOrder->no_phone)
+                                <br>Nomor HP : <b>0{{ $cetakOrder->no_phone }}</b>
+                            @endif
                         </p>
                         <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
                         <div class="section-title "><b class="text-info-jalan">Surat Kembali</b></div>
