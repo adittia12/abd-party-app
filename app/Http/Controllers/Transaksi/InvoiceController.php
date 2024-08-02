@@ -99,7 +99,7 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetakKantor = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.delivery_address')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.delivery_address', 'orders.no_phone')
                                 ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
@@ -132,7 +132,7 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetaEmployee = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.delivery_address')
+                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.delivery_address', 'orders.no_phone')
                                 ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
