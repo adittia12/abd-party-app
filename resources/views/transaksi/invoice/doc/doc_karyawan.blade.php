@@ -48,6 +48,9 @@
                     <div>
                         <p class="mt-2 text-info-jalan">Kepada : <b>{{ $cetaEmployee->name_customer }}</b> <br>
                             {{ $cetaEmployee->delivery_address }}
+                            @if ($cetaEmployee->no_phone)
+                                <br>Nomor HP : <b>0{{ $cetaEmployee->no_phone }}</b>
+                            @endif
                         </p>
                         <input type="hidden" name="id" value="{{ Crypt::encrypt($cetaEmployee->id) }}">
                         <div class="section-title mt-1"><b class="text-info-jalan">Surat Jalan</b></div>
@@ -171,6 +174,9 @@
                     <div>
                         <p class="mt-2 text-info-jalan">Kepada : <b>{{ $cetaEmployee->name_customer }}</b> <br>
                             {{ $cetaEmployee->delivery_address }}
+                            @if ($cetaEmployee->no_phone)
+                                <br>Nomor HP : <b>0{{ $cetaEmployee->no_phone }}</b>
+                            @endif
                         </p>
                         <div class="section-title mt-1"><b class="text-info-jalan">Surat Kembali</b></div>
                         <div class="text-info-jalan">Order : <b>{{ $cetaEmployee->order_number }}</b></div>

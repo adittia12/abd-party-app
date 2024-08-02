@@ -348,6 +348,9 @@
                 <div>
                     <p class="text-info-jalan mt-2">Kepada : <b>{{ $cetakKantor->name_customer }}</b> <br>
                         {{ $cetakKantor->delivery_address }}
+                        @if ($cetakKantor->no_phone)
+                            <br>Nomor HP : <b>0{{ $cetakKantor->no_phone }}</b>
+                        @endif
                     </p>
                     <div class="section-title mt-1">Order : <b
                             class="text-info-jalan">{{ $cetakKantor->order_number }}</b></div>
