@@ -26,12 +26,12 @@ class Invoices extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            // Ambil invoice terakhir
-            $lastInvoice = self::orderBy('invoice_number', 'desc')->first(['invoice_number']);
+            // Ambil invoice terakhir berdasarkan bagian numerik dari invoice_number
+            $lastInvoice = self::orderByRaw('CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(invoice_number, "/", 2), "/", -1) AS UNSIGNED) DESC')->first(['invoice_number']);
 
             // Inisialisasi nextID
             if ($lastInvoice) {
-                // Ambil angka setelah 'KWITANSI' dan sebelum '/'
+                // Ambil angka setelah 'KWITANSI/' dan sebelum '/'
                 $latestID = intval(substr($lastInvoice->invoice_number, strlen('KWITANSI/'), strpos($lastInvoice->invoice_number, '/', strlen('KWITANSI/')) - strlen('KWITANSI/')));
                 $nextID = $latestID + 1;
             } else {
@@ -54,13 +54,11 @@ class Invoices extends Model
             $romanMonth = $romanMonths[$currentMonth];
 
             // Bentuk nomor invoice sesuai format
-            $model->invoice_number = 'KWITANSI/' . sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
+            $invoiceNumber = 'KWITANSI/' . sprintf('%03d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
 
-            // Cek keunikan invoice number
-            while (self::where('invoice_number', $model->invoice_number)->exists()) {
-                $nextID++;
-                $model->invoice_number = 'KWITANSI/' . sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
-            }
+            // Set nomor invoice ke model
+            $model->invoice_number = $invoiceNumber;
         });
     }
+
 }

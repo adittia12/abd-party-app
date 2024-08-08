@@ -15,11 +15,45 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filterMonth = $request->input('filteringMonth');
+        $filterDate = $request->input('filterDate');
+
         $invoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                            ->select('invoices.*', 'orders.order_number', 'orders.name_customer')
-                            ->orderBy('invoices.created_at', 'DESC')->get();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event')
+            ->when($request->input('q'), function ($query, $q) {
+                // Cek apakah q adalah tanggal yang valid
+                $timestamp = strtotime($q);
+
+                if ($timestamp) {
+                    // Jika q adalah tanggal yang valid, format menjadi Y-m-d
+                    $formattedQDate = date('Y-m-d', $timestamp);
+                    $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
+
+                    return $query->where('orders.name_customer', 'LIKE', '%' . $q . '%')
+                        ->orWhere('invoices.invoice_number', 'LIKE', '%' . $q . '%')
+                        ->orWhereDate('orders.start_event', $formattedQDate)
+                        ->orWhere('orders.start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
+                        ->orWhere('orders.order_number', 'LIKE', '%' . $q . '%');
+                } else {
+                    // Jika q bukan tanggal yang valid, gunakan q apa adanya
+                    return $query->where('orders.name_customer', 'LIKE', '%' . $q . '%')
+                        ->orWhere('orders.start_event', 'LIKE', '%' . $q . '%')
+                        ->orWhere('orders.order_number', 'LIKE', '%' . $q . '%')
+                        ->orWhere('invoices.invoice_number', 'LIKE', '%' . $q . '%');
+                }
+            })
+            ->when($filterMonth, function ($query, $filterMonth) {
+                $filterMonth = date('Y-m', strtotime($filterMonth));
+                return $query->where('invoices.period_date', 'LIKE', '%' . $filterMonth . '%');
+            })
+            ->when($filterDate, function ($query, $filterDate) {
+                $filterDate = date('Y-m-d', strtotime($filterDate));
+                return $query->whereDate('orders.start_event', $filterDate);
+            })
+            ->orderBy('invoices.created_at', 'DESC')
+            ->paginate(10);
 
         return view('transaksi.invoice.index', compact(['invoice']));
     }
