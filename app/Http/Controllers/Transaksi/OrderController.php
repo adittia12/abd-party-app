@@ -500,7 +500,7 @@ class OrderController extends Controller
             return redirect()->back();
         } catch (\Throwable $e) {
             DB::rollBack();
-            Alert::error('Failed', 'Data order ' . $orders->order_number . ' gagal dihapus');
+            Alert::error('Failed', 'Data order gagal dihapus');
             return redirect()->back();
         }
     }
