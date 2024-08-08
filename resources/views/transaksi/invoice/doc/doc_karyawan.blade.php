@@ -17,7 +17,7 @@
 <body>
     <!-- Watermark image -->
     <div class="watermark">
-        <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="300px" alt="Watermark">
+        <img src="https://abd-ro.com/admin/assets/img/logo_abd.jpg" width="300px" alt="Watermark">
     </div>
 
     <div class="main-content">
@@ -28,7 +28,7 @@
                         <div class="d-flex justify-content-start">
                             <div class="p-2">
                                 <p style="font-size: 10px">
-                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
+                                    <img src="https://abd-ro.com/admin/assets/img/logo_abd.jpg" width="250px"
                                         alt="">
                                     <br>
                                     Jl. KH. Ahmad Dahlan No.7 <br>
@@ -154,7 +154,7 @@
                         <div class="d-flex justify-content-start">
                             <div class="p-2">
                                 <p style="font-size: 10px">
-                                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="250px"
+                                    <img src="https://abd-ro.com/admin/assets/img/logo_abd.jpg" width="250px"
                                         alt="">
                                     <br>
                                     Jl. KH. Ahmad Dahlan No.7 <br>

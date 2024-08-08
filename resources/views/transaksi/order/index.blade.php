@@ -23,7 +23,7 @@
                             <div class="col-auto float-right ml-auto">
                                 <a href="{{ route('export_transaksi', ['filteringMonth' => $filterMonth]) }}"
                                     class="btn btn-success">
-                                    <i class="fas fa-file-excel"></i> Download
+                                    <i class="fas fa-file-excel"></i> Download Laporan
                                 </a>
                             </div>
                             <div class="col-auto float-left mr-auto">

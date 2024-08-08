@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,20 +47,17 @@ class Orders extends Model
     protected static function boot()
     {
         parent::boot();
-        self::creating(function ($model){
-            $getOrder = self::orderBy('order_number', 'desc')->first();
+        self::creating(function ($model) {
+            // Ambil order terbaru berdasarkan nomor urut (sebelum '/ABD/')
+            $getOrder = self::orderByRaw('CAST(SUBSTRING_INDEX(order_number, "/", 1) AS UNSIGNED) DESC')->first();
 
-            if ($getOrder) {
-                $latestID = intval(substr($getOrder->order_number, 0, strpos($getOrder->order_number, '/')));
-                $nextID = $latestID + 1;
-            } else {
-                $nextID = 1;
-            }
+            // Tentukan ID berikutnya
+            $nextID = $getOrder ? intval(substr($getOrder->order_number, 0, strpos($getOrder->order_number, '/'))) + 1 : 1;
 
-            // Ambil tanggal saat ini
-            $currentDate = date('d');
-            $currentMonth = date('m');
-            $currentYear = date('Y');
+            // Ambil tanggal saat ini menggunakan Carbon
+            $currentDate = Carbon::now()->format('d');
+            $currentMonth = Carbon::now()->format('m');
+            $currentYear = Carbon::now()->format('Y');
 
             // Daftar bulan Romawi
             $romanMonths = [
@@ -72,12 +70,17 @@ class Orders extends Model
             $romanMonth = $romanMonths[$currentMonth];
 
             // Bentuk nomor order sesuai format
-            $model->order_number = sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
+            $orderNumber = sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
 
-            while (self::where('order_number', $model->order_number)->exists()) {
+            // Pastikan nomor order unik
+            while (self::where('order_number', $orderNumber)->exists()) {
                 $nextID++;
-                $model->order_number = sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
+                $orderNumber = sprintf('%02d', $nextID) . '/ABD/' . $currentDate . '/' . $romanMonth . '/' . $currentYear;
             }
+
+            // Set nomor order ke model
+            $model->order_number = $orderNumber;
         });
     }
+
 }

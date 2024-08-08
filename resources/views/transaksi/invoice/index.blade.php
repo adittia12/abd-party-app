@@ -16,12 +16,28 @@
                             <div class="col">
                                 <h3 class="">Invoice list</h3>
                             </div>
+                            <div class="col-auto float-left mr-auto">
+                                <div class="d-flex flex-row">
+                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                        data-target="#filterDataInvoice">
+                                        Filter Data
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     @include('sweetalert::alert')
                     <div class="card-body">
+                        <div class="d-flex flex-row-reverse mb-3">
+                            <div class="p-2">
+                                <form action="{{ route('invoice.index') }}" method="get">
+                                    <input type="text" class="form-control" placeholder="Pencarian" name="q"
+                                        value="{{ request('q') }}" width="200px" autofocus>
+                                </form>
+                            </div>
+                        </div>
                         <div class="table-responsive">
-                            <table id="table-1" class="table table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -39,7 +55,7 @@
                                 <tbody>
                                     @foreach ($invoice as $key => $item)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $invoice->perPage() * ($invoice->currentPage() - 1) + $key + 1 }}</td>
                                             <td class="order_number">{{ $item->order_number }}</span></td>
                                             <td class="name_customer">{{ $item->name_customer }}</td>
                                             <td class="invoice_number">{{ $item->invoice_number }}</td>
@@ -112,12 +128,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $invoice->links('pagination::bootstrap-4') }}
                         </div>
 
                     </div>
@@ -128,6 +144,7 @@
 
     @include('transaksi.invoice.components.modal.modal_create_po')
     @include('transaksi.invoice.components.modal.modal_edit_invoice')
+    @include('transaksi.invoice.components.modal.modal_filter')
 @section('script')
     @include('transaksi.invoice.components.js.script')
 @endsection

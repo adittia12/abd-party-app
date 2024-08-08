@@ -17,13 +17,13 @@
 <body>
     <!-- Watermark image -->
     <div class="watermark">
-        <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" width="300px" alt="Watermark">
+        <img src="https://abd-ro.com/admin/assets/img/logo_abd.jpg" width="300px" alt="Watermark">
     </div>
     <div class="main-content">
         <section class="section">
             <section class="section-header">
                 <div class="header-content">
-                    <img src="{{ public_path('admin/assets/img/logo_abd.jpg') }}" alt="Logo">
+                    <img src="https://abd-ro.com/admin/assets/img/logo_abd.jpg" alt="Logo">
                     <p style="font-size: 10px">
                         Jl. KH. Ahmad Dahlan No.7 <br>
                         Belakang Masjid Agung Karawang, Karawang, Indonesia <br>
