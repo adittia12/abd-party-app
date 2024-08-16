@@ -20,6 +20,7 @@ class OrderController extends Controller
     {
         $filterMonth = $request->input('filteringMonth');
         $filterDate = $request->input('filterDate');
+        $perPage = $request->input('per_page', 10); // Default 10 jika tidak ada input
 
         $datasetOrder = Orders::when($request->input('q'), function($query, $q) {
             // Cek apakah q adalah tanggal yang valid
@@ -31,14 +32,14 @@ class OrderController extends Controller
                 $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
 
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                             ->orWhereDate('start_event', $formattedQDate)
-                             ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
-                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                            ->orWhereDate('start_event', $formattedQDate)
+                            ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
+                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             } else {
                 // Jika q bukan tanggal yang valid, gunakan q apa adanya
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                             ->orWhere('start_event', 'LIKE', '%' . $q . '%')
-                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                            ->orWhere('start_event', 'LIKE', '%' . $q . '%')
+                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             }
         });
 
@@ -51,7 +52,8 @@ class OrderController extends Controller
             $datasetOrder->whereDate('start_event', $filterDate);
         }
 
-        $orderData = $datasetOrder->orderBy('start_event', 'asc')->paginate(10);
+        // Gunakan $perPage untuk menentukan jumlah data yang ditampilkan per halaman
+        $orderData = $datasetOrder->orderBy('start_event', 'asc')->paginate($perPage);
 
         return view('transaksi.order.index', compact('orderData', 'filterMonth'));
     }
