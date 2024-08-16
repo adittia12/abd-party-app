@@ -28,15 +28,23 @@
                     </div>
                     @include('sweetalert::alert')
                     <div class="card-body">
-                        <div class="d-flex flex-row-reverse mb-3">
+                        <div class="d-flex justify-content-between mb-3">
                             <div class="p-2">
-                                <form action="{{ route('invoice.index') }}" method="get">
+                                <select id="perPageSelect" name="per_page" class="form-control">
+                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="20" {{ request('per_page') == 20 ? 'selected' : '' }}>20</option>
+                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+                            <div class="p-2">
+                                <form id="searchForm" action="{{ route('invoice.index') }}" method="get">
                                     <input type="text" class="form-control" placeholder="Pencarian" name="q"
-                                        value="{{ request('q') }}" width="200px" autofocus>
+                                        value="{{ request('q') }}" id="searchQuery" width="200px" autofocus>
                                 </form>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="invoiceTableContainer">
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>

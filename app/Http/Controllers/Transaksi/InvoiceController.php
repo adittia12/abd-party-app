@@ -19,6 +19,7 @@ class InvoiceController extends Controller
     {
         $filterMonth = $request->input('filteringMonth');
         $filterDate = $request->input('filterDate');
+        $perPage = $request->input('per_page', 10);
 
         $invoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
             ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event')
@@ -53,7 +54,7 @@ class InvoiceController extends Controller
                 return $query->whereDate('orders.start_event', $filterDate);
             })
             ->orderBy('invoices.created_at', 'DESC')
-            ->paginate(10);
+            ->paginate($perPage);
 
         return view('transaksi.invoice.index', compact(['invoice']));
     }

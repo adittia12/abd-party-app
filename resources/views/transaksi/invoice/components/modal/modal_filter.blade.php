@@ -9,6 +9,7 @@
                 </button>
             </div>
             <form action="{{ route('invoice.index') }}" method="GET">
+                <input type="hidden" name="per_page" value="{{ request('per_page') }}">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="">Filter Bulan</label>
