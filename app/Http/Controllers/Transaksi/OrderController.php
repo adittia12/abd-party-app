@@ -291,7 +291,7 @@ class OrderController extends Controller
             // Commit transaction
             DB::commit();
             Alert::success('Success', 'Order berhasil diperbarui ' . $request->order_number);
-            return redirect()->route('order.index');
+            return redirect()->back();
         } catch (\Exception $e) {
             // Rollback transaction on error
             DB::rollBack();
