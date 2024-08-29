@@ -143,7 +143,7 @@
                                     <p class="send-info">
                                         <span class="text-secondary"><b>REKENING BANK</b></span> <br>
                                         BANK MANDIRI : 1730025222226 <br>
-                                        Atas Nama : CV ABD KAUM 1 <br>
+                                        Atas Nama : CV ABD KAUM I <br>
                                         NPWP : 436648703408000 <br>
                                         Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
                                     </p>

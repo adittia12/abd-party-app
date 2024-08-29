@@ -26,18 +26,17 @@ use App\Http\Controllers\UserManagementController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('company_profile.company.index');
+});
 
 // Auth::rouwtes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 Route::controller(LoginController::class)->group(function() {
-    Route::get('/', 'login')->name('login');
-    Route::post('/', 'authenticate');
+    Route::get('/login-abd', 'login')->name('login');
+    Route::post('/login-abd', 'authenticate');
     Route::get('/logout', 'logout')->name('logoutUser');
 });
 
@@ -65,6 +64,7 @@ Route::controller(ResetPasswordController::class)->group(function () {
 });
 
 Route::middleware('auth')->group(function(){
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::controller(UserManagementController::class)->group(function () {
         Route::get('userManagement', 'index')->name('userManagement');
         Route::post('user/add/save', 'addNewUserSave')->name('user/add/save');
