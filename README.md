@@ -19,6 +19,10 @@
 -   Proses Approvel Order product
 -   Export
 
+# Storage Setting Company Profile
+-    clients
+-    service
+
 ## 🛠 Teknologi
 
 -   [Laravel v10](https://laravel.com/docs/10.x)
