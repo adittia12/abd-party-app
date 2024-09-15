@@ -91,7 +91,7 @@ class LoginController extends Controller
                 return redirect()->back();
             }
         } catch (\Throwable $e) {
-            \Log::info($e);
+            // \Log::info($e);
             DB::rollBack();
             Alert::error('error','Add new user fail :)');
             return redirect()->back();

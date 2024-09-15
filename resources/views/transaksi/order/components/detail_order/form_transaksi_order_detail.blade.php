@@ -53,6 +53,7 @@
             $diskon = 0;
             $dp = 0;
             $pajak = 0;
+            $billPayment = 0;
             if ($order->discount_rate) {
                 $diskon = $order->discount_rate;
                 $totalAkhir -= $diskon;
@@ -64,6 +65,11 @@
             if ($order->pajak) {
                 $pajak = $order->pajak;
                 $totalAkhir += $pajak;
+            }
+
+            if ($order->pembayaran) {
+                $billPayment = $order->pembayaran;
+                $totalAkhir -= $billPayment;
             }
         @endphp
         <tr>
@@ -88,8 +94,14 @@
                 <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
             </tr>
         @endif
+        @if ($billPayment)
+            <tr>
+                <th colspan="7" class="text-right">Pelunasan</th>
+                <th>{{ 'Rp ' . number_format($billPayment, 2, ',', '.') }}</th>
+            </tr>
+        @endif
         <tr>
-            <th colspan="7" class="text-right">Total Akhir</th>
+            <th colspan="7" class="text-right">Total Tagihan</th>
             <th>{{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</th>
         </tr>
     </tfoot>

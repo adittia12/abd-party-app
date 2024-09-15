@@ -44,7 +44,7 @@
                                 <div class="col-md-6">
                                     <address>
                                         <strong>Payment Method:</strong><br>
-                                        Mandiri : 1730025222226<br>
+                                        Mandiri : 1730043222224<br>
                                         <a href="abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a>
                                     </address>
                                 </div>
@@ -118,6 +118,7 @@
                                         $diskon = 0;
                                         $dp = 0;
                                         $pajak = 0;
+                                        $billPayment = 0;
                                         if ($dataInvoice->discount_rate) {
                                             $diskon = $dataInvoice->discount_rate;
                                             $totalAkhir -= $diskon;
@@ -129,6 +130,10 @@
                                         if ($dataInvoice->pajak) {
                                             $pajak = $dataInvoice->pajak;
                                             $totalAkhir += $pajak;
+                                        }
+                                        if ($dataInvoice->pembayaran) {
+                                            $billPayment = $dataInvoice->pembayaran;
+                                            $totalAkhir -= $billPayment;
                                         }
                                     @endphp
                                     <div class="invoice-detail-item">
@@ -160,9 +165,17 @@
                                             </div>
                                         </div>
                                     @endif
+                                    @if ($billPayment)
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Pelunasan</div>
+                                            <div class="invoice-detail-value">
+                                                {{ 'Rp ' . number_format($billPayment, 2, ',', '.') }}
+                                            </div>
+                                        </div>
+                                    @endif
                                     <hr class="mt-2 mb-2">
                                     <div class="invoice-detail-item">
-                                        <div class="invoice-detail-name">Total</div>
+                                        <div class="invoice-detail-name">Total Tagihan</div>
                                         <div class="invoice-detail-value invoice-detail-value-lg">
                                             {{ 'Rp ' . number_format($totalAkhir, 2, ',', '.') }}</div>
                                     </div>

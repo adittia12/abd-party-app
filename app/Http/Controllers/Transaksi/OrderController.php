@@ -23,11 +23,9 @@ class OrderController extends Controller
         $perPage = $request->input('per_page', 10); // Default 10 jika tidak ada input
 
         $datasetOrder = Orders::when($request->input('q'), function($query, $q) {
-            // Cek apakah q adalah tanggal yang valid
             $timestamp = strtotime($q);
 
             if ($timestamp) {
-                // Jika q adalah tanggal yang valid, format menjadi Y-m-d
                 $formattedQDate = date('Y-m-d', $timestamp);
                 $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
 
@@ -36,7 +34,6 @@ class OrderController extends Controller
                             ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             } else {
-                // Jika q bukan tanggal yang valid, gunakan q apa adanya
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
                             ->orWhere('start_event', 'LIKE', '%' . $q . '%')
                             ->orWhere('order_number', 'LIKE', '%' . $q . '%');
@@ -52,13 +49,56 @@ class OrderController extends Controller
             $datasetOrder->whereDate('start_event', $filterDate);
         }
 
-        // Gunakan $perPage untuk menentukan jumlah data yang ditampilkan per halaman
+        // Ambil data order yang dipaginate
         $orderData = $datasetOrder->orderBy('start_event', 'asc')->paginate($perPage);
+
+        // Ambil data transaksi terkait setiap order
+        foreach ($orderData as $order) {
+            $order->dataTagihan = Transactions::join('products', 'transactions.id_product', '=', 'products.id')
+                ->select('transactions.*', 'products.name_product', 'products.inter_ref')
+                ->where('transactions.id_order', $order->id)
+                ->get();
+
+            // Hitung total tagihan dan sisa tagihan
+            $totalTagihan = $order->dataTagihan->sum(function ($item) {
+                return $item->price * $item->qty;
+            });
+
+            $diskon = $order->discount_rate ?? 0;
+            $dp = $order->dp ?? 0;
+            $pajak = $order->pajak ?? 0;
+            $lunas = $order->pembayaran ?? 0;
+
+            // Total akhir = total tagihan - diskon - dp + pajak
+            $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajak;
+        }
 
         return view('transaksi.order.index', compact('orderData', 'filterMonth'));
     }
 
+    public function billPayment(Request $request)
+    {
+        $request->validate([
+            'pembayaran'    => 'required|numeric'
+        ]);
 
+        $paymentId = $request->input('order_pay_id');
+        $payOrder = Orders::find($paymentId);
+
+        $status = 'Lunas';
+
+        if ($payOrder) {
+            $payOrder->update([
+                'pembayaran' => $request['pembayaran'],
+                'status_order' => $status
+            ]);
+
+            Alert::success('Success', 'Kode order ' . $payOrder->order_number . ' sudah melunasi tagihan!');
+            return redirect()->back();
+        } else {
+            Alert::error('Error', 'Kode order tidak ditemukan!');
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -99,9 +139,10 @@ class OrderController extends Controller
                 'jenis_pajak' => $request['jenis_pajak'],
                 'dp' => $request['dp'],
                 'status_order' => $request['status_order'],
+                'pembayaran'   => $request['pembayaran']
             ]);
 
-            if ($order && $order->status_order == 'Invoice') {
+            if ($order && $order->status_order == 'Invoice' || $order->status_order == 'Lunas') {
                 $periodeData = date('Y-m-d');
                 Invoices::create([
                     'id_order' => $order->id,
@@ -216,6 +257,11 @@ class OrderController extends Controller
         try {
             // Update data order
             $order = Orders::findOrFail($request->id_order_trans);
+            // Tentukan status order berdasarkan jumlah pembayaran
+            $statusOrder = $order->status_order; // Tetap menggunakan status saat ini jika tidak ada perubahan
+            if ($request->pembayaran > 0) {
+                $statusOrder = 'Lunas';
+            }
             $order->update([
                 'name_customer' => $request->name_customer,
                 'tgl_order' => $request->tgl_order,
@@ -228,11 +274,12 @@ class OrderController extends Controller
                 'end_event' => $request->end_event,
                 'date_pasang' => $request->date_pasang,
                 'jenis_pajak' => $request->jenis_pajak,
-                'status_order' => $request->status_order,
+                'status_order' => $statusOrder,
                 'pajak' => $request->pajak,
                 'price_list' => $request->price_list,
                 'discount_rate' => $request->discount_rate,
                 'dp' => $request->dp,
+                'pembayaran' => $request->pembayaran,
             ]);
 
             if ($order && $order->status_order == 'Invoice') {

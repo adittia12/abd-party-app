@@ -12,12 +12,12 @@
                 <input type="hidden" name="per_page" value="{{ request('per_page') }}">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Filter Bulan</label>
+                        <label for="">Filter Bulan Berdasarkan Tanggal Acara</label>
                         <input type="month" class="form-control" id="filteringMonth" name="filteringMonth"
                             aria-describedby="filteringMonth">
                     </div>
                     <div class="form-group">
-                        <label for="">Filter Tanggal</label>
+                        <label for="">Filter Tanggal Berdasarkan Tanggal Acara</label>
                         <input type="date" class="form-control" id="filterDate" name="filterDate"
                             aria-describedby="filterDate">
                     </div>

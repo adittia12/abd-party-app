@@ -249,6 +249,7 @@
                         $diskon = 0;
                         $dp = 0;
                         $pajak = 0;
+                        $billPayment = 0;
                         if ($cetakonsumen->discount_rate) {
                             $diskon = $cetakonsumen->discount_rate;
                             $totalAkhir -= $diskon;
@@ -260,6 +261,10 @@
                         if ($cetakonsumen->pajak) {
                             $pajak = $cetakonsumen->pajak;
                             $totalAkhir += $pajak;
+                        }
+                        if ($cetakonsumen->pembayaran) {
+                            $billPayment = $cetakonsumen->pembayaran;
+                            $totalAkhir -= $billPayment;
                         }
                     @endphp
                     <tr>
@@ -285,8 +290,15 @@
                             <th>{{ number_format($pajak, 0, ',', '.') }}</th>
                         </tr>
                     @endif
+                    @if ($billPayment)
+                        <tr>
+                            <th colspan="3" class="text-right">Pelunasan
+                            </th>
+                            <th>{{ number_format($billPayment, 0, ',', '.') }}</th>
+                        </tr>
+                    @endif
                     <tr>
-                        <th colspan="3" class="text-right">Total Akhir</th>
+                        <th colspan="3" class="text-right">Total Tagihan</th>
                         <th>{{ number_format($totalAkhir, 0, ',', '.') }}</th>
                     </tr>
                 </tfoot>
@@ -300,7 +312,7 @@
                                 <p class="send-info">
                                     <span class="text-secondary"><b>REKENING BANK</b></span> <br>
                                     BANK MANDIRI : 1730043222224 <br>
-                                    Atas Nama : ABDUL BASIT KAUM 1 (CV.ABD KAUM 1) <br>
+                                    Atas Nama : ABDUL BASIT KAUM I (ABD KAUM I) <br>
                                     NPWP : 436648703408000 <br>
                                     Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
                                 </p>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\RoleUserController;
 use App\Http\Controllers\LockScreen;
+use App\Http\Controllers\SettingCompanyProfile\GalleryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -10,8 +11,17 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\SettingCompanyProfile\ClientController;
+use App\Http\Controllers\SettingCompanyProfile\ComentarController;
+use App\Http\Controllers\SettingCompanyProfile\ComprofController;
+use App\Http\Controllers\SettingCompanyProfile\LegalController;
+use App\Http\Controllers\SettingCompanyProfile\ServiceAreaController;
+use App\Http\Controllers\SettingCompanyProfile\ServiceController;
+use App\Http\Controllers\SettingCompanyProfile\ServiceStrategyController;
+use App\Http\Controllers\SettingCompanyProfile\SkillsController;
 use App\Http\Controllers\Transaksi\InvoiceController;
 use App\Http\Controllers\Transaksi\OrderController;
+use App\Http\Controllers\Transaksi\ReportOrderController;
 use App\Http\Controllers\Transaksi\ReportTransController;
 use App\Http\Controllers\UserManagementController;
 
@@ -26,18 +36,17 @@ use App\Http\Controllers\UserManagementController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::controller(ComprofController::class)->group(function() {
+    Route::get('/', 'index')->name('company_profile');
+    Route::post('/createComentar', 'storeComentar')->name('store_coment');
+});
 
 // Auth::rouwtes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
 Auth::routes();
 Route::controller(LoginController::class)->group(function() {
-    Route::get('/', 'login')->name('login');
-    Route::post('/', 'authenticate');
+    Route::get('/login-abd', 'login')->name('login');
+    Route::post('/login-abd', 'authenticate');
     Route::get('/logout', 'logout')->name('logoutUser');
 });
 
@@ -65,6 +74,7 @@ Route::controller(ResetPasswordController::class)->group(function () {
 });
 
 Route::middleware('auth')->group(function(){
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::controller(UserManagementController::class)->group(function () {
         Route::get('userManagement', 'index')->name('userManagement');
         Route::post('user/add/save', 'addNewUserSave')->name('user/add/save');
@@ -105,7 +115,9 @@ Route::middleware('auth')->group(function(){
         Route::post('/order/approve_surat_kembali', 'approveSuratKembali')->name('order.approveSuratKembali');
         Route::get('/order/cetak_surat_jalan/{id}', 'suratJalan')->name('order.suratJalan');
         Route::get('/order/cetak_surat_kembali/{id}', 'suratKembali')->name('order.suratKembali');
+        Route::post('/order/bill_payment', 'billPayment')->name('order.billPaymentOrder');
     });
+    Route::resource('/report_order', ReportOrderController::class);
 
     Route::resource('/invoice', InvoiceController::class);
     Route::controller(InvoiceController::class)->group(function () {
@@ -119,8 +131,46 @@ Route::middleware('auth')->group(function(){
 
     Route::controller( ReportTransController::class)->group(function () {
         Route::get('/report/transaksi/', 'export')->name('export_transaksi');
+        Route::get('/report/export_order/', 'exportReportOrder')->name('export_order');
     });
 
+    // Route Sett Company Profile
+    Route::resource('/clients', ClientController::class);
+    Route::controller(ClientController::class)->group(function () {
+        Route::post('/clients/update', 'update')->name('update_client');
+    });
+
+    Route::resource('/service', ServiceController::class);
+    Route::controller(ServiceController::class)->group(function() {
+        Route::post('service/update', 'update')->name('update_service');
+    });
+
+    Route::resource('/service_area', ServiceAreaController::class);
+    Route::controller(ServiceAreaController::class)->group(function() {
+        Route::post('service-area/update', 'update')->name('update_service_area');
+    });
+
+    Route::resource('/service_strategy', ServiceStrategyController::class);
+    Route::controller(ServiceStrategyController::class)->group(function() {
+        Route::post('service_strategy/update', 'update')->name('updateServiceStrategy');
+    });
+
+    Route::resource('/workforece_skill', SkillsController::class);
+    Route::controller(SkillsController::class)->group(function() {
+        Route::post('workforece_skill/update', 'update')->name('updateSkillWork');
+    });
+
+    Route::resource('/gallery', GalleryController::class);
+    Route::controller(GalleryController::class)->group(function() {
+        Route::post('gallery/update', 'update')->name('updateGallery');
+    });
+
+    Route::resource('/comentars', ComentarController::class);
+
+    Route::resource('/legal', LegalController::class);
+    Route::controller(LegalController::class)->group(function() {
+        Route::post('legal/update', 'update')->name('updateLegal');
+    });
 });
 
 

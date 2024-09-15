@@ -55,11 +55,7 @@
                         <input type="hidden" name="id" value="{{ $cetakOrder->id }}">
                         <div class="section-title "><b class="text-info-jalan">Surat Kembali</b></div>
                         <div class="section-title text-info-jalan">Order : <b>{{ $cetakOrder->order_number }}</b></div>
-                        <small class="text-info-jalan"><b>Berikut kami kirimkan untuk pengajuan
-                                harga
-                                sewa
-                                pakai perlengkapan
-                                sebagai
+                        <small class="text-info-jalan"><b>Berikut kami kirimkan barang - barang tersebut dibawah sebagai
                                 berikut :</b></small>
                     </div>
                     <br>
