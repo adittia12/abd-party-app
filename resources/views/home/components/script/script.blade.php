@@ -5,9 +5,10 @@
             window.theme = {};
         }
         if (typeof window.theme.primary === 'undefined') {
-            window.theme.primary = '#007bff'; // Ganti dengan warna default yang Anda inginkan
+            window.theme.primary = '#007bff'; // Default color
         }
 
+        // Function to format numbers in Rupiah with currency symbol
         function formatRupiahData(amount) {
             return new Intl.NumberFormat('id-ID', {
                 style: 'currency',
@@ -15,13 +16,16 @@
             }).format(amount);
         }
 
+        // Function to format numbers into k (thousands), jt (millions), M (billions), T (trillions)
         function formatRupiah(amount) {
-            if (amount >= 1000000000) {
-                return (amount / 1000000000).toFixed(0) + 'jt';
+            if (amount >= 1000000000000) {
+                return (amount / 1000000000000).toFixed(2) + ' T'; // Trillions
+            } else if (amount >= 1000000000) {
+                return (amount / 1000000000).toFixed(2) + ' M'; // Billions
             } else if (amount >= 1000000) {
-                return (amount / 1000000).toFixed(0) + 'jt';
+                return (amount / 1000000).toFixed(2) + ' jt'; // Millions
             } else if (amount >= 1000) {
-                return (amount / 1000).toFixed(0) + 'k';
+                return (amount / 1000).toFixed(2) + ' k'; // Thousands
             } else {
                 return amount.toFixed(0);
             }
@@ -79,11 +83,11 @@
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
-                            min: 0, // Set nilai minimum sumbu Y
-                            maxTicksLimit: 5, // Batasan maksimum jumlah nilai sumbu Y yang ditampilkan
+                            min: 0,
+                            maxTicksLimit: 5,
                             callback: function(value, index, values) {
                                 return formatRupiah(
-                                    value); // Gunakan fungsi format jika diperlukan
+                                    value); // Use format function for Y-axis labels
                             }
                         },
                         gridLines: {
@@ -95,7 +99,7 @@
             }
         });
 
-        // Event handler untuk form filter
+        // Event handler for the filter form
         $('#filterForm').on('submit', function(e) {
             e.preventDefault();
             var month = $('#filteringMonth').val();

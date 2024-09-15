@@ -88,10 +88,10 @@
                         </div>
                         @php
                             $statusOptions = [
-                                'Invoice' => ['Order Cancel'],
+                                'Invoice' => ['Order Cancel', 'Lunas'],
                                 'Pengajuan' => ['Sudah Ok', 'Invoice'],
                                 'Sudah Ok' => ['Invoice'],
-                                'default' => ['Pengajuan', 'Sudah Ok', 'Invoice'],
+                                'default' => ['Pengajuan', 'Sudah Ok', 'Invoice', 'Lunas'],
                             ];
 
                             $currentStatus = $order->status_order;
@@ -227,29 +227,70 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Discount</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Discount</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="discount_rate" id="discount_rate"
+                            value="{{ $order->discount_rate }}" class="form-control">
                     </div>
                 </div>
-                <input type="number" name="discount_rate" id="discount_rate" value="{{ $order->discount_rate }}"
-                    class="form-control">
             </div>
-        </div>
-        <div class="form-group">
-            <label>Uang Muka (DP)</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+            <div class="col">
+                <div class="form-group">
+                    <label>Uang Muka (DP)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="dp" id="dp" value="{{ $order->dp }}"
+                            class="form-control">
                     </div>
                 </div>
-                <input type="number" name="dp" id="dp" value="{{ $order->dp }}"
-                    class="form-control">
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Bayar Lunas</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="pembayaran" id="pembayaran" value="{{ $order->pembayaran }}"
+                            class="form-control">
+                    </div>
+                </div>
+            </div>
+            @if ($order->pembayaran > 0)
+                <div class="col">
+                    <div class="form-group">
+                        <label>Tanggal Lunas</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                            <span
+                                class="form-control">{{ \Carbon\Carbon::parse($order->updated_at)->translatedFormat('d F Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+
     </div>
 </div>

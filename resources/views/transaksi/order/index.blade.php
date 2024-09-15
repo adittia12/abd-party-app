@@ -70,9 +70,8 @@
                                         <th>Nama Pelanggan</th>
                                         <th>Tanggal Pasang</th>
                                         <th>Mulai Acara</th>
-                                        <th>Selesai Acara</th>
                                         <th>Status Order</th>
-                                        <th>Status Driver</th>
+                                        <th>Sisa Tagihan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -92,9 +91,6 @@
                                             </td>
                                             <td class="start_event">
                                                 {{ \Carbon\Carbon::parse($item->start_event)->translatedFormat('d F Y') }}
-                                            </td>
-                                            <td class="end_event">
-                                                {{ \Carbon\Carbon::parse($item->end_event)->translatedFormat('d F Y') }}
                                             </td>
                                             <td class="status_order">
                                                 @if ($item->status_order === 'Pengajuan')
@@ -153,49 +149,35 @@
                                                         @endif
                                                     </div>
                                                 @elseif ($item->status_order === 'Invoice')
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="p-1">
+                                                            <span class="badge badge-info">{{ $item->status_order }}</span>
+                                                        </div>
+                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                            <div class="p-1">
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm rounded-full"
+                                                                    data-toggle="modal" data-target="#billPayment"
+                                                                    data-payment-id="{{ $item->id }}">
+                                                                    Tagihan
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @elseif ($item->status_order === 'Lunas')
                                                     <span class="badge badge-success">{{ $item->status_order }}</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    @if ($item->status_driver == 'Surat Jalan')
+                                                @if ($item->sisa_tagihan)
+                                                    {{ number_format($item->sisa_tagihan, 0, ',', '.') }}
+                                                @elseif ($item->sisa_tagihan == 0)
+                                                    <div class="d-flex justify-content-center">
                                                         <div class="p-1">
-                                                            <a href="{{ route('order.suratJalan', Crypt::encrypt($item->id)) }}"
-                                                                class="btn btn-warning btn-sm" target="_blank">
-                                                                <i class="fas fa-print"></i> Surat Jalan
-                                                            </a>
+                                                            <span class="badge badge-success">Sudah Lunas</span>
                                                         </div>
-                                                        <div class="p-1">
-                                                            <form action="{{ route('order.approveSuratKembali') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="order_id_surat_kembali"
-                                                                    value="{{ $item->id }}" />
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-sm rounded-full">
-                                                                    Buat Surat Kembali
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    @elseif ($item->status_driver == 'Surat Kembali' || $item->status_order == 'Invoice')
-                                                        <div class="p-1">
-                                                            <a href="{{ route('order.suratJalan', Crypt::encrypt($item->id)) }}"
-                                                                class="btn btn-warning btn-sm" target="_blank">
-                                                                <i class="fas fa-print"></i> Surat Jalan
-                                                            </a>
-                                                        </div>
-                                                        <div class="p-1">
-                                                            <a href="{{ route('order.suratKembali', Crypt::encrypt($item->id)) }}"
-                                                                class="btn btn-danger btn-sm" target="_blank">
-                                                                <i class="fas fa-print"></i> Surat Kembali
-                                                            </a>
-                                                        </div>
-                                                    @else
-                                                        <div class="p-1">
-                                                            <span class="badge badge-danger">Belum di approve</span>
-                                                        </div>
-                                                    @endif
-                                                </div>
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
@@ -259,6 +241,7 @@
     </section>
 
     @include('transaksi.order.components.modal_filter')
+    @include('transaksi.order.components.modal_bill_payment')
 @section('script')
     @include('transaksi.order.components.script_order')
 @endsection

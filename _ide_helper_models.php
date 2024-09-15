@@ -16,6 +16,92 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $client_name
+ * @property string $image
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients whereClientName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Clients whereUpdatedAt($value)
+ */
+	class Clients extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $name
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comentars whereUpdatedAt($value)
+ */
+	class Comentars extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $document
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal whereDocument($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DocumentsLegal whereUpdatedAt($value)
+ */
+	class DocumentsLegal extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $image
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereUpdatedAt($value)
+ */
+	class Gallerys extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $id_order
  * @property string $invoice_number
  * @property string|null $no_po_manual
@@ -100,6 +186,27 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $id_service
+ * @property string $name_photo
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService whereIdService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService whereNamePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PhotoService whereUpdatedAt($value)
+ */
+	class PhotoService extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $inter_ref
  * @property string $name_product
  * @property int $sales_price
@@ -120,6 +227,71 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Products whereUpdatedAt($value)
  */
 	class Products extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $area
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceArea whereUpdatedAt($value)
+ */
+	class ServiceArea extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServiceStrategies whereUpdatedAt($value)
+ */
+	class ServiceStrategies extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PhotoService> $photo_service
+ * @property-read int|null $photo_service_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereUpdatedAt($value)
+ */
+	class Services extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -218,5 +390,24 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|UserRole whereUpdatedAt($value)
  */
 	class UserRole extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $skill
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills query()
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills whereSkill($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WorkforeceSkills whereUpdatedAt($value)
+ */
+	class WorkforeceSkills extends \Eloquent {}
 }
 

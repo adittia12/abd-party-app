@@ -152,29 +152,68 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Discount</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Discount</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ $order->discount_rate == 0 ? '0' : 'Rp ' . number_format($order->discount_rate, 2, ',', '.') }}</span>
                     </div>
                 </div>
-                <span
-                    class="form-control">{{ $order->discount_rate == 0 ? '0' : 'Rp ' . number_format($order->discount_rate, 2, ',', '.') }}</span>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Uang Muka (DP)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ $order->dp == 0 ? '0' : 'Rp ' . number_format($order->dp, 2, ',', '.') }}</span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Uang Muka (DP)</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Bayar Lunas</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ $order->pembayaran == 0 ? '0' : 'Rp ' . number_format($order->pembayaran, 0, ',', '.') }}</span>
                     </div>
                 </div>
-                <span
-                    class="form-control">{{ $order->dp == 0 ? '0' : 'Rp ' . number_format($order->dp, 2, ',', '.') }}</span>
             </div>
+            @if ($order->pembayaran > 0)
+                <div class="col">
+                    <div class="form-group">
+                        <label>Tanggal Lunas</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                            <span
+                                class="form-control">{{ \Carbon\Carbon::parse($order->updated_at)->translatedFormat('d F Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

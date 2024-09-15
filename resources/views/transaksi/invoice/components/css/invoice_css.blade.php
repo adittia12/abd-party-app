@@ -150,7 +150,7 @@
     .card-bank {
         background: #e8e8e88c;
         padding: 10px;
-        width: 220px;
+        width: 250px;
         font-size: 10px;
         /* Reduce font size */
     }

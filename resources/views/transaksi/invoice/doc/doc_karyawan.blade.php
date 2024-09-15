@@ -55,11 +55,8 @@
                         <input type="hidden" name="id" value="{{ Crypt::encrypt($cetaEmployee->id) }}">
                         <div class="section-title mt-1"><b class="text-info-jalan">Surat Jalan</b></div>
                         <div class="text-info-jalan">Order : <b>{{ $cetaEmployee->order_number }}</b></div>
-                        <small class="text-sm"><b>Berikut kami kirimkan untuk pengajuan harga
-                                sewa
-                                pakai perlengkapan
-                                sebagai
-                                berikut :</b></small>
+                        <small class="text-sm"><b>Berikut kami kirimkan barang - barang tersebut dibawah sebagai berikut
+                                :</b></small>
                     </div>
                     <table class="table-id">
                         <thead>
@@ -180,8 +177,8 @@
                         </p>
                         <div class="section-title mt-1"><b class="text-info-jalan">Surat Kembali</b></div>
                         <div class="text-info-jalan">Order : <b>{{ $cetaEmployee->order_number }}</b></div>
-                        <small class="text-info-jalan"><b>Berikut data barang yang harus dikirimkan
-                                :</b></small>
+                        <small class="text-info-jalan"><b>Berikut kami kirimkan barang - barang tersebut dibawah sebagai
+                                berikut :</b></small>
                     </div>
                     <br>
                     <table class="table-id">

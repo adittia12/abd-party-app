@@ -32,6 +32,33 @@
                             href="{{ route('activity/login/logout') }}">Activity User</a></li>
                 </ul>
             </li>
+            {{-- Setting Layout Company Profile --}}
+            <li class="menu-header">Set Company Profile</li>
+            <li
+                class="dropdown {{ Request::is(['clients*', 'service_area*', 'service*', 'workforece_skill*', 'gallery*', 'comentars', 'legal*']) ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
+                    <span>Management CP</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('clients*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('clients.index') }}">Clients</a></li>
+                    <li class="{{ Request::is('service*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('service.index') }}">Pelayanan</a></li>
+                    <li class="{{ Request::is('service_area*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('service_area.index') }}">Wilayah Pelayanan</a></li>
+                    <li class="{{ Request::is('service_strategy*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('service_strategy.index') }}">Pelayanan Strategi</a></li>
+                    <li class="{{ Request::is('workforece_skill*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('workforece_skill.index') }}">Workforece Skill</a></li>
+                    <li class="{{ Request::is('gallery*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('gallery.index') }}">Gallery/Documentation</a></li>
+                    <li class="{{ Request::is('legal*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('legal.index') }}">Document
+                            Legal</a></li>
+                    <li class="{{ Request::is('comentars') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('comentars.index') }}">Komentar</a>
+                    </li>
+                </ul>
+            </li>
         @endif
         <li class="menu-header">Master Data</li>
         <li class="dropdown {{ Request::is(['product*']) ? 'active' : '' }}">
@@ -43,7 +70,7 @@
             </ul>
         </li>
         <li class="menu-header">Transaksi</li>
-        <li class="dropdown {{ Request::is(['order*', 'invoice*']) ? 'active' : '' }}">
+        <li class="dropdown {{ Request::is(['order*', 'invoice*', 'report_order*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
                 <span>Order & Invoice</span></a>
             <ul class="dropdown-menu">
@@ -52,6 +79,8 @@
                 </li>
                 <li class="{{ Request::is('invoice*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('invoice.index') }}">Invoice</a></li>
+                <li class="{{ Request::is('report_order*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('report_order.index') }}">Laporan</a></li>
             </ul>
         </li>
     </ul>

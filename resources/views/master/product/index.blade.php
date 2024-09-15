@@ -24,8 +24,29 @@
                     </div>
                     @include('sweetalert::alert')
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="table-1" class="table table-striped table-hover">
+                        <div class="d-flex justify-content-between mb-3">
+                            <!-- Dropdown di Kiri -->
+                            <div class="p-2">
+                                <select id="perPageSelect" name="per_page" class="form-control">
+                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="20" {{ request('per_page') == 20 ? 'selected' : '' }}>20</option>
+                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+
+                            <!-- Form Pencarian di Kanan -->
+                            <div class="p-2">
+                                <form id="searchForm" action="{{ route('product.index') }}" method="get">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Pencarian" name="q"
+                                            value="{{ request('q') }}" id="searchQuery" autofocus>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive" id="productTableContainer">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -40,7 +61,7 @@
                                 <tbody>
                                     @foreach ($product as $key => $item)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $product->perPage() * ($product->currentPage() - 1) + $key + 1 }}</td>
                                             <td class="inter_ref">{{ $item->inter_ref }}</td>
                                             <td class="name_product">{{ $item->name_product }}</td>
                                             <td class="sales_price">{{ $item->sales_price }}</td>
@@ -72,6 +93,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $product->links('pagination::bootstrap-4') }}
                         </div>
 
                     </div>
@@ -85,18 +107,6 @@
 
 
 @section('script')
-    <script>
-        $(document).on('click', '.productUpdate', function() {
-            var _this = $(this).parents('tr');
-            var salesPriceText = _this.find('.sales_price').text();
-            var salesPriceNumber = parseFloat(
-                salesPriceText); // atau parseInt(salesPriceText) jika ingin nilai bulat
-            $('#e_inter_ref').val(_this.find('.inter_ref').text());
-            $('#e_name_product').val(_this.find('.name_product').text());
-            $('#e_sales_price').val(salesPriceNumber);;
-            $('#e_unit_measure').val(_this.find('.unit_measure').text());
-        });
-    </script>
     @include('master.product.components.script')
 @endsection
 @endsection
