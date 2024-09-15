@@ -93,6 +93,7 @@
                             <option value="Pengajuan">Pengajuan</option>
                             <option value="Sudah Ok">Sudah Ok</option>
                             <option value="Invoice">Invoice</option>
+                            <option value="Lunas">Lunas</option>
                         </select>
                         @if ($errors->has('status_order'))
                             <span class="text-danger text-sm">{{ $errors->first('status_order') }}</span>
@@ -215,27 +216,47 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Discount</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Discount</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="discount_rate" id="discount_rate"
+                            value="{{ old('discount_rate') }}" class="form-control">
                     </div>
                 </div>
-                <input type="number" name="discount_rate" id="discount_rate" value="{{ old('discount_rate') }}"
-                    class="form-control">
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Uang Muka (DP)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="dp" id="dp" value="{{ old('dp') }}"
+                            class="form-control">
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="form-group">
-            <label>Uang Muka (DP)</label>
+            <label>Bayar Lunas</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                 </div>
-                <input type="number" name="dp" id="dp" value="{{ old('dp') }}"
+                <input type="number" name="pembayaran" id="pembayaran" value="{{ old('pembayaran') }}"
                     class="form-control">
             </div>
         </div>

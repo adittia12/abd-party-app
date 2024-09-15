@@ -27,6 +27,7 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('company-profile/assets/css/main.css') }}" rel="stylesheet">
+    @yield('style')
 
     <!-- =======================================================
   * Template Name: HeroBiz
@@ -44,6 +45,7 @@
     </header>
 
     <main class="main">
+        @include('sweetalert::alert')
 
         @yield('content')
 

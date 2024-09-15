@@ -30,6 +30,7 @@ class Orders extends Model
         'dp',
         'jenis_pajak',
         'pajak',
+        'pembayaran',
         'status_order',
         'status_driver'
     ];

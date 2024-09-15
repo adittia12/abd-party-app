@@ -18,9 +18,16 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $product = Products::all();
+        $perPage = $request->input('per_page', 10);
+        $product = Products::when(request('q'), function($query) {
+            $search = request('q');
+            return $query->where(function($q) use ($search) {
+                $q->where('inter_ref', 'like', '%' . $search . '%')
+                  ->orWhere('name_product', 'like', '%' . $search . '%');
+            });
+        })->latest()->paginate($perPage);
 
         return view('master.product.index', compact(['product']));
     }

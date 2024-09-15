@@ -73,3 +73,13 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#billPayment').on('show.bs.modal', function(event) { // Perbaiki event name ke 'show.bs.modal'
+            var button = $(event.relatedTarget); // Gunakan var bukan let
+            var invoiceId = button.data('payment-id'); // Gunakan .data() bukan .getAttribute()
+            $('#order_pay_id').val(invoiceId);
+        });
+    });
+</script>
