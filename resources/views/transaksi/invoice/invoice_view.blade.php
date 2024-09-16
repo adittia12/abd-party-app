@@ -90,7 +90,7 @@
                                                 {{ $transaksi->name_product }}
                                             </td>
                                             <td class="text-center">
-                                                {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                                {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                                             </td>
                                             <td class="text-right">
                                                 {{ $transaksi->price == 0 ? '0' : 'Rp ' . number_format($transaksi->price, 2, ',', '.') }}

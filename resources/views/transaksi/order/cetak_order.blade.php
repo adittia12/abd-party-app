@@ -196,7 +196,7 @@
                                         {{ $transaksi->description }}
                                     </td>
                                     <td style="height: 20px">
-                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                        {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                                     </td>
                                     <td style="height: 20px">
                                         {{ $transaksi->price == 0 ? '0' : number_format($transaksi->price, 0, ',', '.') }}

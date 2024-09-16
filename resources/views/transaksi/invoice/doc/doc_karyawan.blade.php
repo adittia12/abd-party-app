@@ -100,7 +100,7 @@
                                         {{ $transaksi->description }}
                                     </td>
                                     <td>
-                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                        {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -223,7 +223,7 @@
                                         {{ $transaksi->description }}
                                     </td>
                                     <td>
-                                        {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                        {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                                     </td>
                                 </tr>
                             @endforeach
