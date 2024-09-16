@@ -107,7 +107,7 @@
                                     {{ $transaksi->description }}
                                 </td>
                                 <td>
-                                    {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                    {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                                 </td>
                                 <td>
                                     {{ $transaksi->price == 0 ? '0' : number_format($transaksi->price, 0, ',', '.') }}
@@ -232,7 +232,7 @@
                                 {{ $transaksi->name_product }}
                             </td>
                             <td>
-                                {{ $transaksi->qty }} {{ $transaksi->measure_list }}
+                                {{ $transaksi->qty }} {{ $transaksi->unit_measure }}
                             </td>
                             <td>
                                 {{ $transaksi->price == 0 ? '0' : number_format($transaksi->price, 0, ',', '.') }}

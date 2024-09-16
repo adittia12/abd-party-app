@@ -44,23 +44,7 @@
                                     </div>
                                 @endif
                                 @if ($order->status_order == 'Sudah Ok' || $order->status_order == 'Invoice' || $order->status_order == 'Lunas')
-                                    <div class="p-1">
-                                        <a href="{{ route('order.suratJalan', Crypt::encrypt($order->id)) }}"
-                                            class="btn btn-warning" target="_blank">
-                                            <i class="fas fa-print"></i> Surat Jalan
-                                        </a>
-                                    </div>
-                                    <div class="p-1">
-                                        <form action="{{ route('order.approveSuratKembali') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="order_id_surat_kembali"
-                                                value="{{ $order->id }}" />
-                                            <button type="submit" class="btn btn-primary rounded-full">
-                                                Buat Surat Kembali
-                                            </button>
-                                        </form>
-                                    </div>
-                                @elseif ($order->status_order == 'Invoice' || $order->status_order == 'Lunas')
+                                    {{-- @elseif ($order->status_order == 'Invoice' || $order->status_order == 'Lunas' || $order->status_driver == 'Surat Kembali') --}}
                                     <div class="p-1">
                                         <a href="{{ route('order.suratJalan', Crypt::encrypt($order->id)) }}"
                                             class="btn btn-warning" target="_blank">
