@@ -448,7 +448,7 @@ class OrderController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
                                         ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
                                         ->where('transactions.id_order', $cetakOrder->id)
                                         ->get();
         // Generate PDF
@@ -473,7 +473,7 @@ class OrderController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
                                         ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
                                         ->where('transactions.id_order', $cetakOrder->id)
                                         ->get();
         // Generate PDF
@@ -492,7 +492,7 @@ class OrderController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
                                         ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
                                         ->where('transactions.id_order', $cetakOrder->id)
                                         ->get();
         // Generate PDF
@@ -516,7 +516,7 @@ class OrderController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $cetakInvoice->id)
             ->get();
 

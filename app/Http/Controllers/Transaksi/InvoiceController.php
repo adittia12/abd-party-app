@@ -76,7 +76,7 @@ class InvoiceController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $cetakInvoice->id_order)
             ->get();
 
@@ -107,7 +107,7 @@ class InvoiceController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $cetakonsumen->id_order)
             ->get();
 
@@ -140,7 +140,7 @@ class InvoiceController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $cetakKantor->id_order)
             ->get();
 
@@ -173,7 +173,7 @@ class InvoiceController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $cetaEmployee->id_order)
             ->get();
 
@@ -225,7 +225,7 @@ class InvoiceController extends Controller
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksi = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
             ->join('products', 'transactions.id_product', '=', 'products.id')
-            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
             ->where('transactions.id_order', $dataInvoice->id_order)
             ->get();
 
