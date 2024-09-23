@@ -32,7 +32,8 @@ class Orders extends Model
         'pajak',
         'pembayaran',
         'status_order',
-        'status_driver'
+        'status_driver',
+        'date_driver'
     ];
 
     protected $hidden = [

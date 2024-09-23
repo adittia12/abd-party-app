@@ -58,7 +58,7 @@
                         <i class="far fa-calendar-check"></i>
                     </div>
                 </div>
-                <input type="number" name="initial_terms" id="initial_terms" value="1" class="form-control"
+                <input type="number" name="initial_terms" id="initial_terms" class="form-control"
                     value="{{ $order->initial_terms }}" placeholder="Ketik jumlah hari">
             </div>
         </div>
@@ -144,6 +144,36 @@
                             class="form-control" placeholder="Masukan nominal pajak">
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Status Kirim</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-money-check"></i>
+                    </div>
+                </div>
+                @php
+                    $statusOpKirim = [
+                        'DIkirim' => ['Ambil Langsung'],
+                        'Ambil Langsung' => ['Dikirim'],
+                        'default' => ['Dikirim', 'Ambil Langsung'],
+                    ];
+
+                    $currentStatusDriver = $order->status_driver;
+                    $optionsDrive = $statusOpKirim[$currentStatusDriver] ?? $statusOpKirim['default'];
+                @endphp
+
+                <select name="status_driver" id="status_driver" class="form-control select2">
+                    <option value="{{ $currentStatusDriver }}">
+                        {{ $currentStatusDriver ?? 'Pilih status Order' }}
+                    </option>
+                    @foreach ($optionsDrive as $option)
+                        <option value="{{ $option }}">{{ $option }}</option>
+                    @endforeach
+                </select>
+
             </div>
         </div>
     </div>
@@ -290,6 +320,19 @@
                     </div>
                 </div>
             @endif
+        </div>
+
+        <div class="form-group">
+            <label>Tanggal Pengambilan</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <input type="date" name="date_driver" id="date_driver" value="{{ $order->date_driver }}"
+                    class="form-control">
+            </div>
         </div>
 
     </div>

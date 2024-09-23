@@ -146,6 +146,7 @@ namespace App\Models{
  * @property int|null $dp
  * @property string|null $jenis_pajak
  * @property int|null $pajak
+ * @property string|null $pembayaran
  * @property string|null $status_order
  * @property string|null $status_driver
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -170,6 +171,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNoPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePembayaran($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStartEvent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStatusDriver($value)

@@ -45,18 +45,37 @@
                 <span class="form-control">{{ $order->initial_terms }} {{ $order->jenis_term }}</span>
             </div>
         </div>
-        <div class="form-group">
-            <label>Tanggal Pasang</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-calendar-alt"></i>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Tanggal Pasang</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ \Carbon\Carbon::parse($order->date_pasang)->translatedFormat('d F Y') }}</span>
                     </div>
                 </div>
-                <span
-                    class="form-control">{{ \Carbon\Carbon::parse($order->date_pasang)->translatedFormat('d F Y') }}</span>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Status Order</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <span class="form-control">{{ $order->status_order }}</span>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -86,6 +105,23 @@
                 </div>
             </div>
         </div>
+        @if ($order->status_driver)
+            <div class="form-group">
+                <label>Status Kirim </label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-money-check"></i>
+                        </div>
+                    </div>
+                    <span class="form-control">{{ $order->status_driver }}</span>
+                </div>
+            </div>
+        @else
+            <div class="form-group">
+                <span class="form-control badge badge-danger">Tidak ada data</span>
+            </div>
+        @endif
     </div>
     <div class="col">
         <div class="form-group">
@@ -215,5 +251,36 @@
                 </div>
             @endif
         </div>
+        @if ($order->status_driver == 'Dikirim')
+            <div class="form-group">
+                <label>Tanggal Pasang</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </div>
+                    <span
+                        class="form-control">{{ \Carbon\Carbon::parse($order->date_pasang)->translatedFormat('d F Y') }}</span>
+                </div>
+            </div>
+        @elseif ($order->status_driver == 'Ambil Langsung')
+            <div class="form-group">
+                <label>Tanggal Pengambilan</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </div>
+                    <span
+                        class="form-control">{{ \Carbon\Carbon::parse($order->date_driver)->translatedFormat('d F Y') }}</span>
+                </div>
+            </div>
+        @else
+            <div class="form-group">
+                <span class="form-control badge badge-danger">Tidak ada data</span>
+            </div>
+        @endif
     </div>
 </div>
