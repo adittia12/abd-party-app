@@ -68,7 +68,6 @@
                                         <th>Kode order</th>
                                         <th>Order Date</th>
                                         <th>Nama Pelanggan</th>
-                                        <th>Tanggal Pasang</th>
                                         <th>Mulai Acara</th>
                                         <th>Status Order</th>
                                         <th>Sisa Tagihan</th>
@@ -86,9 +85,6 @@
                                                 {{ \Carbon\Carbon::parse($item->tgl_order)->translatedFormat('d F Y') }}
                                             </td>
                                             <td class="name_customer">{{ $item->name_customer }}</td>
-                                            <td class="date_pasang">
-                                                {{ \Carbon\Carbon::parse($item->date_pasang)->translatedFormat('d F Y') }}
-                                            </td>
                                             <td class="start_event">
                                                 {{ \Carbon\Carbon::parse($item->start_event)->translatedFormat('d F Y') }}
                                             </td>
@@ -165,7 +161,27 @@
                                                         @endif
                                                     </div>
                                                 @elseif ($item->status_order === 'Lunas')
-                                                    <span class="badge badge-success">{{ $item->status_order }}</span>
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="p-1">
+                                                            <span
+                                                                class="badge badge-success">{{ $item->status_order }}</span>
+                                                        </div>
+                                                        @if ($item->status_driver == 'Dikirim')
+                                                            <div class="p-1">
+                                                                <span
+                                                                    class="badge badge-secondary">{{ $item->status_driver }}</span>
+                                                            </div>
+                                                        @elseif ($item->status_driver == 'Ambil Langsung')
+                                                            <div class="p-1">
+                                                                <span
+                                                                    class="badge badge-warning">{{ $item->status_driver }}</span>
+                                                            </div>
+                                                        @else
+                                                            <div class="p-1">
+                                                                <span class="badge badge-danger">Tidak ada data</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 @endif
                                             </td>
                                             <td>
@@ -196,7 +212,8 @@
                                                                 @if (
                                                                     $item->status_order === 'Pengajuan' ||
                                                                         $item->status_order === 'Sudah Ok' ||
-                                                                        ($item->status_order == 'Invoice' && Auth::user()->role_name == 'Super Admin'))
+                                                                        ($item->status_order == 'Invoice' ||
+                                                                            ($item->status_order == 'Lunas' && Auth::user()->role_name == 'Super Admin')))
                                                                     <li><a class="dropdown-item"
                                                                             href="{{ route('order.edit', $item->id) }}"><i
                                                                                 class="fas fa-pen-square"></i>

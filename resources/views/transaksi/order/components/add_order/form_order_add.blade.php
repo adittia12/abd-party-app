@@ -105,6 +105,45 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
+                    <label>Status Kirim</label>
+                    <!-- Deskripsi di bawah label -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <select name="status_driver" id="status_driver"
+                            class="form-control select2 @error('status_driver') is-invalid @enderror">
+                            <option>Pilih Status</option>
+                            <option value="Dikirim">Dikirim</option>
+                            <option value="Ambil Langsung">Ambil Langsung</option>
+                        </select>
+                        @if ($errors->has('status_driver'))
+                            <span class="text-danger text-sm">{{ $errors->first('status_driver') }}</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Tanggal Pengambilan</label>
+                    <!-- Deskripsi di bawah label -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <input type="date" name="date_driver" id="date_driver" value="{{ old('date_driver') }}"
+                            class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
                     <label>Jenis Pajak</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -217,37 +256,30 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Discount</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
-                        <input type="number" name="discount_rate" id="discount_rate"
-                            value="{{ old('discount_rate') }}" class="form-control">
+        <div class="form-group">
+            <label>Discount</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-money-bill-wave"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Uang Muka (DP)</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
-                        <input type="number" name="dp" id="dp" value="{{ old('dp') }}"
-                            class="form-control">
-                    </div>
-                </div>
+                <input type="number" name="discount_rate" id="discount_rate" value="{{ old('discount_rate') }}"
+                    class="form-control">
             </div>
         </div>
-
+        <div class="form-group">
+            <label>Uang Muka (DP)</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <input type="number" name="dp" id="dp" value="{{ old('dp') }}"
+                    class="form-control">
+            </div>
+        </div>
         <div class="form-group">
             <label>Bayar Lunas</label>
             <div class="input-group">

@@ -39,12 +39,12 @@ class HomeController extends Controller
                 DB::raw('MONTH(orders.start_event) AS month'),
                 DB::raw('YEAR(orders.start_event) AS year')
             )
-            ->where('orders.status_order', '=', 'Invoice');
+            ->where('orders.status_order', '=', 'Lunas');
 
         $countOrder = Orders::select(DB::raw('COUNT(status_order) AS total_status'), 'status_order')
             ->groupBy('status_order');
 
-        $overviewOrder = Orders::select('order_number', 'start_event', 'status_order')->orderBy('created_at', 'DESC')->limit(5)->get();
+        $overviewOrder = Orders::select(['order_number', 'start_event', 'status_order'])->orderBy('created_at', 'DESC')->limit(5)->get();
 
         if ($filterMonth) {
             $filterMonth = date('Y-m', strtotime($filterMonth));
