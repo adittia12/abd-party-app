@@ -22,6 +22,27 @@
                             <span class="text-danger text-sm">{{ $errors->first('pembayaran') }}</span>
                         @endif
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="status_driver">Status Kirim</label>
+                        <small class="form-text text-muted badeg">Pilih metode pengiriman, jika memilih <b>Ambil
+                                langsung</b>
+                            pastikan pelanggan melampirkan KTP</small>
+                        <select name="status_driver" id="status_driver"
+                            class="form-control @error('status_driver') is-invalid @enderror">
+                            <option value="">Pilih Status</option>
+                            <option value="Dikirim">Dikirim</option>
+                            <option value="Ambil Langsung">Ambil Langsung</option>
+                        </select>
+                        @if ($errors->has('status_driver'))
+                            <span class="text-danger text-sm">{{ $errors->first('status_driver') }}</span>
+                        @endif
+                    </div>
+
+                    <div class="mb-3" id="date_driver_container" style="display: none;">
+                        <label class="form-label" for="date_driver">Tanggal Pengambilan</label>
+                        <input type="date" name="date_driver" id="date_driver" value="{{ old('date_driver') }}"
+                            class="form-control">
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

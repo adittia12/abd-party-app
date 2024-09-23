@@ -12,6 +12,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\Transasksi\OrderStoreRequest;
 use App\Http\Requests\Transasksi\OrderUpdateRequest;
 use App\Models\Invoices;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 use PDF;
 
 class OrderController extends Controller
@@ -79,7 +82,8 @@ class OrderController extends Controller
     public function billPayment(Request $request)
     {
         $request->validate([
-            'pembayaran'    => 'required|numeric'
+            'pembayaran'    => 'required|numeric',
+            'status_driver' => 'required',
         ]);
 
         $paymentId = $request->input('order_pay_id');
@@ -90,6 +94,8 @@ class OrderController extends Controller
         if ($payOrder) {
             $payOrder->update([
                 'pembayaran' => $request['pembayaran'],
+                'status_driver' => $request['status_driver'],
+                'date_driver' => $request['date_driver'],
                 'status_order' => $status
             ]);
 
@@ -139,7 +145,9 @@ class OrderController extends Controller
                 'jenis_pajak' => $request['jenis_pajak'],
                 'dp' => $request['dp'],
                 'status_order' => $request['status_order'],
-                'pembayaran'   => $request['pembayaran']
+                'pembayaran'   => $request['pembayaran'],
+                'status_driver'   => $request['status_driver'],
+                'date_driver'   => $request['date_driver'],
             ]);
 
             if ($order && $order->status_order == 'Invoice' || $order->status_order == 'Lunas') {
@@ -269,7 +277,7 @@ class OrderController extends Controller
                 'no_phone' => $request->no_phone,
                 'invoice_address' => $request->invoice_address,
                 'delivery_address' => $request->delivery_address,
-                'initial_term' => $request->initial_term,
+                'initial_terms' => $request->initial_terms,
                 'start_event' => $request->start_event,
                 'end_event' => $request->end_event,
                 'date_pasang' => $request->date_pasang,
@@ -280,6 +288,8 @@ class OrderController extends Controller
                 'discount_rate' => $request->discount_rate,
                 'dp' => $request->dp,
                 'pembayaran' => $request->pembayaran,
+                'status_driver' => $request->status_driver,
+                'date_driver' => $request->date_driver,
             ]);
 
             if ($order && $order->status_order == 'Invoice') {
@@ -373,7 +383,7 @@ class OrderController extends Controller
         $order = Orders::find($orderId);
 
         if ($order) {
-            $order->update(['status_order' => 'Sudah Ok', 'status_driver' => 'Surat Jalan']);
+            $order->update(['status_order' => 'Sudah Ok']);
             Alert::success('Success', 'Order sewa barang dengan kode ' . $order->order_number . ' sudah ok !!!');
             return redirect()->back();
         } else {
@@ -541,8 +551,29 @@ class OrderController extends Controller
     public function destroy($order)
     {
         DB::beginTransaction();
+        $user = Auth::user();
+        Session::put('user', $user);
+
         try {
+
+            $fullName = $user->name;
+            $email = $user->email;
+            $status = $user->status;
+            $role_name = $user->role_name;
+
+            $dt = Carbon::now('Asia/Jakarta');
+            $todayDate = $dt->toDayDateTimeString();
+
             $orders = Orders::where('id', $order)->first();
+            $activityLog = [
+                'user_name'     => $fullName,
+                'email'         => $email,
+                'status'        => $status,
+                'role_name'     => $role_name,
+                'modify_user'   => 'Delete data order ' . $orders->order_number,
+                'date_time'     => $todayDate
+            ];
+            DB::table('user_activity_logs')->insert($activityLog);
             $orders->delete();
             DB::commit();
             Alert::success('Success', 'Data order ' . $orders->order_number . ' berhasil dihapus');

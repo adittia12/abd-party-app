@@ -83,3 +83,16 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById('status_driver').addEventListener('change', function() {
+        var status = this.value;
+        var dateDriverContainer = document.getElementById('date_driver_container');
+
+        if (status === 'Ambil Langsung') {
+            dateDriverContainer.style.display = 'block';
+        } else {
+            dateDriverContainer.style.display = 'none';
+        }
+    });
+</script>
