@@ -30,6 +30,8 @@ class OrderStoreRequest extends FormRequest
             'start_event'         => ['required', 'date'],
             'end_event'           => ['required', 'date'],
             'status_order'        => ['required'],
+            'status_driver'        => ['required'],
+            'payment_type'        => ['required'],
             'id_product.*'        => ['required'],
             'description.*'       => ['required', 'string'],
             'qty.*'               => ['required', 'numeric'],
@@ -69,6 +71,12 @@ class OrderStoreRequest extends FormRequest
             ],
             'status_order' => [
                 'required' => 'Status Order harus diisi',
+            ],
+            'status_driver' => [
+                'required' => 'Status driver harus diisi',
+            ],
+            'payment_type' => [
+                'required' => 'Jenis pembayaran harus diisi',
             ],
             'id_product.*' => [
                 'required' => 'Produk harus diisi',

@@ -146,34 +146,70 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Status Kirim</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-check"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Status Kirim</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        @php
+                            $statusOpKirim = [
+                                'Dikirim' => ['Ambil Langsung'],
+                                'Ambil Langsung' => ['Dikirim'],
+                                'default' => ['Dikirim', 'Ambil Langsung'],
+                            ];
+
+                            $currentStatusDriver = $order->status_driver;
+                            $optionsDrive = $statusOpKirim[$currentStatusDriver] ?? $statusOpKirim['default'];
+                        @endphp
+
+                        <select name="status_driver" id="status_driver" class="form-control select2">
+                            <option value="{{ $currentStatusDriver }}">
+                                {{ $currentStatusDriver ?? 'Pilih status Order' }}
+                            </option>
+                            @foreach ($optionsDrive as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
+                        </select>
+
                     </div>
                 </div>
-                @php
-                    $statusOpKirim = [
-                        'DIkirim' => ['Ambil Langsung'],
-                        'Ambil Langsung' => ['Dikirim'],
-                        'default' => ['Dikirim', 'Ambil Langsung'],
-                    ];
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Jenis Pembayaran</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        @php
+                            $optPayment = [
+                                'Rekening Perusahaan' => ['Rekening Pribadi'],
+                                'Rekening Pribadi' => ['Rekening Perusahaan'],
+                                'default' => ['Rekening Perusahaan', 'Rekening Pribadi'],
+                            ];
 
-                    $currentStatusDriver = $order->status_driver;
-                    $optionsDrive = $statusOpKirim[$currentStatusDriver] ?? $statusOpKirim['default'];
-                @endphp
+                            $currentPaymentType = $order->payment_type;
+                            $optionsPayment = $optPayment[$currentPaymentType] ?? $optPayment['default'];
+                        @endphp
 
-                <select name="status_driver" id="status_driver" class="form-control select2">
-                    <option value="{{ $currentStatusDriver }}">
-                        {{ $currentStatusDriver ?? 'Pilih status Order' }}
-                    </option>
-                    @foreach ($optionsDrive as $option)
-                        <option value="{{ $option }}">{{ $option }}</option>
-                    @endforeach
-                </select>
+                        <select name="payment_type" id="payment_type" class="form-control select2">
+                            <option value="{{ $currentPaymentType }}">
+                                {{ $currentPaymentType ?? 'Pilih Jenis Pembayaran' }}
+                            </option>
+                            @foreach ($optionsPayment as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
+                        </select>
 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
