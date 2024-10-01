@@ -150,17 +150,31 @@
                 <div class="d-flex justify-content-center mt-3">
                     <table class="table table-hover">
                         <tr>
-                            <td style="width: 350px">
-                                <div class="card-bank">
-                                    <p class="send-info">
-                                        <span class="text-secondary"><b>REKENING BANK</b></span> <br>
-                                        BANK MANDIRI : 1730043222224 <br>
-                                        Atas Nama : ABDUL BASIT KAUM I (ABD KAUM I) <br>
-                                        NPWP : 436648703408000 <br>
-                                        Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
-                                    </p>
-                                </div>
-                            </td>
+                            @if ($cetakInvoice->payment_type == 'Rekening Pribadi')
+                                <td style="width: 350px">
+                                    <div class="card-bank">
+                                        <p class="send-info">
+                                            <span class="text-secondary"><b>REKENING BANK</b></span> <br>
+                                            BANK MANDIRI : 1730020030095 <br>
+                                            Atas Nama : ABDUL BASIT <br>
+                                            NPWP : 442072047408000 <br>
+                                            Atas Nama : ABDUL BASIT
+                                        </p>
+                                    </div>
+                                </td>
+                            @else
+                                <td style="width: 350px">
+                                    <div class="card-bank">
+                                        <p class="send-info">
+                                            <span class="text-secondary"><b>REKENING BANK</b></span> <br>
+                                            BANK MANDIRI : 1730043222224 <br>
+                                            Atas Nama : ABDUL BASIT KAUM I (ABD KAUM I) <br>
+                                            NPWP : 436648703408000 <br>
+                                            Atas Nama : CV.ABDUL BASIT (ABD KAUM 1)
+                                        </p>
+                                    </div>
+                                </td>
+                            @endif
                             <td>
                                 <div class="signature">
                                     <div class="signature-content">

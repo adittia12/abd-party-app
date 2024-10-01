@@ -146,9 +146,10 @@ namespace App\Models{
  * @property int|null $dp
  * @property string|null $jenis_pajak
  * @property int|null $pajak
- * @property string|null $pembayaran
+ * @property int|null $pembayaran
  * @property string|null $status_order
  * @property string|null $status_driver
+ * @property string|null $date_driver
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newModelQuery()
@@ -157,6 +158,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereCloseDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereCompanyType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDateDriver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDatePasang($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDeliveryAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDiscountRate($value)

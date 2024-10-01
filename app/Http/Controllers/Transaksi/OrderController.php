@@ -148,6 +148,7 @@ class OrderController extends Controller
                 'pembayaran'   => $request['pembayaran'],
                 'status_driver'   => $request['status_driver'],
                 'date_driver'   => $request['date_driver'],
+                'payment_type'   => $request['payment_type'],
             ]);
 
             if ($order && $order->status_order == 'Invoice' || $order->status_order == 'Lunas') {
@@ -183,7 +184,7 @@ class OrderController extends Controller
             return redirect()->route('order.index');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Alert::error('Error', 'Order gagal dibuat: ' . $e->getMessage());
+            Alert::error('Error', 'Order gagal dibuat: ');
             return redirect()->back();
         }
     }
@@ -290,6 +291,7 @@ class OrderController extends Controller
                 'pembayaran' => $request->pembayaran,
                 'status_driver' => $request->status_driver,
                 'date_driver' => $request->date_driver,
+                'payment_type' => $request->payment_type,
             ]);
 
             if ($order && $order->status_order == 'Invoice') {
@@ -352,7 +354,7 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             // Rollback transaction on error
             DB::rollBack();
-            Alert::error('Error', 'Order gagal diperbarui: ' . $e->getMessage());
+            Alert::error('Error', 'Order gagal diperbarui: ');
             return redirect()->back();
         }
     }
