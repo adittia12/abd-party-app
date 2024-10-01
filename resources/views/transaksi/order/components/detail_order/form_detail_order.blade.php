@@ -105,23 +105,47 @@
                 </div>
             </div>
         </div>
-        @if ($order->status_driver)
-            <div class="form-group">
-                <label>Status Kirim </label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fas fa-money-check"></i>
+        <div class="row">
+            <div class="col">
+                @if ($order->status_driver)
+                    <div class="form-group">
+                        <label>Status Kirim </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-money-check"></i>
+                                </div>
+                            </div>
+                            <span class="form-control">{{ $order->status_driver }}</span>
                         </div>
                     </div>
-                    <span class="form-control">{{ $order->status_driver }}</span>
-                </div>
+                @else
+                    <div class="form-group">
+                        <span class="form-control badge badge-danger">Tidak ada data</span>
+                    </div>
+                @endif
             </div>
-        @else
-            <div class="form-group">
-                <span class="form-control badge badge-danger">Tidak ada data</span>
+            <div class="col">
+                @if ($order->payment_type)
+                    <div class="form-group">
+                        <label>Jenis Pembayaran </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-money-check"></i>
+                                </div>
+                            </div>
+                            <span class="form-control">{{ $order->payment_type }}</span>
+                        </div>
+                    </div>
+                @else
+                    <div class="form-group">
+                        <span class="form-control badge badge-danger">Tidak ada data</span>
+                    </div>
+                @endif
             </div>
-        @endif
+        </div>
+
     </div>
     <div class="col">
         <div class="form-group">

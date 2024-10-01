@@ -44,7 +44,11 @@
                                 <div class="col-md-6">
                                     <address>
                                         <strong>Payment Method:</strong><br>
-                                        Mandiri : 1730043222224<br>
+                                        @if ($dataInvoice->payment_type == 'Rekening Pribadi')
+                                            Mandiri : 1730020030095<br>
+                                        @else
+                                            Mandiri : 1730043222224<br>
+                                        @endif
                                         <a href="abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a>
                                     </address>
                                 </div>
@@ -185,10 +189,33 @@
                     </div>
                 </div>
                 <hr>
-                <div class="text-md-right">
-                    <a href="{{ route('invoice.cetakInvoice', Crypt::encrypt($dataInvoice->id)) }}"
-                        class="btn btn-warning btn-icon icon-left" target="_blank"><i class="fas fa-print"></i>Print</a>
+                <div class="row text-center mb-3">
+                    <div class="col-12 col-md-3 mb-2">
+                        <a href="{{ route('invoice.cetakInvoice', Crypt::encrypt($dataInvoice->id)) }}"
+                            class="btn btn-warning btn-block" target="_blank">
+                            <i class="fas fa-print"></i> Print Invoice
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-3 mb-2">
+                        <a href="{{ route('invoice.doc-konsumen', Crypt::encrypt($dataInvoice->id)) }}"
+                            class="btn btn-primary btn-block" target="_blank">
+                            <i class="fas fa-file-alt"></i> Doc Konsumen
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-3 mb-2">
+                        <a href="{{ route('invoice.doc-kantor', Crypt::encrypt($dataInvoice->id)) }}"
+                            class="btn btn-primary btn-block" target="_blank">
+                            <i class="fas fa-file-alt"></i> Doc Kantor
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-3 mb-2">
+                        <a href="{{ route('invoice.docEmployee', Crypt::encrypt($dataInvoice->id)) }}"
+                            class="btn btn-primary btn-block" target="_blank">
+                            <i class="fas fa-file-alt"></i> Doc Karyawan
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>

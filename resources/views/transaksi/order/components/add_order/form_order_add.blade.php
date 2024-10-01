@@ -106,7 +106,6 @@
             <div class="col">
                 <div class="form-group">
                     <label>Status Kirim</label>
-                    <!-- Deskripsi di bawah label -->
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -115,14 +114,17 @@
                         </div>
                         <select name="status_driver" id="status_driver"
                             class="form-control select2 @error('status_driver') is-invalid @enderror">
-                            <option>Pilih Status</option>
-                            <option value="Dikirim">Dikirim</option>
-                            <option value="Ambil Langsung">Ambil Langsung</option>
+                            <option value="">Pilih Status</option>
+                            <option value="Dikirim" {{ old('status_driver') == 'Dikirim' ? 'selected' : '' }}>Dikirim
+                            </option>
+                            <option value="Ambil Langsung"
+                                {{ old('status_driver') == 'Ambil Langsung' ? 'selected' : '' }}>Ambil Langsung
+                            </option>
                         </select>
-                        @if ($errors->has('status_driver'))
-                            <span class="text-danger text-sm">{{ $errors->first('status_driver') }}</span>
-                        @endif
                     </div>
+                    @if ($errors->has('status_driver'))
+                        <span class="text-danger text-sm">{{ $errors->first('status_driver') }}</span>
+                    @endif
                 </div>
             </div>
             <div class="col">
@@ -256,18 +258,50 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label>Discount</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-money-bill-wave"></i>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Discount</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <input type="number" name="discount_rate" id="discount_rate"
+                            value="{{ old('discount_rate') }}" class="form-control">
                     </div>
                 </div>
-                <input type="number" name="discount_rate" id="discount_rate" value="{{ old('discount_rate') }}"
-                    class="form-control">
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Jenis Pembayaran</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                        </div>
+                        <select name="payment_type" id="payment_type"
+                            class="form-control select2 @error('payment_type') is-invalid @enderror">
+                            <option value="">Pilih Jenis Pembayaran</option>
+                            <!-- Pastikan value kosong untuk pilihan default -->
+                            <option value="Rekening Perusahaan"
+                                {{ old('payment_type') == 'Rekening Perusahaan' ? 'selected' : '' }}>Rekening
+                                Perusahaan</option>
+                            <option value="Rekening Pribadi"
+                                {{ old('payment_type') == 'Rekening Pribadi' ? 'selected' : '' }}>Rekening Pribadi
+                            </option>
+                        </select>
+                        @if ($errors->has('payment_type'))
+                            <span class="text-danger text-sm">{{ $errors->first('payment_type') }}</span>
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </div>
+
         <div class="form-group">
             <label>Uang Muka (DP)</label>
             <div class="input-group">
