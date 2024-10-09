@@ -47,7 +47,7 @@ git clone https://github.com/adittia12/abd-party-app.git
 2. Masuk ke direktori aplikasi dengan perintah
 
 ```
-cd abd-party-app
+cd smart-loket
 ```
 
 3. Salin file .env.example menjadi .env dengan perintah
