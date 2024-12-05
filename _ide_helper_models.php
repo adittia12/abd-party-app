@@ -81,6 +81,29 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $id_group
+ * @property string $code_employe
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereCodeEmploye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereIdGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereUpdatedAt($value)
+ */
+	class Employes extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $title
  * @property string $image
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -95,6 +118,25 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereUpdatedAt($value)
  */
 	class Gallerys extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name_group
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereNameGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereUpdatedAt($value)
+ */
+	class Groupss extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -150,6 +192,7 @@ namespace App\Models{
  * @property string|null $status_order
  * @property string|null $status_driver
  * @property string|null $date_driver
+ * @property string|null $payment_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newModelQuery()
@@ -173,6 +216,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNoPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePembayaran($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStartEvent($value)

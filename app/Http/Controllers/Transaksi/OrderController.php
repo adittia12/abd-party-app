@@ -267,7 +267,7 @@ class OrderController extends Controller
             // Update data order
             $order = Orders::findOrFail($request->id_order_trans);
             // Tentukan status order berdasarkan jumlah pembayaran
-            $statusOrder = $order->status_order; // Tetap menggunakan status saat ini jika tidak ada perubahan
+            $statusOrder = $request->status_order; // Tetap menggunakan status saat ini jika tidak ada perubahan
             if ($request->pembayaran > 0) {
                 $statusOrder = 'Lunas';
             }
