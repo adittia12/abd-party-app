@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Master\EmployesController;
+use App\Http\Controllers\Master\GroupsController;
 use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\SettingCompanyProfile\ClientController;
 use App\Http\Controllers\SettingCompanyProfile\ComentarController;
@@ -100,6 +102,18 @@ Route::middleware('auth')->group(function(){
         Route::post('/product/update', 'update')->name('updateProduct');
     });
 
+    Route::resource('/group', GroupsController::class);
+    Route::controller(GroupsController::class)->group(function() {
+        Route::post('/group/update', 'updateGroup')->name('updateGroupes');
+    });
+
+    Route::resource('/employe', EmployesController::class);
+    Route::controller(EmployesController::class)->group(function() {
+        Route::post('/employe/update', 'updateEmploye')->name('updateEmployes');
+        Route::post('/employe/import-emp', 'importEmploye')->name('import_employe');
+    });
+
+    // END MASTER DATA
     // Transaksi Order barang
     Route::resource('/order', OrderController::class);
     Route::controller(OrderController::class)->group(function () {
@@ -117,6 +131,7 @@ Route::middleware('auth')->group(function(){
         Route::get('/order/cetak_surat_kembali/{id}', 'suratKembali')->name('order.suratKembali');
         Route::post('/order/bill_payment', 'billPayment')->name('order.billPaymentOrder');
     });
+
     Route::resource('/report_order', ReportOrderController::class);
 
     Route::resource('/invoice', InvoiceController::class);
@@ -171,6 +186,17 @@ Route::middleware('auth')->group(function(){
     Route::controller(LegalController::class)->group(function() {
         Route::post('legal/update', 'update')->name('updateLegal');
     });
+
+    // contoh format import
+    Route::get('/download-example-import-karyawan', function () {
+        $filePath = public_path('example_import/format-excel-import-karyawan-ABD.xlsx');
+
+        if (!File::exists($filePath)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return Response::download($filePath);
+    })->name('download-example-import-karyawan');
 });
 
 

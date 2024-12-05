@@ -75,4 +75,25 @@
     .text-info-jalan {
         font-size: 13px;
     }
+
+    .note-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 90px;
+        background-color: #f9f9f9;
+        min-height: 180px;
+    }
+
+    .note-card-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .note-card-content {
+        font-size: 14px;
+        color: #555;
+    }
 </style>

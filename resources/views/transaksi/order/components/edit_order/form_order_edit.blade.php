@@ -106,7 +106,6 @@
                                 <option value="{{ $option }}">{{ $option }}</option>
                             @endforeach
                         </select>
-
                     </div>
                 </div>
             </div>

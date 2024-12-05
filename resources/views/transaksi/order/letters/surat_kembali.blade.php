@@ -142,6 +142,13 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="note-card">
+                    <div class="note-card-title">Note:</div>
+                    <div class="note-card-content">
+                        <!-- Teks kosong untuk menambahkan note -->
+                    </div>
+                </div>
             </div>
         </section>
     </div>

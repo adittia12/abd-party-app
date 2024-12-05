@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Master;
 
-use Carbon\Carbon;
-use App\Models\Products;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use App\Models\Groupss;
+use Auth;
+use Carbon\Carbon;
+use DB;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Requests\Master\ProductStoreRequest;
-use App\Http\Requests\Master\ProductUpdateRequest;
+use Session;
 
-class ProductController extends Controller
+class GroupsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,37 +19,38 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        $product = Products::when(request('q'), function($query) {
+
+        $dataGroup = Groupss::when(request('q'), function($query)  {
             $search = request('q');
-            return $query->where(function($q) use ($search) {
-                $q->where('inter_ref', 'like', '%' . $search . '%')
-                  ->orWhere('name_product', 'like', '%' . $search . '%');
+            return $query->where(function($q) use ($search){
+                $q->where('name_group', 'like', '%' . $search . '%');
             });
         })->latest()->paginate($perPage);
 
-        return view('master.product.index', compact(['product']));
+        return view('master.groups.index', compact(['dataGroup']));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request)
+    public function store(Request $request)
     {
+        $request->validate(
+            ['name_group' => 'required'],
+            ['name_group.required' => 'Nama group wajib diisi']
+        );
+
         DB::beginTransaction();
         try {
-            $product = new Products;
-            $product->name_product     = $request->name_product;
-            $product->sales_price      = $request->sales_price;
-            $product->unit_measure     = $request->unit_measure;
-            $product->save();
-
+            $group = new Groupss;
+            $group->name_group = $request->name_group;
+            $group->save();
             DB::commit();
-            Alert::success('Success', 'Product berhasil ditambah :)');
-
-            return redirect()->route('product.index');
-        } catch (\Exception $e) {
-            DB::rollback();
-            Alert::error('Error', 'Product gagal ditambahkan :[');
+            Alert::success('Success', 'Data berhasil ditambah');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Alert::error('Error', 'Data gagal ditambah');
             return redirect()->back();
         }
     }
@@ -59,18 +58,20 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request)
+    public function updateGroup(Request $request)
     {
+        $request->validate(
+            ['name_group' => 'required'],
+            ['name_group.required' => 'Nama group wajib diisi']
+        );
+
         DB::beginTransaction();
         try {
             $dt = Carbon::now();
             $todayDate = $dt->toDayDateTimeString();
 
             $update = [
-                'inter_ref'    => $request->inter_ref,
-                'name_product' => $request->name_product,
-                'sales_price'   => $request->sales_price,
-                'unit_measure' => $request->unit_measure,
+                'name_group' => $request->name_group
             ];
 
             $activityLog = [
@@ -78,7 +79,7 @@ class ProductController extends Controller
                 'email'       => Auth::user()->email,
                 'status'      => Auth::user()->status,
                 'role_name'   => Auth::user()->role_name,
-                'modify_user' => 'Update data product ' . $request->inter_ref,
+                'modify_user' => 'Ubah data group ' . $request->name_group,
                 'date_time'   => $todayDate,
             ];
 
@@ -88,32 +89,33 @@ class ProductController extends Controller
 
             if ($isUpdateDataComplete && $isActivityLogComplete) {
                 DB::table('user_activity_logs')->insert($activityLog);
-                Products::where('inter_ref', $request->inter_ref)->update($update);
+                Groupss::where('id', decrypt($request->code_id_group))->update($update);
                 DB::commit();
-                Alert::success('Success', 'Data produk ' . $request->inter_ref . ' berhasil diperbarui :)');
-                return redirect()->route('product.index');
+                Alert::success('Success', 'Data ' . $request->name_group . ' berhasil diubah');
+                return redirect()->back();
             } else {
-                Alert::error('Failed', 'Data produk tidak lengkap dan tidak berhasil disimpan');
+                DB::rollBack();
+                Alert::error('Error', 'Data gagal diubah');
                 return redirect()->back();
             }
-
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
-            Alert::error('Wrong', 'Data produk ' . $request->inter_ref . ' gagal diperbarui :[');
+            Alert::error('Wrong', 'Data ' . $request->name_group . ' gagal diubah');
             return redirect()->back();
         }
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($product)
+    public function destroy($group)
     {
         $user = Auth::user();
         Session::put('user', $user);
         $user = Session::get('user');
+
         DB::beginTransaction();
+
         try {
             $fullName       = $user->name;
             $email          = $user->email;
@@ -122,27 +124,26 @@ class ProductController extends Controller
 
             $dt         = Carbon::now('Asia/Jakarta');
             $todayDate  = $dt->toDayDateTimeString();
-            $products = Products::where('inter_ref', $product)->first();
+
+            $groups = Groupss::where('id', decrypt($group))->first();
 
             $activityLog = [
                 'user_name'     => $fullName,
                 'email'         => $email,
                 'status'        => $status,
                 'role_name'     => $role_name,
-                'modify_user'   => 'Delete data product ' . $products->inter_ref,
+                'modify_user'   => 'Delete data group ' . $groups->name_group,
                 'date_time'     => $todayDate
             ];
 
             DB::table('user_activity_logs')->insert($activityLog);
-
-            $products->delete();
-
+            $groups->delete();
             DB::commit();
-            Alert::success('Success', 'Data product '. $products->inter_ref .' berhasil dihapus :)');
-            return redirect()->route('product.index');
-        } catch (\Exception $e) {
+            Alert::success('Success', 'Data ' . $groups->name_group . ' berhasil dihapus.');
+            return redirect()->back();
+        } catch (\Throwable $e) {
             DB::rollBack();
-            Alert::error('Error!', 'Data gagal dihapus :[');
+            Alert::error('Wrong', 'Data gagal dihapus');
             return redirect()->back();
         }
     }
