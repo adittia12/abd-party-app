@@ -54,13 +54,20 @@ class Orders extends Model
             // Ambil order terbaru berdasarkan nomor urut (sebelum '/ABD/')
             $getOrder = self::orderByRaw('CAST(SUBSTRING_INDEX(order_number, "/", 1) AS UNSIGNED) DESC')->first();
 
-            // Tentukan ID berikutnya
-            $nextID = $getOrder ? intval(substr($getOrder->order_number, 0, strpos($getOrder->order_number, '/'))) + 1 : 1;
+            // Ambil tahun dan nomor urut dari order terakhir
+            $lastOrderYear = $getOrder ? substr($getOrder->order_number, strrpos($getOrder->order_number, '/') + 1) : null;
+
+            // Tentukan ID berikutnya, reset ID jika tahun berbeda
+            $currentYear = Carbon::now()->format('Y');
+            if ($lastOrderYear !== $currentYear) {
+                $nextID = 1;  // Jika tahun berubah, reset ke 1
+            } else {
+                $nextID = $getOrder ? intval(substr($getOrder->order_number, 0, strpos($getOrder->order_number, '/'))) + 1 : 1;
+            }
 
             // Ambil tanggal saat ini menggunakan Carbon
             $currentDate = Carbon::now()->format('d');
             $currentMonth = Carbon::now()->format('m');
-            $currentYear = Carbon::now()->format('Y');
 
             // Daftar bulan Romawi
             $romanMonths = [
@@ -85,5 +92,6 @@ class Orders extends Model
             $model->order_number = $orderNumber;
         });
     }
+
 
 }

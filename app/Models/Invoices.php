@@ -29,19 +29,32 @@ class Invoices extends Model
             // Ambil invoice terakhir berdasarkan bagian numerik dari invoice_number
             $lastInvoice = self::orderByRaw('CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(invoice_number, "/", 2), "/", -1) AS UNSIGNED) DESC')->first(['invoice_number']);
 
-            // Inisialisasi nextID
+            // Ambil tahun dari invoice terakhir jika ada
+            $lastYear = null;
             if ($lastInvoice) {
-                // Ambil angka setelah 'KWITANSI/' dan sebelum '/'
-                $latestID = intval(substr($lastInvoice->invoice_number, strlen('KWITANSI/'), strpos($lastInvoice->invoice_number, '/', strlen('KWITANSI/')) - strlen('KWITANSI/')));
-                $nextID = $latestID + 1;
-            } else {
+                // Ambil tahun dari nomor invoice terakhir
+                $lastYear = substr($lastInvoice->invoice_number, strrpos($lastInvoice->invoice_number, '/') + 1);
+            }
+
+            // Ambil tahun saat ini
+            $currentYear = Carbon::now()->format('Y');
+
+            // Jika tahun sekarang berbeda dengan tahun terakhir, reset nextID menjadi 1
+            if ($lastYear !== $currentYear) {
                 $nextID = 1;
+            } else {
+                // Inisialisasi nextID berdasarkan invoice terakhir
+                $nextID = 1;
+                if ($lastInvoice) {
+                    // Ambil angka setelah 'KWITANSI/' dan sebelum '/'
+                    $latestID = intval(substr($lastInvoice->invoice_number, strlen('KWITANSI/'), strpos($lastInvoice->invoice_number, '/', strlen('KWITANSI/')) - strlen('KWITANSI/')));
+                    $nextID = $latestID + 1;
+                }
             }
 
             // Ambil tanggal saat ini menggunakan Carbon
             $currentDate = Carbon::now()->format('d');
             $currentMonth = Carbon::now()->format('m');
-            $currentYear = Carbon::now()->format('Y');
 
             // Daftar bulan Romawi
             $romanMonths = [

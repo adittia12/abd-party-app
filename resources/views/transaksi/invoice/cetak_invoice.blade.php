@@ -151,10 +151,9 @@
                             <div class="card-bank">
                                 <p class="send-info">
                                     <span class="text-secondary"><b>REKENING BANK</b></span> <br>
-                                    BANK MANDIRI : 1730020030095 <br>
-                                    Atas Nama : ABDUL BASIT <br>
-                                    NPWP : 442072047408000 <br>
-                                    Atas Nama : ABDUL BASIT
+                                    MANDIRI : <b>1730020030095</b> A/N ABDUL BASIT<br>
+                                    BCA : <b>1090866407</b> A/N ABDUL BASIT<br>
+                                    NPWP : <b>442072047408000</b> A/N ABDUL BASIT<br>
                                 </p>
                             </div>
                         </td>
@@ -175,6 +174,8 @@
                         <div class="signature">
                             <div class="signature-content">
                                 <p><b>Hormat kami</b></p>
+                                <br>
+                                <br>
                                 <br>
                                 <p>(Abdul Basit)</p>
                             </div>

@@ -142,7 +142,7 @@ class ProductController extends Controller
             return redirect()->route('product.index');
         } catch (\Exception $e) {
             DB::rollBack();
-            Alert::error('Error!', 'Data gagal dihapus :)');
+            Alert::error('Error!', 'Data gagal dihapus :[');
             return redirect()->back();
         }
     }

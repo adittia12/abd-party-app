@@ -267,7 +267,7 @@ class OrderController extends Controller
             // Update data order
             $order = Orders::findOrFail($request->id_order_trans);
             // Tentukan status order berdasarkan jumlah pembayaran
-            $statusOrder = $order->status_order; // Tetap menggunakan status saat ini jika tidak ada perubahan
+            $statusOrder = $request->status_order; // Tetap menggunakan status saat ini jika tidak ada perubahan
             if ($request->pembayaran > 0) {
                 $statusOrder = 'Lunas';
             }
@@ -533,7 +533,7 @@ class OrderController extends Controller
             ->get();
 
         // Mengambil invoice terkait dengan order yang sesuai
-        $dataInvoice = Invoices::where('id_order', $cetakInvoice->id)->first();;
+        $dataInvoice = Invoices::where('id_order', $cetakInvoice->id)->first();
 
         // Generate PDF
         $pdf = PDF::loadView('transaksi.order.cetak_invoice', [

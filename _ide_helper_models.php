@@ -81,6 +81,32 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $id_group
+ * @property string $code_employe
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Groupss $group
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TransactionOperational> $transaction_oprational
+ * @property-read int|null $transaction_oprational_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereCodeEmploye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereIdGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employes whereUpdatedAt($value)
+ */
+	class Employes extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $title
  * @property string $image
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -95,6 +121,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Gallerys whereUpdatedAt($value)
  */
 	class Gallerys extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name_group
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employes> $employees
+ * @property-read int|null $employees_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereNameGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Groupss whereUpdatedAt($value)
+ */
+	class Groupss extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -127,6 +174,56 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $list_budget
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel whereListBudget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListBudgetModel whereUpdatedAt($value)
+ */
+	class ListBudgetModel extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $code_operational
+ * @property string|null $tgl_opartional
+ * @property string|null $name_operational
+ * @property int|null $budget
+ * @property string|null $time_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TransactionOperational> $transaction_oprational
+ * @property-read int|null $transaction_oprational_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TransactionOperational> $transactions
+ * @property-read int|null $transactions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereBudget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereCodeOperational($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereNameOperational($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereTglOpartional($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereTimeDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OperationalMoney whereUpdatedAt($value)
+ */
+	class OperationalMoney extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string|null $order_number
  * @property string|null $tgl_order
  * @property string|null $company_type
@@ -150,6 +247,7 @@ namespace App\Models{
  * @property string|null $status_order
  * @property string|null $status_driver
  * @property string|null $date_driver
+ * @property string|null $payment_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newModelQuery()
@@ -173,6 +271,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNoPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePembayaran($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStartEvent($value)
@@ -296,6 +395,36 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereUpdatedAt($value)
  */
 	class Services extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $id_operational
+ * @property int $id_employe
+ * @property int|null $id_list_budget
+ * @property int|null $expend
+ * @property string $tgl_periode
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Employes $employess
+ * @property-read \App\Models\ListBudgetModel|null $listBudget
+ * @property-read \App\Models\OperationalMoney $operational_money
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereExpend($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereIdEmploye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereIdListBudget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereIdOperational($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereTglPeriode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereUpdatedAt($value)
+ */
+	class TransactionOperational extends \Eloquent {}
 }
 
 namespace App\Models{
