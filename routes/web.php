@@ -10,9 +10,11 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Master\BudgetListController;
 use App\Http\Controllers\Master\EmployesController;
 use App\Http\Controllers\Master\GroupsController;
 use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\Operational\OperationalTransController;
 use App\Http\Controllers\SettingCompanyProfile\ClientController;
 use App\Http\Controllers\SettingCompanyProfile\ComentarController;
 use App\Http\Controllers\SettingCompanyProfile\ComprofController;
@@ -113,6 +115,11 @@ Route::middleware('auth')->group(function(){
         Route::post('/employe/import-emp', 'importEmploye')->name('import_employe');
     });
 
+    Route::resource('/list_budget', BudgetListController::class);
+    Route::controller(BudgetListController::class)->group(function() {
+        Route::post('/list_budget/update_opt_in', 'updateOptIn')->name('optInUpdate');
+    });
+
     // END MASTER DATA
     // Transaksi Order barang
     Route::resource('/order', OrderController::class);
@@ -147,6 +154,14 @@ Route::middleware('auth')->group(function(){
     Route::controller( ReportTransController::class)->group(function () {
         Route::get('/report/transaksi/', 'export')->name('export_transaksi');
         Route::get('/report/export_order/', 'exportReportOrder')->name('export_order');
+    });
+
+    Route::resource('/operational', OperationalTransController::class);
+    Route::get('/export-trans-op', [OperationalTransController::class, 'exportTransOp'])->name('export.transOp');
+    Route::controller(OperationalTransController::class)->group(function () {
+        Route::post('/operational/update', 'update')->name('operational.update_operational');
+        Route::delete('/operational/detele-operational-trans/{id}', 'deleteOperationalTrans')->name('operational.deleteTransOperational');
+        Route::post('/generate-budget', 'generateBudget')->name('operational.generateBudget');
     });
 
     // Route Sett Company Profile

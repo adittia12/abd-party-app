@@ -35,6 +35,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     @yield('header')
+    @yield('style')
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -127,6 +128,16 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
     @yield('script')
+    <script>
+        function comingSoon() {
+            Swal.fire({
+                title: "Coming Soon!",
+                text: "Fitur ini sedang dalam pengembangan. Nantikan segera!",
+                icon: "info",
+                confirmButtonText: "OK"
+            });
+        }
+    </script>
 </body>
 
 </html>

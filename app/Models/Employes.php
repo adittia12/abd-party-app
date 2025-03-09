@@ -22,6 +22,16 @@ class Employes extends Model
         'updated_at'
     ];
 
+    public function transaction_oprational()
+    {
+        return $this->hasMany(TransactionOperational::class, 'id_employe', 'id');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Groupss::class, 'id_group', 'id');
+    }
+
     protected static function boot()
     {
         parent::boot();

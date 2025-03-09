@@ -89,12 +89,14 @@
             </li>
         @endif
         <li class="menu-header">Master Data</li>
-        <li class="dropdown {{ Request::is(['product*', 'group*', 'employe*']) ? 'active' : '' }}">
+        <li class="dropdown {{ Request::is(['product*', 'group*', 'employe*', 'list_budget*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-th"></i>
                 <span>Master</span></a>
             <ul class="dropdown-menu">
                 <li class="{{ Request::is('product*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('product.index') }}">Produk</a></li>
+                <li class="{{ Request::is('list_budget*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('list_budget.index') }}">Jenis Pengeluaran</a></li>
                 <li class="{{ Request::is('group*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('group.index') }}">Group</a></li>
                 <li class="{{ Request::is('employe*') ? 'active' : '' }}"><a class="nav-link"
@@ -113,6 +115,19 @@
                         href="{{ route('invoice.index') }}">Invoice</a></li>
                 <li class="{{ Request::is('report_order*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('report_order.index') }}">Laporan</a></li>
+            </ul>
+        </li>
+        <li class="dropdown {{ Request::is(['operational*']) ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
+                <span>Operasional & Gaji</span></a>
+            <ul class="dropdown-menu">
+                <li class="{{ Request::is('operational*') ? 'active' : '' }}"><a class="nav-link"
+                        href="{{ route('operational.index') }}">Trans. Operasional</a>
+                </li>
+                <li class="#">
+                    <a class="nav-link" href="javascript:void(0);" onclick="comingSoon()">Gaji (Coming
+                        Soon)</a>
+                </li>
             </ul>
         </li>
     </ul>
