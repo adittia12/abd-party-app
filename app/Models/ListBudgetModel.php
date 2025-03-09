@@ -5,22 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Groupss extends Model
+class ListBudgetModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'groupss';
+    protected $table = "list_bugeting";
+
     protected $fillable = [
-        'name_group'
+        'list_budget'
     ];
 
     protected $hidden = [
         'created_at',
         'updated_at'
     ];
-
-    public function employees()
-    {
-        return $this->hasMany(Employes::class, 'id_group');
-    }
 }

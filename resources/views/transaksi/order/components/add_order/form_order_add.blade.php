@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col">
         <div class="form-group">
-            <label>Company Type</label>
+            <label>Company Type <span class="text-danger">* Wajib Diisi!!</span></label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -9,8 +9,8 @@
                     </div>
                 </div>
                 <select name="company_type" id="company_type"
-                    class="form-control select2 @error('company_type') is-invalid @enderror">
-                    <option>Select option</option>
+                    class="form-control @error('company_type') is-invalid @enderror">
+                    <option value="">Select option</option>
                     <option value="Individual">Individual</option>
                     <option value="Company">Company</option>
                 </select>
@@ -20,7 +20,7 @@
             @endif
         </div>
         <div class="form-group">
-            <label>Order Date</label>
+            <label>Order Date <span class="text-danger">* Wajib Diisi!!</span></label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -36,7 +36,7 @@
             @endif
         </div>
         <div class="form-group">
-            <label>Invoice Address</label>
+            <label>Invoice Address <span class="text-danger">* Wajib Diisi!!</span></label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -63,57 +63,45 @@
                     value="{{ old('initial_terms') }}" placeholder="Ketik jumlah hari">
             </div>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row g-2">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Tanggal Pasang</label>
+                    <label class="form-label">Tanggal Pasang</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="far fa-calendar-check"></i></span>
                         <input type="date" name="date_pasang" id="date_pasang" value="{{ old('date_pasang') }}"
                             class="form-control datepicker">
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Status Order</label>
+                    <label class="form-label">Status Order <span class="text-danger">* Wajib Diisi!!</span></label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-money-check"></i></span>
                         <select name="status_order" id="status_order"
-                            class="form-control select2 @error('status_order') is-invalid @enderror">
-                            <option>Pilih Status</option>
+                            class="form-select form-control @error('status_order') is-invalid @enderror">
+                            <option value="">Pilih Status</option>
                             <option value="Pengajuan">Pengajuan</option>
                             <option value="Sudah Ok">Sudah Ok</option>
                             <option value="Invoice">Invoice</option>
                             <option value="Lunas">Lunas</option>
                         </select>
-                        @if ($errors->has('status_order'))
-                            <span class="text-danger text-sm">{{ $errors->first('status_order') }}</span>
-                        @endif
                     </div>
+                    @error('status_order')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row g-2">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Status Kirim</label>
+                    <label class="form-label">Status Kirim <span class="text-danger">* Wajib Diisi!!</span></label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-money-check"></i></span>
                         <select name="status_driver" id="status_driver"
-                            class="form-control select2 @error('status_driver') is-invalid @enderror">
+                            class="form-control @error('status_driver') is-invalid @enderror">
                             <option value="">Pilih Status</option>
                             <option value="Dikirim" {{ old('status_driver') == 'Dikirim' ? 'selected' : '' }}>Dikirim
                             </option>
@@ -127,33 +115,24 @@
                     @endif
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Tanggal Pengambilan</label>
-                    <!-- Deskripsi di bawah label -->
+                    <label class="form-label">Tanggal Pengambilan</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="far fa-calendar-check"></i></span>
                         <input type="date" name="date_driver" id="date_driver" value="{{ old('date_driver') }}"
                             class="form-control">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row g-2">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Jenis Pajak</label>
+                    <label class="form-label">Jenis Pajak</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
-                            </div>
-                        </div>
-                        <select name="jenis_pajak" id="jenis_pajak" class="form-control select2">
+                        <span class="input-group-text"><i class="far fa-calendar-check"></i></span>
+                        <select name="jenis_pajak" id="jenis_pajak" class="form-control">
                             <option>Pilih Jenis Pajak</option>
                             <option value="PPH">PPH</option>
                             <option value="PPN">PPN</option>
@@ -161,15 +140,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Pajak</label>
+                    <label class="form-label">Pajak</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
                         <input type="number" name="pajak" id="pajak" value="{{ old('pajak') }}"
                             class="form-control" placeholder="Masukan nominal pajak">
                     </div>
@@ -179,7 +154,7 @@
     </div>
     <div class="col">
         <div class="form-group">
-            <label>Nama Customer</label>
+            <label>Nama Customer <span class="text-danger">* Wajib Diisi!!</span></label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -187,7 +162,7 @@
                     </div>
                 </div>
                 <input type="text" name="name_customer" id="name_customer" value="{{ old('name_customer') }}"
-                    class="form-control @error('name_customer') @enderror">
+                    class="form-control @error('name_customer') is-invalid @enderror">
             </div>
             @if ($errors->has('name_customer'))
                 <span class="text-danger text-sm">{{ $errors->first('name_customer') }}</span>
@@ -206,7 +181,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label>Deliver Address</label>
+            <label>Deliver Address <span class="text-danger">* Wajib Diisi!!</span></label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -221,16 +196,12 @@
                 <span class="text-danger text-sm">{{ $errors->first('delivery_address') }}</span>
             @endif
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row g-2">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Mulai Acara</label>
+                    <label class="form-label">Mulai Acara <span class="text-danger">* Wajib Diisi!!</span></label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-calendar"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                         <input type="date" name="start_event" id="start_event" value="{{ old('start_event') }}"
                             class="form-control @error('start_event') is-invalid @enderror">
                     </div>
@@ -239,15 +210,11 @@
                     @endif
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Acara Selesai</label>
+                    <label class="form-label">Acara Selesai <span class="text-danger">* Wajib Diisi!!</span></label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-calendar"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                         <input type="date" name="end_event" id="end_event" value="{{ old('end_event') }}"
                             class="form-control @error('end_event') is-invalid @enderror">
                     </div>
@@ -258,47 +225,39 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
+        <div class="row g-2">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Discount</label>
+                    <label class="form-label">Discount</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
-                        <input type="number" name="discount_rate" id="discount_rate"
-                            value="{{ old('discount_rate') }}" class="form-control">
+                        <span class="input-group-text"><i class="fas fa-money-bill-wave"></i></span>
+                        <input type="number" name="discount_rate" id="discount_rate" class="form-control"
+                            value="{{ old('discount_rate') }}">
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-md-6 col-lg-6">
                 <div class="form-group">
-                    <label>Jenis Pembayaran</label>
+                    <label class="form-label">Jenis Pembayaran <span class="text-danger">* Wajib
+                            Diisi!!</span></label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
-                            </div>
-                        </div>
+                        <span class="input-group-text"><i class="fas fa-money-check"></i></span>
                         <select name="payment_type" id="payment_type"
-                            class="form-control select2 @error('payment_type') is-invalid @enderror">
+                            class="form-select form-control @error('payment_type') is-invalid @enderror">
                             <option value="">Pilih Jenis Pembayaran</option>
-                            <!-- Pastikan value kosong untuk pilihan default -->
                             <option value="Rekening Perusahaan"
                                 {{ old('payment_type') == 'Rekening Perusahaan' ? 'selected' : '' }}>Rekening
-                                Perusahaan</option>
+                                Perusahaan
+                            </option>
                             <option value="Rekening Pribadi"
                                 {{ old('payment_type') == 'Rekening Pribadi' ? 'selected' : '' }}>Rekening Pribadi
                             </option>
                         </select>
-                        @if ($errors->has('payment_type'))
-                            <span class="text-danger text-sm">{{ $errors->first('payment_type') }}</span>
-                        @endif
                     </div>
+                    @error('payment_type')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
                 </div>
-
             </div>
         </div>
 

@@ -533,7 +533,7 @@ class OrderController extends Controller
             ->get();
 
         // Mengambil invoice terkait dengan order yang sesuai
-        $dataInvoice = Invoices::where('id_order', $cetakInvoice->id)->first();;
+        $dataInvoice = Invoices::where('id_order', $cetakInvoice->id)->first();
 
         // Generate PDF
         $pdf = PDF::loadView('transaksi.order.cetak_invoice', [

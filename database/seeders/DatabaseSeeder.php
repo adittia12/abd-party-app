@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\ListBudgetModel;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Products;
@@ -82,6 +83,17 @@ class DatabaseSeeder extends Seeder
                 'name_product' => $product['name_product'],
                 'sales_price' => $product['sales_price'],
                 'unit_measure' => $product['unit_measure']
+            ]);
+        }
+
+        $jenisPemasukkan = [
+            ['list_budget'=> 'Uang Makan'],
+            ['list_budget'=> 'Uang Bensin']
+        ];
+
+        foreach ($jenisPemasukkan as $pemasukkan){
+            ListBudgetModel::create([
+                'list_budget' => $pemasukkan['list_budget']
             ]);
         }
     }
