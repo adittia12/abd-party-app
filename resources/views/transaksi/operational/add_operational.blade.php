@@ -42,7 +42,8 @@
                                             <!-- Kolom Kiri -->
                                             <div class="col-md-6">
                                                 <div class="form-group mt-3">
-                                                    <label>Tanggal Operasional</label>
+                                                    <label>Tanggal Operasional <span class="text-danger">* Wajib
+                                                            Diisi!!</span></label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
@@ -58,7 +59,8 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Nama Operasional</label>
+                                                    <label>Nama Operasional <span class="text-danger">* Wajib
+                                                            Diisi!!</span></label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
@@ -77,7 +79,7 @@
                                             <!-- Kolom Kanan -->
                                             <div class="col-md-6">
                                                 <div class="form-group mt-3">
-                                                    <label>Budget</label>
+                                                    <label>Budget <span class="text-danger">* Wajib Diisi!!</span></label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
