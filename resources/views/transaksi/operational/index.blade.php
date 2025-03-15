@@ -78,8 +78,14 @@
                                         <th>No</th>
                                         <th>
                                             <a
-                                                href="{{ request()->fullUrlWithQuery(['sort_by' => 'tgl_opartional', 'order' => request('order') === 'asc' ? 'desc' : 'asc']) }}">
-                                                Tanggal {!! request('sort_by') == 'tgl_opartional' ? (request('order') == 'asc' ? '↑' : '↓') : '' !!}
+                                                href="{{ request()->fullUrlWithQuery([
+                                                    'sort_by' => 'tgl_opartional',
+                                                    'order' => request('order', 'desc') === 'desc' ? 'asc' : 'desc',
+                                                ]) }}">
+                                                Tanggal
+                                                @if (request('sort_by', 'tgl_opartional') == 'tgl_opartional')
+                                                    {!! request('order', 'desc') == 'desc' ? '↓' : '↑' !!}
+                                                @endif
                                             </a>
                                         </th>
                                         <th>Deskripsi</th>
