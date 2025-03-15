@@ -31,7 +31,7 @@ class OperationalTransController extends Controller
         $filterDate = $request->input('filterDate');
         $searchQuery = $request->input('q');
         $sortBy = $request->input('sort_by', 'tgl_opartional'); // Default sort by tanggal
-        $order = $request->input('order', 'asc'); // Default ascending
+        $order = $request->input('order', 'desc'); // Default ascending
 
         // Pastikan hanya sorting berdasarkan 'tgl_opartional' atau 'budget'
         if (!in_array($sortBy, ['tgl_opartional', 'budget'])) {
@@ -274,48 +274,98 @@ class OperationalTransController extends Controller
         }
     }
 
+    // public function generateBudget()
+    // {
+    //     $currentTime = Carbon::now()->format('H:i:s');
+    //     $today = Carbon::now()->format('Y-m-d');
+
+    //     // Ambil data operational terakhir yang masih memiliki sisa budget
+    //     $latestOperational = OperationalMoney::whereDate('tgl_opartional', $today)
+    //         ->orderBy('id', 'desc')
+    //         ->first();
+
+    //     if (!$latestOperational) {
+    //         Alert::error('Error', 'Tidak ada data operational untuk hari ini.');
+    //         return redirect()->back();
+    //     }
+
+    //     // Hitung total transaksi hari ini
+    //     $totalExpenditures = TransactionOperational::where('id_operational', $latestOperational->id)
+    //         ->sum('expend');
+
+    //     $remainingBudget = $latestOperational->budget - $totalExpenditures;
+
+    //     if ($remainingBudget > 0 && $currentTime >= '17:00:00') {
+    //         // **Update budget lama agar sesuai dengan total pengeluaran**
+    //         $latestOperational->update(['budget' => $totalExpenditures]);
+
+    //         // **Buat entri baru untuk sisa budget**
+    //         OperationalMoney::create([
+    //             'tgl_opartional' => Carbon::parse($latestOperational->tgl_opartional)->addDay()->format('Y-m-d'),
+    //             'name_operational' => 'Sisa budget pada tanggal ' . $latestOperational->tgl_opartional,
+    //             'budget' => $remainingBudget,
+    //             'time_date' => Carbon::now()->format('H:i:s'),
+    //         ]);
+
+    //         Alert::success('Success', 'Sisa budget berhasil dipindahkan ke hari berikutnya.');
+    //     } else {
+    //         Alert::info('Info', 'Tidak ada sisa budget atau belum melewati jam 17:00.');
+    //     }
+
+    //     return redirect()->back();
+    // }
+
     public function generateBudget()
     {
         $currentTime = Carbon::now()->format('H:i:s');
-        $today = Carbon::now()->format('Y-m-d');
+        $tomorrow = Carbon::tomorrow()->format('Y-m-d'); // Selalu gunakan tanggal besok
 
-        // Ambil data operational terakhir yang masih memiliki sisa budget
-        $latestOperational = OperationalMoney::whereDate('tgl_opartional', $today)
-            ->orderBy('id', 'desc')
-            ->first();
+        // Ambil semua data operational yang masih memiliki sisa budget
+        $operationalWithRemainingBudget = OperationalMoney::whereRaw(
+            'budget > (SELECT COALESCE(SUM(expend), 0) FROM transaction_oprational WHERE transaction_oprational.id_operational = operational_money.id)'
+        )
+        ->orderBy('tgl_opartional', 'asc') // Ambil dari tanggal terlama ke terbaru
+        ->get();
 
-        if (!$latestOperational) {
-            Alert::error('Error', 'Tidak ada data operational untuk hari ini.');
+        if ($operationalWithRemainingBudget->isEmpty()) {
+            Alert::error('Error', 'Tidak ada sisa budget yang tersedia.');
             return redirect()->back();
         }
 
-        // Hitung total transaksi hari ini
-        $totalExpenditures = TransactionOperational::where('id_operational', $latestOperational->id)
-            ->sum('expend');
+        $totalRemainingBudget = 0;
 
-        $remainingBudget = $latestOperational->budget - $totalExpenditures;
+        foreach ($operationalWithRemainingBudget as $operational) {
+            // Hitung total pengeluaran pada tanggal tersebut
+            $totalExpenditures = TransactionOperational::where('id_operational', $operational->id)
+                ->sum('expend');
 
-        if ($remainingBudget > 0 && $currentTime >= '17:00:00') {
-            // **Update budget lama agar sesuai dengan total pengeluaran**
-            $latestOperational->update(['budget' => $totalExpenditures]);
+            // Hitung sisa budget
+            $remainingBudget = $operational->budget - $totalExpenditures;
 
-            // **Buat entri baru untuk sisa budget**
+            if ($remainingBudget > 0) {
+                $totalRemainingBudget += $remainingBudget;
+
+                // Update budget lama agar sesuai dengan total pengeluaran
+                $operational->update(['budget' => $totalExpenditures]);
+            }
+        }
+
+        if ($totalRemainingBudget > 0 && $currentTime >= '17:00:00') {
+            // Buat transaksi baru dengan sisa budget yang terkumpul untuk tanggal besok
             OperationalMoney::create([
-                'tgl_opartional' => Carbon::parse($latestOperational->tgl_opartional)->addDay()->format('Y-m-d'),
-                'name_operational' => 'Sisa budget pada tanggal ' . $latestOperational->tgl_opartional,
-                'budget' => $remainingBudget,
+                'tgl_opartional' => $tomorrow, // **Tanggal selalu besok dari hari ini**
+                'name_operational' => 'Akumulasi Sisa Budget per ' . Carbon::now()->format('Y-m-d'),
+                'budget' => $totalRemainingBudget,
                 'time_date' => Carbon::now()->format('H:i:s'),
             ]);
 
-            Alert::success('Success', 'Sisa budget berhasil dipindahkan ke hari berikutnya.');
+            Alert::success('Success', 'Sisa budget berhasil dipindahkan ke tanggal ' . $tomorrow);
         } else {
-            Alert::info('Info', 'Tidak ada sisa budget atau belum melewati jam 17:00.');
+            Alert::info('Info', 'Tidak ada sisa budget yang tersedia atau belum melewati jam 17:00.');
         }
 
         return redirect()->back();
     }
-
-
 
     /**
      * Display the specified resource.
