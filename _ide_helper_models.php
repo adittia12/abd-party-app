@@ -406,6 +406,7 @@ namespace App\Models{
  * @property int $id_employe
  * @property int|null $id_list_budget
  * @property int|null $expend
+ * @property string|null $description
  * @property string $tgl_periode
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -416,6 +417,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational query()
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereExpend($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereIdEmploye($value)

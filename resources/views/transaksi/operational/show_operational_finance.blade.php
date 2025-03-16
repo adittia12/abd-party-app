@@ -99,6 +99,7 @@
                                                 <th>Nama Pegawai</th>
                                                 <th class="text-right">Pengeluaran (Rp)</th>
                                                 <th>Jenis</th>
+                                                <th>Deskripsi</th>
                                             </tr>
                                         </thead>
                                         <tbody id="transactionBody">
@@ -118,6 +119,13 @@
                                                         <span
                                                             class="badge badge-info">{{ $operational->list_budget }}</span>
                                                     </td>
+                                                    <td>
+                                                        @empty($operational->description)
+                                                            <span class="text-danger">Tidak ada deskripsi</span>
+                                                        @else
+                                                            {{ $operational->description }}
+                                                        @endempty
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -125,17 +133,17 @@
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Total Pengeluaran</td>
                                                 <td class="text-right text-danger" id="totalExpend">Rp 0</td>
-                                                <td></td>
+                                                <td colspan="2"></td>
                                             </tr>
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Budget</td>
                                                 <td class="text-right text-success" id="displayBudget">Rp 0</td>
-                                                <td></td>
+                                                <td colspan="2"></td>
                                             </tr>
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Sisa Pemasukkan</td>
                                                 <td class="text-right text-primary" id="remainingIncome">Rp 0</td>
-                                                <td></td>
+                                                <td colspan="2"></td>
                                             </tr>
                                         </tfoot>
                                     </table>

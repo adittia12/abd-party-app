@@ -105,6 +105,7 @@
                                                 <th>Nama Pegawai</th>
                                                 <th>Pengeluaran</th>
                                                 <th>Jenis</th>
+                                                <th>Deskripsi</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -168,6 +169,16 @@
                                                         @endif
                                                     </td>
                                                     <td>
+                                                        <input type="text" name="description[]" id="description"
+                                                            class="form-control @error('description.*') is-invalid @enderror"
+                                                            value="{{ $transaksi->description }}"
+                                                            placeholder="Deskripsi">
+                                                        @if ($errors->has('description.*'))
+                                                            <span
+                                                                class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
                                                         <a href="javascript:void(0)"
                                                             class="btn btn-danger remove-trans btn-sm"
                                                             data-id="{{ $transaksi->id }}">Hapus</a>
@@ -177,15 +188,15 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td>Total Pengeluaran</td>
+                                                <td colspan="2">Total Pengeluaran</td>
                                                 <td id="totalExpend">Rp 0</td>
                                             </tr>
                                             <tr>
-                                                <td>Budget</td>
+                                                <td colspan="2">Budget</td>
                                                 <td id="displayBudget">Rp 0</td>
                                             </tr>
                                             <tr>
-                                                <td>Sisa Pemasukkan</td>
+                                                <td colspan="2">Sisa Pemasukkan</td>
                                                 <td id="remainingIncome" style="font-weight: bold;">Rp 0</td>
                                             </tr>
                                         </tfoot>

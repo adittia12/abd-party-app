@@ -227,6 +227,7 @@ class OperationalTransController extends Controller
             $expendInputs = $request->input('expend', []);
             $employeesInputs = $request->input('id_employe', []);
             $jenisPemasukanInputs = $request->input('jenis_pemasukan', []);
+            $descriptions = $request->input('description', []);
 
             // Debugging untuk cek apakah data sudah benar
             // dd($employeesInputs); // Pastikan id_employe dikirim sebagai array
@@ -241,6 +242,7 @@ class OperationalTransController extends Controller
                 // Pastikan setiap input `id_employe` berbentuk array
                 $employees = isset($employeesInputs[$key]) ? (array) $employeesInputs[$key] : [];
                 $jenisPemasukan = $jenisPemasukanInputs[$key] ?? null;
+                $transDescrip = $descriptions[$key] ?? null;
 
                 // Validasi keberadaan karyawan di database
                 $existInMasterEmployes = Employes::whereIn('id', $employees)->pluck('id')->toArray();
@@ -259,6 +261,7 @@ class OperationalTransController extends Controller
                         'id_employe' => $employeeId,
                         'expend' => $shareAmount,
                         'id_list_budget' => $jenisPemasukan,
+                        'description' => $transDescrip,
                         'tgl_periode' => $operaMoney->tgl_opartional,
                     ]);
                 }
@@ -317,7 +320,16 @@ class OperationalTransController extends Controller
 
     public function generateBudget()
     {
-        $currentTime = Carbon::now()->format('H:i:s');
+        $currentTime = Carbon::now();
+
+        // Cek apakah waktu sekarang masih sebelum jam 17:00
+        $deadlineTime = Carbon::today()->setHour(17)->setMinute(0)->setSecond(0);
+
+        if ($currentTime->lt($deadlineTime)) {
+            Alert::info('Error', 'Generate budget hanya bisa dilakukan setelah jam 17:00.');
+            return redirect()->back();
+        }
+
         $tomorrow = Carbon::tomorrow()->format('Y-m-d'); // Selalu gunakan tanggal besok
 
         // Ambil semua data operational yang masih memiliki sisa budget
@@ -350,22 +362,23 @@ class OperationalTransController extends Controller
             }
         }
 
-        if ($totalRemainingBudget > 0 && $currentTime >= '17:00:00') {
+        if ($totalRemainingBudget > 0) {
             // Buat transaksi baru dengan sisa budget yang terkumpul untuk tanggal besok
             OperationalMoney::create([
                 'tgl_opartional' => $tomorrow, // **Tanggal selalu besok dari hari ini**
                 'name_operational' => 'Akumulasi Sisa Budget per ' . Carbon::now()->format('Y-m-d'),
                 'budget' => $totalRemainingBudget,
-                'time_date' => Carbon::now()->format('H:i:s'),
+                'time_date' => $currentTime->format('H:i:s'),
             ]);
 
             Alert::success('Success', 'Sisa budget berhasil dipindahkan ke tanggal ' . $tomorrow);
         } else {
-            Alert::info('Info', 'Tidak ada sisa budget yang tersedia atau belum melewati jam 17:00.');
+            Alert::info('Info', 'Tidak ada sisa budget yang tersedia.');
         }
 
         return redirect()->back();
     }
+
 
     /**
      * Display the specified resource.
@@ -472,6 +485,7 @@ class OperationalTransController extends Controller
                         'id_employe' => $new_id_employe[$i],
                         'id_list_budget' => $request->new_id_list_budget[$i],
                         'expend' => $request->new_expend[$i],
+                        'description' => $request->new_description[$i],
                         'tgl_periode' => $operational->tgl_opartional
                     ]);
                 }
