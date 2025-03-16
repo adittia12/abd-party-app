@@ -4,6 +4,7 @@
             <th>Nama Pegawai</th>
             <th>Pengeluaran</th>
             <th>Jenis</th>
+            <th>Deskripsi</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -60,6 +61,13 @@
                 </select>
                 @if ($errors->has('jenis_pemasukan.*'))
                     <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <input type="text" name="description[]" id="description" value="{{ old('description[]') }}"
+                    class="form-control @error('description.*') is-invalid @enderror" placeholder="Deskripsi">
+                @if ($errors->has('description.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
                 @endif
             </td>
             <td>

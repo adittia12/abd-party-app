@@ -60,6 +60,16 @@
                     <span class="text-danger text-sm">{{ $errors->first('new_id_list_budget.*') }}</span>
                 @endif
             </td>
+            <td>
+                <input type="text" name="new_description[]" id="new_description"
+                    class="form-control @error('new_description.*') is-invalid @enderror"
+                    value="{{ old('new_description[]') }}"
+                    placeholder="Deskripsi">
+                @if ($errors->has('new_description.*'))
+                    <span
+                        class="text-danger text-sm">{{ $errors->first('new_description.*') }}</span>
+                @endif
+            </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm removeRow">Hapus</button>
         </td>
