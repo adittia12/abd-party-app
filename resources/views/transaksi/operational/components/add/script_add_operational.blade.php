@@ -59,6 +59,13 @@
                     <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
                 @endif
             </td>
+            <td>
+                <input type="text" name="description[]" id="description" value="{{ old('description[]') }}"
+                    class="form-control @error('description.*') is-invalid @enderror" placeholder="Deskripsi">
+                @if ($errors->has('description.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
+                @endif
+            </td>
         <td>
             <button type="button" class="btn btn-danger removeRow">Hapus</button>
         </td>

@@ -59,7 +59,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Nama Operasional <span class="text-danger">* Wajib
+                                                    <label>Nama Operasional (Deskripsi) <span class="text-danger">* Wajib
                                                             Diisi!!</span></label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">

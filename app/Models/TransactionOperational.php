@@ -16,6 +16,7 @@ class TransactionOperational extends Model
         'id_employe',
         'id_list_budget',
         'expend',
+        'description',
         'tgl_periode'
     ];
 
