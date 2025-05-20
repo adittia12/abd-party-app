@@ -69,7 +69,9 @@
                                                     </div>
                                                     <input type="number" name="budget" id="budgetInput"
                                                         value="{{ $operational->budget }}"
-                                                        class="form-control @error('budget') @enderror">
+                                                        data-initial-budget="{{ $operational->budget }}"
+                                                        class="form-control" readonly>
+
                                                 </div>
                                                 @if ($errors->has('budget'))
                                                     <span class="text-danger text-sm">{{ $errors->first('budget') }}</span>
@@ -103,8 +105,8 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Nama Pegawai</th>
-                                                <th>Pengeluaran</th>
-                                                <th>Jenis</th>
+                                                <th>Jenis Pengeluaran/Pemasukkan</th>
+                                                <th>Nominal</th>
                                                 <th>Deskripsi</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -136,21 +138,7 @@
                                                                 class="text-danger text-sm">{{ $errors->first('id_employe.*') }}</span>
                                                         @endif
                                                     </td>
-                                                    <td style="position: relative;">
-                                                        <!-- Input untuk angka mentah -->
-                                                        <input type="number" name="expend[]"
-                                                            class="form-control expend-input number-input"
-                                                            value="{{ $transaksi->expend }}" placeholder="Nominal"
-                                                            style="width: 70%; padding-right: 30px;">
 
-                                                        <!-- Elemen overlay untuk menampilkan format Rupiah -->
-                                                        <div class="formatted-text"
-                                                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: gray; font-size: 0.9em;">
-                                                            <b>
-                                                                {{ 'Rp ' . number_format($transaksi->expend, 0, ',', '.') }}
-                                                            </b>
-                                                        </div>
-                                                    </td>
                                                     <td>
                                                         <select name="jenis_pemasukan[]" id="jenis_pemasukan"
                                                             class="select2 @error('jenis_pemasukan.*') is-invalid @enderror"
@@ -167,6 +155,21 @@
                                                             <span
                                                                 class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
                                                         @endif
+                                                    </td>
+                                                    <td style="position: relative;">
+                                                        <!-- Input untuk angka mentah -->
+                                                        <input type="number" name="expend[]"
+                                                            class="form-control expend-input number-input"
+                                                            value="{{ $transaksi->expend }}" placeholder="Nominal"
+                                                            style="width: 70%; padding-right: 30px;">
+
+                                                        <!-- Elemen overlay untuk menampilkan format Rupiah -->
+                                                        <div class="formatted-text"
+                                                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: gray; font-size: 0.9em;">
+                                                            <b>
+                                                                {{ 'Rp ' . number_format($transaksi->expend, 0, ',', '.') }}
+                                                            </b>
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <input type="text" name="description[]" id="description"

@@ -119,17 +119,14 @@
                                                 <td>{{ $item->name_operational }}</td>
                                                 <td>{{ number_format($item->budget, 0, ',', '.') }}</td>
                                                 <td>
-                                                    @if ($item->remainingBudget)
+                                                    @if ($item->remainingBudget > 0)
                                                         <b>{{ number_format($item->remainingBudget, 0, ',', '.') }}</b>
-                                                    @elseif ($item->remainingBudget == 0)
+                                                    @else
                                                         <div class="d-flex justify-content-center">
                                                             <div class="p-1">
                                                                 <span class="badge badge-success">Sudah terpakai</span>
                                                             </div>
                                                         </div>
-                                                    @else
-                                                        <b
-                                                            class="text-red">{{ number_format($item->remainingBudget, 0, ',', '.') }}</b>
                                                     @endif
                                                 </td>
                                                 <td>{{ $item->time_date }}</td>
