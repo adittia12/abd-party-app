@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th>Nama Pegawai</th>
-            <th>Pengeluaran</th>
-            <th>Jenis</th>
+            <th>Jenis Pengeluaran/Pemasukkan</th>
+            <th>Nominal</th>
             <th>Deskripsi</th>
             <th>Aksi</th>
         </tr>
@@ -23,6 +23,20 @@
                 </select>
                 @if ($errors->has('id_employe.*'))
                     <span class="text-danger text-sm">{{ $errors->first('id_employe.*') }}</span>
+                @endif
+            </td>
+            <td>
+                <select name="jenis_pemasukan[]" id="jenis_pemasukan"
+                    class="select2 @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
+                    <option value="">Pilih Jenis</option>
+                    @foreach ($listBudget as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->list_budget }}
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('jenis_pemasukan.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
                 @endif
             </td>
             <td style="position: relative;">
@@ -47,20 +61,6 @@
 
                 @if ($errors->has('expend.*'))
                     <span class="text-danger text-sm">{{ $errors->first('expend.*') }}</span>
-                @endif
-            </td>
-            <td>
-                <select name="jenis_pemasukan[]" id="jenis_pemasukan"
-                    class="select2 @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
-                    <option value="">Pilih Pemasukkan</option>
-                    @foreach ($listBudget as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->list_budget }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('jenis_pemasukan.*'))
-                    <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
                 @endif
             </td>
             <td>

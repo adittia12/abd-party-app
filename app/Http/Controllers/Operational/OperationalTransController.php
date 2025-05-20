@@ -84,30 +84,121 @@ class OperationalTransController extends Controller
         }
 
         foreach ($dataOperational as $transOpera) {
-            // Ambil semua transaksi terkait operasional uang
             $transOpera->moneyOperational = TransactionOperational::join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
-                ->select('transaction_oprational.*', 'employess.name')
+                ->leftJoin('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
+                ->select('transaction_oprational.*', 'employess.name', 'list_bugeting.list_budget')
                 ->where('transaction_oprational.id_operational', $transOpera->id)
                 ->get();
 
-            // Hitung total budget terpakai
-            $totalBudgetUsed = $transOpera->moneyOperational->sum('expend');
+            // Filter hanya transaksi yang BUKAN "Budget Baru" atau "Bayar Hutang"
+            $pengeluaran = $transOpera->moneyOperational->filter(function ($item) {
+                return !in_array($item->list_budget, ['Budget Baru', 'Bayar Hutang']);
+            });
 
-            // Hitung sisa budget
-            $remainingBudget = $transOpera->budget - $totalBudgetUsed;
+            $totalBudgetUsed = $pengeluaran->sum('expend');
+            $remainingBudget = max(0, $transOpera->budget - $totalBudgetUsed);
 
-            // Tambahkan ke objek $transOpera
             $transOpera->totalBudgetUsed = $totalBudgetUsed;
             $transOpera->remainingBudget = $remainingBudget;
         }
 
-
         return view('transaksi.operational.index', compact('dataOperational', 'filterMonth', 'filterDate'));
     }
 
+    // public function exportTransOp(Request $request)
+    // {
+    //     $request->validate(['filterDate' => ['required']], ['filterDate' => ['required' => 'Pilih Tanggal Wajib Diisi!!!']]);
+
+    //     try {
+    //         $filterDate = $request->input('filterDate');
+    //         $formattedDate = Carbon::parse($filterDate)->format('Y-m-d');
+    //     } catch (\Throwable $e) {
+    //         return redirect()->back()->withErrors(['msg' => 'Invalid Filter Date.']);
+    //     }
+
+    //     // Ambil data transaksi berdasarkan tanggal yang dipilih
+    //     $reportOperational = TransactionOperational::join('operational_money', 'transaction_oprational.id_operational', '=', 'operational_money.id')
+    //         ->leftJoin('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
+    //         ->leftJoin('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
+    //         ->select([
+    //             'transaction_oprational.expend',
+    //             'transaction_oprational.tgl_periode',
+    //             'operational_money.tgl_opartional',
+    //             'operational_money.name_operational',
+    //             'operational_money.budget',
+    //             'operational_money.time_date',
+    //             'employess.name as name_employee',
+    //             'list_bugeting.list_budget'
+    //         ])
+    //         ->where('operational_money.tgl_opartional', $formattedDate)
+    //         ->get();
+
+    //     // **Tambahkan Pengecekan Jika Data Kosong**
+    //     if ($reportOperational->isEmpty()) {
+    //         Alert::info('INFO', 'Data laporan untuk tanggal ' . Carbon::parse($filterDate)->format('d F Y') . ' tidak tersedia.');
+    //         return redirect()->back();
+    //     }
+
+    //     // Struktur untuk menyusun data ke dalam laporan
+    //     $groupedData = [];
+    //     $totalIn = 0;
+    //     $totalOut = 0;
+
+    //     foreach ($reportOperational as $data) {
+    //         $descKey = $data->name_operational; // Nama budget
+    //         $budgetAmount = $data->budget;
+    //         $employeeName = $data->name_employee;
+    //         $transactionType = $data->list_budget;
+    //         $expendAmount = $data->expend;
+
+    //         // Inisialisasi jika budget belum ada di array
+    //         if (!isset($groupedData[$descKey])) {
+    //             $groupedData[$descKey] = [
+    //                 'budget' => $budgetAmount,
+    //                 'transactions' => []
+    //             ];
+    //             $totalIn += $budgetAmount; // Total IN hanya dari budget
+    //         }
+
+    //         // Jika ada transaksi, tambahkan ke dalam daftar transaksi terkait budget
+    //         if ($transactionType && $employeeName) {
+    //             $transactionKey = $transactionType;
+
+    //             if (!isset($groupedData[$descKey]['transactions'][$transactionKey])) {
+    //                 $groupedData[$descKey]['transactions'][$transactionKey] = [
+    //                     'employess' => [],
+    //                     'total_expend' => 0
+    //                 ];
+    //             }
+
+    //             // Tambahkan karyawan ke dalam transaksi terkait
+    //             $groupedData[$descKey]['transactions'][$transactionKey]['employess'][] = $employeeName;
+    //             $groupedData[$descKey]['transactions'][$transactionKey]['total_expend'] += $expendAmount;
+    //             $totalOut += $expendAmount; // Total OUT dijumlahkan dari semua transaksi
+    //         }
+    //     }
+
+    //     // Load tampilan PDF
+    //     $pdf = PDF::loadView('transaksi.operational.exports.report_operational', [
+    //         'groupedData' => $groupedData,
+    //         'totalIn' => $totalIn,
+    //         'totalOut' => $totalOut,
+    //         'filterDate' => $filterDate
+    //     ]);
+
+    //     // Nama file PDF
+    //     $dt = now('Asia/Jakarta');
+    //     $todayDate = $dt->format('d_F_Y_His');
+    //     return $pdf->stream('Laporan_Transaksi_Operasional_' . Carbon::parse($filterDate)->format('d_F_Y') . '_' . $todayDate . '.pdf');
+    // }
+
+
     public function exportTransOp(Request $request)
     {
-        $request->validate(['filterDate' => ['required']], ['filterDate' => ['required' => 'Pilih Tanggal Wajib Diisi!!!']]);
+        $request->validate(
+            ['filterDate' => ['required']],
+            ['filterDate.required' => 'Pilih Tanggal Wajib Diisi!!!']
+        );
 
         try {
             $filterDate = $request->input('filterDate');
@@ -116,74 +207,56 @@ class OperationalTransController extends Controller
             return redirect()->back()->withErrors(['msg' => 'Invalid Filter Date.']);
         }
 
-        // Ambil data transaksi berdasarkan tanggal yang dipilih
+        // Ambil data budget dari tabel operational
+        $operational = OperationalMoney::select('budget')
+            ->where('tgl_opartional', $formattedDate)
+            ->first();
+
+        // Ambil seluruh data transaksi berdasarkan tanggal
         $reportOperational = TransactionOperational::join('operational_money', 'transaction_oprational.id_operational', '=', 'operational_money.id')
             ->leftJoin('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
+            ->leftJoin('groupss', 'employess.id_group', '=', 'groupss.id')
             ->leftJoin('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
             ->select([
-                'transaction_oprational.expend',
-                'transaction_oprational.tgl_periode',
+                'transaction_oprational.*',
                 'operational_money.tgl_opartional',
                 'operational_money.name_operational',
                 'operational_money.budget',
-                'operational_money.time_date',
-                'employess.name as name_employee',
-                'list_bugeting.list_budget'
+                'employess.name as employee_name',
+                'groupss.name_group',
+                'list_bugeting.list_budget',
+                'list_bugeting.id as id_jen_pemasuk'
             ])
             ->where('operational_money.tgl_opartional', $formattedDate)
             ->get();
 
-        // **Tambahkan Pengecekan Jika Data Kosong**
+        $budget = $operational->budget ?? 0;
+
+        // Filter transaksi untuk keperluan pengurangan budget
+        $filteredReportOperational = $reportOperational->filter(function ($item) {
+            return !in_array(strtolower($item->list_budget), ['budget baru', 'bayar hutang']);
+        });
+
+        // Hitung total pengeluaran hanya dari data yang valid
+        $totalExpend = $filteredReportOperational->sum('expend');
+
+        // Hitung sisa budget
+        $remainingIncome = $budget - $totalExpend;
+
+        // Jika tidak ada data transaksi sama sekali
         if ($reportOperational->isEmpty()) {
             Alert::info('INFO', 'Data laporan untuk tanggal ' . Carbon::parse($filterDate)->format('d F Y') . ' tidak tersedia.');
             return redirect()->back();
         }
 
-        // Struktur untuk menyusun data ke dalam laporan
-        $groupedData = [];
-        $totalIn = 0;
-        $totalOut = 0;
-
-        foreach ($reportOperational as $data) {
-            $descKey = $data->name_operational; // Nama budget
-            $budgetAmount = $data->budget;
-            $employeeName = $data->name_employee;
-            $transactionType = $data->list_budget;
-            $expendAmount = $data->expend;
-
-            // Inisialisasi jika budget belum ada di array
-            if (!isset($groupedData[$descKey])) {
-                $groupedData[$descKey] = [
-                    'budget' => $budgetAmount,
-                    'transactions' => []
-                ];
-                $totalIn += $budgetAmount; // Total IN hanya dari budget
-            }
-
-            // Jika ada transaksi, tambahkan ke dalam daftar transaksi terkait budget
-            if ($transactionType && $employeeName) {
-                $transactionKey = $transactionType;
-
-                if (!isset($groupedData[$descKey]['transactions'][$transactionKey])) {
-                    $groupedData[$descKey]['transactions'][$transactionKey] = [
-                        'employess' => [],
-                        'total_expend' => 0
-                    ];
-                }
-
-                // Tambahkan karyawan ke dalam transaksi terkait
-                $groupedData[$descKey]['transactions'][$transactionKey]['employess'][] = $employeeName;
-                $groupedData[$descKey]['transactions'][$transactionKey]['total_expend'] += $expendAmount;
-                $totalOut += $expendAmount; // Total OUT dijumlahkan dari semua transaksi
-            }
-        }
-
         // Load tampilan PDF
         $pdf = PDF::loadView('transaksi.operational.exports.report_operational', [
-            'groupedData' => $groupedData,
-            'totalIn' => $totalIn,
-            'totalOut' => $totalOut,
-            'filterDate' => $filterDate
+            'reportOperational' => $reportOperational, // tetap kirim semua data ke view
+            'operational' => $operational,
+            'filterDate' => $filterDate,
+            'budget' => $budget,
+            'totalExpend' => $totalExpend,
+            'remainingIncome' => $remainingIncome,
         ]);
 
         // Nama file PDF
@@ -192,8 +265,6 @@ class OperationalTransController extends Controller
         return $pdf->stream('Laporan_Transaksi_Operasional_' . Carbon::parse($filterDate)->format('d_F_Y') . '_' . $todayDate . '.pdf');
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -201,7 +272,7 @@ class OperationalTransController extends Controller
     {
         $listGroups = Groupss::all();
         $listEmploye = Employes::join('groupss', 'employess.id_group', '=', 'groupss.id')
-                                ->select('groupss.name_group', 'employess.*')->get();
+            ->select('groupss.name_group', 'employess.*')->get();
         $listBudget = ListBudgetModel::all();
         return view('transaksi.operational.add_operational', compact(['listGroups', 'listEmploye', 'listBudget']));
     }
@@ -323,12 +394,12 @@ class OperationalTransController extends Controller
         $currentTime = Carbon::now();
 
         // Cek apakah waktu sekarang masih sebelum jam 17:00
-        $deadlineTime = Carbon::today()->setHour(17)->setMinute(0)->setSecond(0);
+        // $deadlineTime = Carbon::today()->setHour(17)->setMinute(0)->setSecond(0);
 
-        if ($currentTime->lt($deadlineTime)) {
-            Alert::info('Error', 'Generate budget hanya bisa dilakukan setelah jam 17:00.');
-            return redirect()->back();
-        }
+        // if ($currentTime->lt($deadlineTime)) {
+        //     Alert::info('Error', 'Generate budget hanya bisa dilakukan setelah jam 17:00.');
+        //     return redirect()->back();
+        // }
 
         $tomorrow = Carbon::tomorrow()->format('Y-m-d'); // Selalu gunakan tanggal besok
 
@@ -336,8 +407,8 @@ class OperationalTransController extends Controller
         $operationalWithRemainingBudget = OperationalMoney::whereRaw(
             'budget > (SELECT COALESCE(SUM(expend), 0) FROM transaction_oprational WHERE transaction_oprational.id_operational = operational_money.id)'
         )
-        ->orderBy('tgl_opartional', 'asc') // Ambil dari tanggal terlama ke terbaru
-        ->get();
+            ->orderBy('tgl_opartional', 'asc') // Ambil dari tanggal terlama ke terbaru
+            ->get();
 
         if ($operationalWithRemainingBudget->isEmpty()) {
             Alert::error('Error', 'Tidak ada sisa budget yang tersedia.');
@@ -387,19 +458,20 @@ class OperationalTransController extends Controller
     {
         $operational = OperationalMoney::findOrFail(decrypt($operationalIds));
         $transOperational = TransactionOperational::join('operational_money', 'transaction_oprational.id_operational', '=', 'operational_money.id')
-                                                ->join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
-                                                ->join('groupss', 'employess.id_group', '=', 'groupss.id')
-                                                ->join('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
-                                                ->select([
-                                                    'transaction_oprational.*',
-                                                    'operational_money.tgl_opartional',
-                                                    'operational_money.name_operational',
-                                                    'employess.name as employee_name',
-                                                    'groupss.name_group',
-                                                    'list_bugeting.list_budget',
-                                                    'list_bugeting.id as id_jen_pemasuk'])
-                                                ->where('transaction_oprational.id_operational', $operational->id)
-                                                ->get();
+            ->join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
+            ->join('groupss', 'employess.id_group', '=', 'groupss.id')
+            ->join('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
+            ->select([
+                'transaction_oprational.*',
+                'operational_money.tgl_opartional',
+                'operational_money.name_operational',
+                'employess.name as employee_name',
+                'groupss.name_group',
+                'list_bugeting.list_budget',
+                'list_bugeting.id as id_jen_pemasuk'
+            ])
+            ->where('transaction_oprational.id_operational', $operational->id)
+            ->get();
 
 
         return view('transaksi.operational.show_operational_finance', compact(['transOperational', 'operational']));
@@ -413,15 +485,15 @@ class OperationalTransController extends Controller
         $operational = OperationalMoney::findOrFail($id);
         $listBudget = ListBudgetModel::all();
         $listEmploye = Employes::join('groupss', 'employess.id_group', '=', 'groupss.id')
-                                ->select('groupss.name_group', 'employess.*')->get();
+            ->select('groupss.name_group', 'employess.*')->get();
 
         $transOperational = TransactionOperational::join('operational_money', 'transaction_oprational.id_operational', '=', 'operational_money.id')
-                                                ->join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
-                                                ->join('groupss', 'employess.id_group', '=', 'groupss.id')
-                                                ->join('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
-                                                ->select('transaction_oprational.*', 'operational_money.tgl_opartional', 'operational_money.name_operational', 'employess.name as employee_name', 'groupss.name_group', 'list_bugeting.list_budget', 'list_bugeting.id as id_jen_pemasuk')
-                                                ->where('transaction_oprational.id_operational', $operational->id)
-                                                ->get();
+            ->join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
+            ->join('groupss', 'employess.id_group', '=', 'groupss.id')
+            ->join('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
+            ->select('transaction_oprational.*', 'operational_money.tgl_opartional', 'operational_money.name_operational', 'employess.name as employee_name', 'groupss.name_group', 'list_bugeting.list_budget', 'list_bugeting.id as id_jen_pemasuk')
+            ->where('transaction_oprational.id_operational', $operational->id)
+            ->get();
 
         return view('transaksi.operational.edit_operational', compact(['operational', 'listEmploye', 'transOperational', 'listBudget']));
     }
@@ -471,8 +543,8 @@ class OperationalTransController extends Controller
             // delete transaction that were not updated
             if (!empty($updateTransactionIds)) {
                 TransactionOperational::where('id_operational', $operational->id)
-                                    ->whereNotIn('id', $updateTransactionIds)
-                                    ->delete();
+                    ->whereNotIn('id', $updateTransactionIds)
+                    ->delete();
             }
 
             // process new transaction

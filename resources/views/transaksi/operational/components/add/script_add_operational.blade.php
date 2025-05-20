@@ -18,7 +18,23 @@
                 <span class="text-danger text-sm">{{ $errors->first('id_employe.*') }}</span>
             @endif
         </td>
-        <td style="position: relative;">
+
+            <td>
+                <select name="jenis_pemasukan[]" id="jenis_pemasukan"
+                    class="select2 @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
+                    <option value="">Pilih Jenis</option>
+                    @foreach ($listBudget as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->list_budget }}
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('jenis_pemasukan.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
+                @endif
+            </td>
+
+            <td style="position: relative;">
                 <!-- Input untuk angka mentah -->
                 <input type="number" name="expend[]" id="expend"
                     value="{{ old('expend[]') }}"
@@ -43,20 +59,6 @@
                 @if ($errors->has('expend.*'))
                     <span
                         class="text-danger text-sm">{{ $errors->first('expend.*') }}</span>
-                @endif
-            </td>
-            <td>
-                <select name="jenis_pemasukan[]" id="jenis_pemasukan"
-                    class="select2 @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
-                    <option value="">Pilih Pemasukkan</option>
-                    @foreach ($listBudget as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->list_budget }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('jenis_pemasukan.*'))
-                    <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
                 @endif
             </td>
             <td>
@@ -115,7 +117,6 @@
 </script>
 
 <script>
-    // Fungsi untuk memformat angka menjadi format Rupiah
     function formatRupiah(angka) {
         const numberString = angka.toString().replace(/[^,\d]/g, '');
         const split = numberString.split(',');
@@ -131,37 +132,62 @@
         return `Rp ${rupiah}`;
     }
 
-    // Fungsi untuk menghitung total pengeluaran dan sisa pemasukkan
+    // Simpan nilai awal budget (dari input manual terakhir)
+    let manualBudget = parseFloat(document.getElementById('budgetInput').value) || 0;
+
+    // Saat user input manual di budgetInput, update manualBudget
+    document.getElementById('budgetInput').addEventListener('input', function() {
+        manualBudget = parseFloat(this.value) || 0;
+        calculateTotals();
+    });
+
     function calculateTotals() {
-        const expendInputs = document.querySelectorAll('.expend-input');
+        const rows = document.querySelectorAll('#transactionTable tbody tr');
+        let totalAdditions = 0;
         let totalExpend = 0;
 
-        // Hitung total pengeluaran
-        expendInputs.forEach(input => {
-            const value = parseFloat(input.value) || 0;
-            totalExpend += value;
+        rows.forEach(row => {
+            const expendInput = row.querySelector('.expend-input');
+            const jenisSelect = row.querySelector('select[name="jenis_pemasukan[]"]');
+
+            const value = parseFloat(expendInput.value) || 0;
+            const jenisText = jenisSelect.options[jenisSelect.selectedIndex]?.text.trim() || "";
+
+            if (jenisText === "Budget Baru" || jenisText === "Bayar Hutang") {
+                totalAdditions += value;
+            } else {
+                totalExpend += value;
+            }
         });
 
-        // Update total pengeluaran
+        // Total budget = manualBudget + totalAdditions
+        const totalBudget = manualBudget + totalAdditions;
+
+        // Update budgetInput hanya jika nilainya berbeda (untuk menghindari infinite loop)
+        const budgetInput = document.getElementById('budgetInput');
+        if (parseFloat(budgetInput.value) !== totalBudget) {
+            budgetInput.value = totalBudget.toFixed(2);
+        }
+
+        // Update tampilan budget dan pengeluaran
+        document.getElementById('displayBudget').textContent = formatRupiah(totalBudget);
         document.getElementById('totalExpend').textContent = formatRupiah(totalExpend);
 
-        // Ambil nilai budget dari input data operasional
-        const budget = parseFloat(document.getElementById('budgetInput').value) || 0;
+        let remainingIncome = totalBudget - totalExpend;
+        if (remainingIncome < 0) remainingIncome = 0;
 
-        // Update tampilan budget di tabel
-        document.getElementById('displayBudget').textContent = formatRupiah(budget);
-
-        // Hitung sisa pemasukkan
-        const remainingIncome = budget - totalExpend;
-
-        // Update sisa pemasukkan
-        document.getElementById('remainingIncome').textContent = formatRupiah(remainingIncome > 0 ? remainingIncome :
-            0);
+        document.getElementById('remainingIncome').textContent = formatRupiah(remainingIncome);
     }
 
-    // Event listener untuk input pengeluaran atau budget
+
+
+    // Event listener untuk input pengeluaran, jenis pemasukan, atau budget awal
     document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('expend-input') || e.target.id === 'budgetInput') {
+        if (
+            e.target.classList.contains('expend-input') ||
+            e.target.id === 'budgetInput' ||
+            e.target.name === 'jenis_pemasukan[]'
+        ) {
             calculateTotals();
         }
     });
@@ -173,4 +199,7 @@
             calculateTotals();
         }
     });
+
+    // Jalankan sekali saat halaman load supaya nilai muncul
+    window.addEventListener('DOMContentLoaded', calculateTotals);
 </script>
