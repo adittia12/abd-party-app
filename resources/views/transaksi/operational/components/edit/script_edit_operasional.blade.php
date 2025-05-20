@@ -2,6 +2,7 @@
     document.getElementById('addRow').addEventListener('click', function() {
         const tableBody = document.querySelector('#transactionTable tbody');
         const newRow = document.createElement('tr');
+        newRow.setAttribute('data-new', 'true'); // << ini yang kamu butuhkan
         newRow.innerHTML = `
         <td class="row-index">${$('#transactionTable tbody tr').length + 1}</td>
         <td>
@@ -19,7 +20,21 @@
                 <span class="text-danger text-sm">{{ $errors->first('new_id_employe.*') }}</span>
             @endif
         </td>
-        <td style="position: relative;">
+            <td>
+                <select name="new_id_list_budget[]" id="new_id_list_budget"
+                    class="select2 @error('new_id_list_budget.*') is-invalid @enderror" style="width: 100%">
+                    <option value="">Pilih Pemasukkan</option>
+                    @foreach ($listBudget as $item)
+                        <option value="{{ $item->id }}">
+                            {{ $item->list_budget }}
+                        </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('new_id_list_budget.*'))
+                    <span class="text-danger text-sm">{{ $errors->first('new_id_list_budget.*') }}</span>
+                @endif
+            </td>
+            <td style="position: relative;">
                 <!-- Input untuk angka mentah -->
                 <input type="number" name="new_expend[]" id="expend"
                     value="{{ old('new_expend[]') }}"
@@ -44,20 +59,6 @@
                 @if ($errors->has('new_expend.*'))
                     <span
                         class="text-danger text-sm">{{ $errors->first('new_expend.*') }}</span>
-                @endif
-            </td>
-            <td>
-                <select name="new_id_list_budget[]" id="new_id_list_budget"
-                    class="select2 @error('new_id_list_budget.*') is-invalid @enderror" style="width: 100%">
-                    <option value="">Pilih Pemasukkan</option>
-                    @foreach ($listBudget as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->list_budget }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('new_id_list_budget.*'))
-                    <span class="text-danger text-sm">{{ $errors->first('new_id_list_budget.*') }}</span>
                 @endif
             </td>
             <td>
@@ -218,46 +219,84 @@
 
         function calculateTotals() {
             let totalExpend = 0;
+            let additionalBudget = 0;
 
-            // Mengambil semua input pengeluaran
-            document.querySelectorAll('.expend-input').forEach(input => {
-                let value = parseFloat(input.value) || 0;
-                totalExpend += value;
+            const budgetInput = document.getElementById('budgetInput');
+            const initialBudget = parseFloat(budgetInput.getAttribute('data-initial-budget')) || 0;
 
-                // Update tampilan format Rupiah pada elemen overlay
-                let formattedText = input.closest('td').querySelector('.formatted-text b');
+            document.querySelectorAll('#transactionTable tbody tr').forEach(row => {
+                let expendInput = row.querySelector('.expend-input');
+                let expend = parseFloat(expendInput?.value) || 0;
+
+                const isOldRow = row.getAttribute('data-new') !== 'true';
+
+                let jenisSelect = row.querySelector('select[name="jenis_pemasukan[]"]') ||
+                    row.querySelector('select[name="new_id_list_budget[]"]');
+
+                let jenisText = jenisSelect && jenisSelect.options[jenisSelect.selectedIndex] ?
+                    jenisSelect.options[jenisSelect.selectedIndex].text.toLowerCase().trim() : '';
+
+                // Jika baris dihapus sebelumnya, jangan ikut dihitung
+                if (row.classList.contains('deleted-row')) {
+                    if ((jenisText.includes('budget baru') || jenisText.includes('bayar hutang')) &&
+                        isOldRow) {
+                        // Jika baris lama dengan jenis budget baru/bayar hutang dihapus → kurangi dari budget tambahan
+                        additionalBudget -= expend;
+                    }
+                    return; // lewati baris ini
+                }
+
+                // Logika normal
+                if (jenisText.includes('budget baru') || jenisText.includes('bayar hutang')) {
+                    if (!isOldRow) {
+                        // Transaksi baru dan jenis budget baru/bayar hutang → tambahkan ke budget
+                        additionalBudget += expend;
+                    }
+                    // Transaksi lama jenis ini → tidak dihitung sebagai pengeluaran
+                } else {
+                    // Semua jenis lain → pengeluaran
+                    totalExpend += expend;
+                }
+
+                // Format tampilan rupiah
+                let formattedText = row.querySelector('.formatted-text b');
                 if (formattedText) {
-                    formattedText.textContent = formatRupiah(value);
+                    formattedText.textContent = formatRupiah(expend);
                 }
             });
 
-            // Update total pengeluaran
+            // Hitung budget akhir dan sisa
+            const finalBudget = initialBudget + additionalBudget;
+            const remainingIncome = finalBudget - totalExpend;
+
+            // Update tampilan
+            budgetInput.value = finalBudget.toFixed(2);
+            document.getElementById('displayBudget').textContent = formatRupiah(finalBudget);
             document.getElementById('totalExpend').textContent = formatRupiah(totalExpend);
 
-            // Mengambil nilai budget dari input
-            let budget = parseFloat(document.getElementById('budgetInput').value) || 0;
-            document.getElementById('displayBudget').textContent = formatRupiah(budget);
-
-            // Hitung sisa budget
-            let remainingIncome = budget - totalExpend;
-            let remainingElement = document.getElementById('remainingIncome');
-
+            const remainingElement = document.getElementById('remainingIncome');
             remainingElement.textContent = formatRupiah(remainingIncome);
-
-            // Jika sisa budget negatif, tampilkan dalam warna merah
-            if (remainingIncome < 0) {
-                remainingElement.style.color = 'red';
-            } else {
-                remainingElement.style.color = 'black';
-            }
+            remainingElement.style.color = remainingIncome < 0 ? 'red' : 'black';
         }
 
-        // Event listener untuk input pengeluaran dan budget
+        // Event listener input
         document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('expend-input') || e.target.id === 'budgetInput') {
+            if (e.target.classList.contains('expend-input') || e.target.name === 'jenis_pemasukan[]') {
                 calculateTotals();
             }
         });
+
+        // Hitung ulang saat halaman siap
+        document.addEventListener('DOMContentLoaded', calculateTotals);
+
+
+
+        // Event listener untuk input pengeluaran dan budget
+        // document.addEventListener('input', function(e) {
+        //     if (e.target.classList.contains('expend-input') || e.target.id === 'budgetInput') {
+        //         calculateTotals();
+        //     }
+        // });
 
         // Event listener untuk tombol hapus transaksi
         document.getElementById('transactionTable').addEventListener('click', function(e) {

@@ -40,7 +40,7 @@ use App\Http\Controllers\UserManagementController;
 |
 */
 
-Route::controller(ComprofController::class)->group(function() {
+Route::controller(ComprofController::class)->group(function () {
     Route::get('/', 'index')->name('company_profile');
     Route::post('/createComentar', 'storeComentar')->name('store_coment');
 });
@@ -48,14 +48,14 @@ Route::controller(ComprofController::class)->group(function() {
 // Auth::rouwtes();
 
 Auth::routes();
-Route::controller(LoginController::class)->group(function() {
+Route::controller(LoginController::class)->group(function () {
     Route::get('/login-abd', 'login')->name('login');
     Route::post('/login-abd', 'authenticate');
     Route::get('/logout', 'logout')->name('logoutUser');
 });
 
 Route::controller(LockScreen::class)->group(function () {
-    Route::get('lock_screen','lockScreen')->name('lock_screen');
+    Route::get('lock_screen', 'lockScreen')->name('lock_screen');
     Route::post('unlock', 'unlock')->name('unlock');
 });
 
@@ -77,7 +77,7 @@ Route::controller(ResetPasswordController::class)->group(function () {
     Route::post('/reset-password', 'updatePassword');
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::controller(UserManagementController::class)->group(function () {
         Route::get('userManagement', 'index')->name('userManagement');
@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function(){
     });
 
     Route::resource('/user_role', RoleUserController::class);
-    Route::controller(RoleUserController::class)->group(function(){
+    Route::controller(RoleUserController::class)->group(function () {
         Route::post('/role/update_role', 'update')->name('updateRole');
     });
 
@@ -105,18 +105,18 @@ Route::middleware('auth')->group(function(){
     });
 
     Route::resource('/group', GroupsController::class);
-    Route::controller(GroupsController::class)->group(function() {
+    Route::controller(GroupsController::class)->group(function () {
         Route::post('/group/update', 'updateGroup')->name('updateGroupes');
     });
 
     Route::resource('/employe', EmployesController::class);
-    Route::controller(EmployesController::class)->group(function() {
+    Route::controller(EmployesController::class)->group(function () {
         Route::post('/employe/update', 'updateEmploye')->name('updateEmployes');
         Route::post('/employe/import-emp', 'importEmploye')->name('import_employe');
     });
 
     Route::resource('/list_budget', BudgetListController::class);
-    Route::controller(BudgetListController::class)->group(function() {
+    Route::controller(BudgetListController::class)->group(function () {
         Route::post('/list_budget/update_opt_in', 'updateOptIn')->name('optInUpdate');
     });
 
@@ -151,13 +151,14 @@ Route::middleware('auth')->group(function(){
         Route::get('/invoice/doc-employee/{id}', 'docEmployee')->name('invoice.docEmployee');
     });
 
-    Route::controller( ReportTransController::class)->group(function () {
+    Route::controller(ReportTransController::class)->group(function () {
         Route::get('/report/transaksi/', 'export')->name('export_transaksi');
         Route::get('/report/export_order/', 'exportReportOrder')->name('export_order');
     });
 
     Route::resource('/operational', OperationalTransController::class);
     Route::get('/export-trans-op', [OperationalTransController::class, 'exportTransOp'])->name('export.transOp');
+    Route::get('export-pdf-trans-op', [OperationalTransController::class, 'exportPdf'])->name('export-pdf.operational-trans');
     Route::controller(OperationalTransController::class)->group(function () {
         Route::post('/operational/update', 'update')->name('operational.update_operational');
         Route::delete('/operational/detele-operational-trans/{id}', 'deleteOperationalTrans')->name('operational.deleteTransOperational');
@@ -171,34 +172,34 @@ Route::middleware('auth')->group(function(){
     });
 
     Route::resource('/service', ServiceController::class);
-    Route::controller(ServiceController::class)->group(function() {
+    Route::controller(ServiceController::class)->group(function () {
         Route::post('service/update', 'update')->name('update_service');
     });
 
     Route::resource('/service_area', ServiceAreaController::class);
-    Route::controller(ServiceAreaController::class)->group(function() {
+    Route::controller(ServiceAreaController::class)->group(function () {
         Route::post('service-area/update', 'update')->name('update_service_area');
     });
 
     Route::resource('/service_strategy', ServiceStrategyController::class);
-    Route::controller(ServiceStrategyController::class)->group(function() {
+    Route::controller(ServiceStrategyController::class)->group(function () {
         Route::post('service_strategy/update', 'update')->name('updateServiceStrategy');
     });
 
     Route::resource('/workforece_skill', SkillsController::class);
-    Route::controller(SkillsController::class)->group(function() {
+    Route::controller(SkillsController::class)->group(function () {
         Route::post('workforece_skill/update', 'update')->name('updateSkillWork');
     });
 
     Route::resource('/gallery', GalleryController::class);
-    Route::controller(GalleryController::class)->group(function() {
+    Route::controller(GalleryController::class)->group(function () {
         Route::post('gallery/update', 'update')->name('updateGallery');
     });
 
     Route::resource('/comentars', ComentarController::class);
 
     Route::resource('/legal', LegalController::class);
-    Route::controller(LegalController::class)->group(function() {
+    Route::controller(LegalController::class)->group(function () {
         Route::post('legal/update', 'update')->name('updateLegal');
     });
 
@@ -213,5 +214,3 @@ Route::middleware('auth')->group(function(){
         return Response::download($filePath);
     })->name('download-example-import-karyawan');
 });
-
-

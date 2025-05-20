@@ -102,73 +102,39 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Pegawai</th>
-                <th>Pengeluaran (Rp)</th>
-                <th>Jenis</th>
-                <th>Deskripsi</th>
+                <th>Nama/Deskripsi</th>
+                <th>IN</th>
+                <th>OUT</th>
             </tr>
         </thead>
         <tbody>
             @php $no = 1; @endphp
-            @php $totalNominal = 0; @endphp
-            @foreach ($reportOperational as $budgetName => $details)
-                @php
-                    $isPenambahanBudget = in_array($details->list_budget, ['Budget Baru', 'Bayar Hutang']);
-                @endphp
-                <tr {{ $isPenambahanBudget ? 'style=font-weight:bold;' : '' }}>
+            @foreach ($groupedData as $budgetName => $details)
+                <tr class="bold">
                     <td>{{ $no++ }}</td>
-                    <td>
-                        <span class="badge badge-primary">{{ $details->name_group }}-</span>
-                        {{ $details->employee_name }}
-                    </td>
-                    <td class="expend-value">
-                        {{ number_format($details->expend, 0, ',', '.') }}
-                    </td>
-                    <td>
-                        <span class="badge badge-info">{{ $details->list_budget }}</span>
-                    </td>
-                    <td>
-                        @empty($details->description)
-                            <span style="color: red">Tidak ada deskripsi</span>
-                        @else
-                            {{ $details->description }}
-                        @endempty
-                    </td>
+                    <td>{{ $budgetName }}</td>
+                    <td class="text-right">{{ number_format($details['budget'], 0, ',', '.') }}</td>
+                    <td></td>
                 </tr>
+
+                @foreach ($details['transactions'] as $transactionName => $transactionDetails)
+                    <tr>
+                        <td>{{ $no++ }}</td>
+                        <td>&emsp; {{ $transactionName }} ({{ implode(', ', $transactionDetails['employess']) }})</td>
+                        <td></td>
+                        <td class="text-right">{{ number_format($transactionDetails['total_expend'], 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
             @endforeach
+
+            <!-- Row untuk Total -->
+            <tr class="bold" style="background-color: #007bff; color: white;">
+                <td></td>
+                <td>Total</td>
+                <td class="text-right">{{ number_format($totalIn, 0, ',', '.') }}</td>
+                <td class="text-right">{{ number_format($totalOut, 0, ',', '.') }}</td>
+            </tr>
         </tbody>
-        @php
-            $isOverBudget = $remainingIncome < 0;
-        @endphp
-
-        <tfoot class="bg-light">
-            <tr class="font-weight-bold">
-                <td colspan="2" class="text-right">Total Pengeluaran</td>
-                <td class="text-right text-danger">
-                    Rp {{ number_format($totalExpend, 0, ',', '.') }}
-                </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr class="font-weight-bold">
-                <td colspan="2" class="text-right">Budget</td>
-                <td class="text-right text-success">
-                    Rp {{ number_format($budget, 0, ',', '.') }}
-                </td>
-                <td colspan="2"></td>
-            </tr>
-            <tr class="font-weight-bold">
-                <td colspan="2" class="text-right">Sisa Pemasukkan</td>
-                <td class="text-right {{ $isOverBudget ? 'text-danger' : 'text-primary' }}">
-                    Rp {{ number_format($remainingIncome, 0, ',', '.') }}
-                    @if ($isOverBudget)
-                        <small class="ml-2">(Over Budget)</small>
-                    @endif
-                </td>
-                <td colspan="2"></td>
-            </tr>
-        </tfoot>
-
-
     </table>
 
     <!-- Bagian Tanda Tangan -->
@@ -193,6 +159,8 @@
             </td>
         </tr>
     </table>
+
+
 
 </body>
 

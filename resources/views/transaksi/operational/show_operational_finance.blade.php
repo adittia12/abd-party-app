@@ -90,6 +90,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
+
                                 @if ($transOperational->isNotEmpty())
                                     <table class="table table-hover table-striped table-bordered shadow-sm rounded"
                                         id="table-1">
@@ -118,7 +119,11 @@
                                                     <td>
                                                         <span
                                                             class="badge badge-info">{{ $operational->list_budget }}</span>
+                                                        @if (in_array(strtolower($operational->list_budget), ['budget baru', 'bayar hutang']))
+                                                            <span class="badge badge-success">Penambahan Budget</span>
+                                                        @endif
                                                     </td>
+
                                                     <td>
                                                         @empty($operational->description)
                                                             <span class="text-danger">Tidak ada deskripsi</span>
@@ -169,11 +174,24 @@
 
             // Ambil budget dari elemen HTML
             let budgetText = document.getElementById("budgetValue").innerText;
-            let budget = parseInt(budgetText.replace(/\./g, "")) || 0; // Hapus titik agar bisa diubah jadi angka
+            let budget = parseInt(budgetText.replace(/\./g, "")) || 0;
 
-            // Hitung total pengeluaran
-            document.querySelectorAll(".expend-value").forEach(function(el) {
-                let value = parseInt(el.innerText.replace(/\./g, "")) || 0;
+            // Ambil semua baris dari tbody
+            const rows = document.querySelectorAll("#transactionBody tr");
+
+            rows.forEach(function(row) {
+                const expendElement = row.querySelector(".expend-value");
+                const budgetTypeElement = row.querySelector(".badge-info");
+
+                if (!expendElement || !budgetTypeElement)
+                    return; // Skip kalau tidak ada elemen yang diperlukan
+
+                const listBudget = budgetTypeElement.innerText.trim().toLowerCase();
+                if (listBudget === "budget baru" || listBudget === "bayar hutang") {
+                    return; // Skip baris ini
+                }
+
+                let value = parseInt(expendElement.innerText.replace(/\./g, "")) || 0;
                 totalExpend += value;
             });
 
