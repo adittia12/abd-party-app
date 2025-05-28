@@ -28,6 +28,10 @@
                                             role="tab" aria-controls="order" aria-selected="true">Data Order</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link" id="payment-tab" data-bs-toggle="tab" href="#payment"
+                                            role="tab" aria-controls="order" aria-selected="true">Pembayaran</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" id="transaction-tab" data-bs-toggle="tab" href="#transaction"
                                             role="tab" aria-controls="transaction" aria-selected="false">Transaction</a>
                                     </li>
@@ -43,9 +47,27 @@
                                             @include('transaksi.order.components.add_order.form_order_add')
                                         </div>
                                         <div class="d-flex justify-content-end mt-3">
-                                            <button type="button" class="btn btn-primary" id="toTransactionTab">
+                                            <button type="button" class="btn btn-primary" id="toPaymentTab">
                                                 Next <i class="fas fa-arrow-right"></i>
                                             </button>
+                                        </div>
+                                    </div>
+                                    {{-- Data Payment --}}
+                                    <div class="tab-pane fade show" id="payment" role="tabpanel"
+                                        aria-labelledby="payment-tab">
+                                        <div class="section-title mt-0">Pembayaran</div>
+                                        <div class="container">
+                                            @include('transaksi.order.components.add_order.form_order_payment')
+                                        </div>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <button type="button" class="btn btn-secondary" id="toOrderTab">
+                                                <i class="fas fa-arrow-left"></i> Back
+                                            </button>
+                                            <div>
+                                                <button type="button" class="btn btn-primary" id="toTransactionTab">
+                                                    Next <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -57,7 +79,7 @@
                                             @include('transaksi.order.components.add_order.form_transaksi_order')
                                         </div>
                                         <div class="d-flex justify-content-between mt-3">
-                                            <button type="button" class="btn btn-secondary" id="toOrderTab">
+                                            <button type="button" class="btn btn-secondary" id="toPaymentTabBack">
                                                 <i class="fas fa-arrow-left"></i> Back
                                             </button>
                                             <div>
@@ -78,6 +100,16 @@
 @section('script')
     <script>
         // Navigasi menggunakan tombol
+        document.getElementById('toPaymentTab').addEventListener('click', function() {
+            const paymentTab = new bootstrap.Tab(document.getElementById('payment-tab'));
+            paymentTab.show();
+        });
+
+        document.getElementById('toPaymentTabBack').addEventListener('click', function() {
+            const paymentTab = new bootstrap.Tab(document.getElementById('payment-tab'));
+            paymentTab.show();
+        });
+
         document.getElementById('toTransactionTab').addEventListener('click', function() {
             const transactionTab = new bootstrap.Tab(document.getElementById('transaction-tab'));
             transactionTab.show();

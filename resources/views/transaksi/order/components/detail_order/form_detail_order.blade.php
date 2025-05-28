@@ -67,7 +67,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
+                                <i class="fas fa-money-check-alt"></i>
                             </div>
                         </div>
                         <span class="form-control">{{ $order->status_order }}</span>
@@ -79,28 +79,29 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>Jenis Pajak</label>
+                    <label>Pajak PPH</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-money-check-alt"></i>
+                            </div>
+                        </div>
+                        <span
+                            class="form-control">{{ $order->pajak_pph == 0 ? '0' : 'Rp ' . number_format($order->pajak_pph, 2, ',', '.') }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Pajak PPN</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <i class="fas fa-money-check"></i>
                             </div>
                         </div>
-                        <span class="form-control">{{ $order->jenis_pajak }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Pajak</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
                         <span
-                            class="form-control">{{ $order->pajak == 0 ? '0' : 'Rp ' . number_format($order->pajak, 2, ',', '.') }}</span>
+                            class="form-control">{{ $order->pajak_ppn == 0 ? '0' : 'Rp ' . number_format($order->pajak_ppn, 2, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
@@ -240,6 +241,17 @@
                             class="form-control">{{ $order->dp == 0 ? '0' : 'Rp ' . number_format($order->dp, 2, ',', '.') }}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Pembayaran Pelanggan</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                </div>
+                <span class="form-control">{{ $order->descript_payment }}</span>
             </div>
         </div>
 

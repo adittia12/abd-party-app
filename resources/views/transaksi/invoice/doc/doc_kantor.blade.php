@@ -124,7 +124,8 @@
                             $totalAkhir = $totalNominal;
                             $diskon = 0;
                             $dp = 0;
-                            $pajak = 0;
+                            $pajakPph = 0;
+                            $pajakPpn = 0;
 
                             if ($cetakKantor->discount_rate) {
                                 $diskon = $cetakKantor->discount_rate;
@@ -135,9 +136,13 @@
                                 $totalAkhir -= $dp;
                             }
 
-                            if ($cetakKantor->pajak) {
-                                $pajak = $cetakKantor->pajak;
-                                $totalAkhir += $pajak;
+                            if ($cetakKantor->pajak_pph) {
+                                $pajakPph = $cetakKantor->pajak_pph ?? 0;
+                                $totalAkhir += $pajakPph;
+                            }
+                            if ($cetakKantor->pajak_ppn) {
+                                $pajakPpn = $cetakKantor->pajak_ppn ?? 0;
+                                $totalAkhir += $pajakPpn;
                             }
                         @endphp
                         <tr>
@@ -156,10 +161,16 @@
                                 <th>{{ number_format($dp, 0, ',', '.') }}</th>
                             </tr>
                         @endif
-                        @if ($pajak)
+                        @if ($pajakPph)
                             <tr>
-                                <th colspan="4" class="text-right">Pajak ({{ $cetakKantor->jenis_pajak }})</th>
-                                <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                                <th colspan="4" class="text-right">Pajak PPH</th>
+                                <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                            </tr>
+                        @endif
+                        @if ($pajakPpn)
+                            <tr>
+                                <th colspan="4" class="text-right">Pajak PPN</th>
+                                <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                             </tr>
                         @endif
                         <tr>
@@ -250,7 +261,8 @@
                     $totalAkhir = $totalNominal;
                     $diskon = 0;
                     $dp = 0;
-                    $pajak = 0;
+                    $pajakPph = 0;
+                    $pajakPpn = 0;
                     $billPayment = 0;
                     if ($cetakKantor->discount_rate) {
                         $diskon = $cetakKantor->discount_rate;
@@ -260,9 +272,13 @@
                         $dp = $cetakKantor->dp;
                         $totalAkhir -= $dp;
                     }
-                    if ($cetakKantor->pajak) {
-                        $pajak = $cetakKantor->pajak;
-                        $totalAkhir += $pajak;
+                    if ($cetakKantor->pajak_pph) {
+                        $pajakPph = $cetakKantor->pajak_pph ?? 0;
+                        $totalAkhir += $pajakPph;
+                    }
+                    if ($cetakKantor->pajak_ppn) {
+                        $pajakPpn = $cetakKantor->pajak_ppn ?? 0;
+                        $totalAkhir += $pajakPpn;
                     }
                     if ($cetakKantor->pembayaran) {
                         $billPayment = $cetakKantor->pembayaran;
@@ -285,10 +301,16 @@
                         <th>{{ number_format($dp, 0, ',', '.') }}</th>
                     </tr>
                 @endif
-                @if ($pajak)
+                @if ($pajakPph)
                     <tr>
-                        <th colspan="3" class="text-right">Pajak ({{ $cetakKantor->jenis_pajak }})</th>
-                        <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                        <th colspan="3" class="text-right">Pajak PPH</th>
+                        <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                    </tr>
+                @endif
+                @if ($pajakPpn)
+                    <tr>
+                        <th colspan="3" class="text-right">Pajak PPN</th>
+                        <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                     </tr>
                 @endif
                 @if ($billPayment)

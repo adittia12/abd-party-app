@@ -70,8 +70,8 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetakInvoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.pembayaran', 'orders.payment_type')
-                                ->where('invoices.id', $encId)->first();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.pajak_pph', 'orders.pajak_ppn', 'orders.pembayaran', 'orders.payment_type')
+            ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
@@ -101,8 +101,8 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetakonsumen = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.delivery_address', 'orders.pembayaran', 'orders.payment_type')
-                                ->where('invoices.id', $encId)->first();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.pajak_pph', 'orders.pajak_ppn', 'orders.delivery_address', 'orders.pembayaran', 'orders.payment_type')
+            ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
@@ -134,8 +134,8 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetakKantor = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.delivery_address', 'orders.no_phone', 'orders.pembayaran', 'orders.payment_type')
-                                ->where('invoices.id', $encId)->first();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.discount_rate', 'orders.dp', 'orders.pajak_pph', 'orders.pajak_ppn', 'orders.delivery_address', 'orders.no_phone', 'orders.pembayaran', 'orders.payment_type')
+            ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
@@ -167,8 +167,8 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $cetaEmployee = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.delivery_address', 'orders.no_phone')
-                                ->where('invoices.id', $encId)->first();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.invoice_address', 'orders.delivery_address', 'orders.no_phone')
+            ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
@@ -219,8 +219,8 @@ class InvoiceController extends Controller
 
         // Temukan order berdasarkan ID
         $dataInvoice = Invoices::join('orders', 'invoices.id_order', '=', 'orders.id')
-                                ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.tgl_order', 'orders.invoice_address', 'orders.delivery_address', 'orders.discount_rate', 'orders.dp', 'orders.jenis_pajak', 'orders.pajak', 'orders.pembayaran', 'orders.payment_type')
-                                ->where('invoices.id', $encId)->first();
+            ->select('invoices.*', 'orders.order_number', 'orders.name_customer', 'orders.start_event', 'orders.tgl_order', 'orders.invoice_address', 'orders.delivery_address', 'orders.discount_rate', 'orders.dp', 'orders.pajak_pph', 'orders.pajak_ppn', 'orders.pembayaran', 'orders.payment_type')
+            ->where('invoices.id', $encId)->first();
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksi = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
@@ -247,7 +247,7 @@ class InvoiceController extends Controller
                 'no_po_manual' => $validateData['no_po_manual']
             ];
 
-            Invoices::where(str_replace('/', '-','invoice_number'), $request->invoice_number)->update($update);
+            Invoices::where(str_replace('/', '-', 'invoice_number'), $request->invoice_number)->update($update);
             DB::commit();
             Alert::success('Success', 'Data berhasil diupdate');
             return redirect()->back();
