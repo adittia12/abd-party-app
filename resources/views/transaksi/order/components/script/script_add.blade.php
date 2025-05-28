@@ -60,7 +60,7 @@
         <tr id="R${++rowIdx}">
             <td class="row-index text-center"><p>${rowIdx}</p></td>
             <td>
-                <select name="id_product[]" id="id_product" class="productSearch select2 @error('id_product.*') is-invalid @enderror">
+                <select name="id_product[]" id="id_product" class="productSearch select2 @error('id_product.*') is-invalid @enderror" style="width: 100%">
                     <option value="">Select Product (Barang)</option>
                     @foreach ($dataProduct as $item)
                         <option value="{{ $item->id }}">

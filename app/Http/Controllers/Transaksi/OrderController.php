@@ -25,7 +25,7 @@ class OrderController extends Controller
         $filterDate = $request->input('filterDate');
         $perPage = $request->input('per_page', 10); // Default 10 jika tidak ada input
 
-        $datasetOrder = Orders::when($request->input('q'), function($query, $q) {
+        $datasetOrder = Orders::when($request->input('q'), function ($query, $q) {
             $timestamp = strtotime($q);
 
             if ($timestamp) {
@@ -33,13 +33,13 @@ class OrderController extends Controller
                 $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
 
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                            ->orWhereDate('start_event', $formattedQDate)
-                            ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
-                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                    ->orWhereDate('start_event', $formattedQDate)
+                    ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
+                    ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             } else {
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                            ->orWhere('start_event', 'LIKE', '%' . $q . '%')
-                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                    ->orWhere('start_event', 'LIKE', '%' . $q . '%')
+                    ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             }
         });
 
@@ -69,11 +69,12 @@ class OrderController extends Controller
 
             $diskon = $order->discount_rate ?? 0;
             $dp = $order->dp ?? 0;
-            $pajak = $order->pajak ?? 0;
+            $pajakPph = $order->pajak_pph ?? 0;
+            $pajakPpn = $order->pajak_ppn ?? 0;
             $lunas = $order->pembayaran ?? 0;
 
             // Total akhir = total tagihan - diskon - dp + pajak
-            $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajak;
+            $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajakPph + $pajakPpn;
         }
 
         return view('transaksi.order.index', compact('orderData', 'filterMonth'));
@@ -83,6 +84,7 @@ class OrderController extends Controller
     {
         $request->validate([
             'pembayaran'    => 'required|numeric',
+            'descript_payment'    => 'required',
             'status_driver' => 'required',
         ]);
 
@@ -94,6 +96,7 @@ class OrderController extends Controller
         if ($payOrder) {
             $payOrder->update([
                 'pembayaran' => $request['pembayaran'],
+                'descript_payment' => $request['descript_payment'],
                 'status_driver' => $request['status_driver'],
                 'date_driver' => $request['date_driver'],
                 'status_order' => $status
@@ -142,7 +145,9 @@ class OrderController extends Controller
                 'warehouse' => $tempat,
                 'price_list' => 'IDR',
                 'discount_rate' => $request['discount_rate'],
-                'jenis_pajak' => $request['jenis_pajak'],
+                'pajak_pph' => $request['pajak_pph'],
+                'pajak_ppn' => $request['pajak_ppn'],
+                'descript_payment' => $request['descript_payment'],
                 'dp' => $request['dp'],
                 'status_order' => $request['status_order'],
                 'pembayaran'   => $request['pembayaran'],
@@ -217,10 +222,10 @@ class OrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiDetail = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
-                                        ->where('transactions.id_order', $order->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $order->id)
+            ->get();
         return view('transaksi.order.detail_order', compact(['order', 'dataTransaksiDetail']));
     }
 
@@ -234,10 +239,10 @@ class OrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksi = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
-                                        ->where('transactions.id_order', $order->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $order->id)
+            ->get();
         // dd($dataTransaksi);
         // die;
         return view('transaksi.order.edit_order', compact(['order', 'dataProduct', 'dataTransaksi']));
@@ -282,9 +287,11 @@ class OrderController extends Controller
                 'start_event' => $request->start_event,
                 'end_event' => $request->end_event,
                 'date_pasang' => $request->date_pasang,
-                'jenis_pajak' => $request->jenis_pajak,
                 'status_order' => $statusOrder,
-                'pajak' => $request->pajak,
+                'pajak_pph' => $request->pajak_pph,
+                'pajak_ppn' => $request->pajak_ppn,
+                'payment_customer' => $request->payment_customer,
+                'descript_payment' => $request->descript_payment,
                 'price_list' => $request->price_list,
                 'discount_rate' => $request->discount_rate,
                 'dp' => $request->dp,
@@ -459,10 +466,10 @@ class OrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
-                                        ->where('transactions.id_order', $cetakOrder->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
+            ->where('transactions.id_order', $cetakOrder->id)
+            ->get();
         // Generate PDF
         $pdf = PDF::loadView('transaksi.order.letters.surat_jalan', ['cetakOrder' => $cetakOrder, 'dataTransaksiCetak' => $dataTransaksiCetak]);
 
@@ -484,10 +491,10 @@ class OrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
-                                        ->where('transactions.id_order', $cetakOrder->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
+            ->where('transactions.id_order', $cetakOrder->id)
+            ->get();
         // Generate PDF
         $pdf = PDF::loadView('transaksi.order.letters.surat_kembali', ['cetakOrder' => $cetakOrder, 'dataTransaksiCetak' => $dataTransaksiCetak]);
 
@@ -503,10 +510,10 @@ class OrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiCetak = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
-                                        ->where('transactions.id_order', $cetakOrder->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref', 'products.unit_measure')
+            ->where('transactions.id_order', $cetakOrder->id)
+            ->get();
         // Generate PDF
         $pdf = PDF::loadView('transaksi.order.cetak_order', ['cetakOrder' => $cetakOrder, 'dataTransaksiCetak' => $dataTransaksiCetak]);
 

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row g-2">
     <div class="col">
         <div class="form-group">
             <label>Company Type</label>
@@ -62,7 +62,7 @@
                     value="{{ $order->initial_terms }}" placeholder="Ketik jumlah hari">
             </div>
         </div>
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
                     <label>Tanggal Pasang</label>
@@ -110,49 +110,44 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
-                    <label>Jenis Pajak</label>
+                    <label>Pajak PPH</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
+                                <i class="fas fa-money-check-alt"></i>
                             </div>
                         </div>
-                        <select name="jenis_pajak" id="jenis_pajak" class="form-control select2">
-                            <option value="{{ $order->jenis_pajak }}">
-                                {{ $order->jenis_pajak ?? 'Pilih Jenis Pajak' }}
-                            </option>
-                            <option value="PPH">PPH</option>
-                            <option value="PPN">PPN</option>
-                        </select>
+                        <input type="number" name="pajak_pph" id="pajak_pph" value="{{ $order->pajak_pph }}"
+                            class="form-control" placeholder="Masukan nominal pajak PPH">
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>Pajak</label>
+                    <label>Pajak PPN</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fas fa-money-bill-wave"></i>
+                                <i class="fas fa-money-check-alt"></i>
                             </div>
                         </div>
-                        <input type="number" name="pajak" id="pajak" value="{{ $order->pajak }}"
-                            class="form-control" placeholder="Masukan nominal pajak">
+                        <input type="number" name="pajak_ppn" id="pajak_ppn" value="{{ $order->pajak_ppn }}"
+                            class="form-control" placeholder="Masukan nominal pajak PPN">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
                     <label>Status Kirim</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="fas fa-money-check"></i>
+                                <i class="fas fa-paper-plane"></i>
                             </div>
                         </div>
                         @php
@@ -210,6 +205,32 @@
                     </div>
                 </div>
             </div>
+            @php
+                use Carbon\Carbon;
+
+                $tanggalDefault = $order->descript_payment
+                    ? $order->descript_payment
+                    : Carbon::now()->translatedFormat('d F Y'); // Contoh: 28 Mei 2025
+            @endphp
+
+            <div class="col-md-6 col-lg-12">
+                <div class="form-group">
+                    <label>Pembayaran Pelanggan</label>
+                    <p class="text-danger mb-2">
+                        Masukkan deskripsi pembayaran, contoh:
+                        <strong>Tf 28 Mei 2025 ke BCA Pak Abdul.</strong>
+                    </p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-keyboard"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="descript_payment" id="descript_payment"
+                            value="{{ old('descript_payment', $tanggalDefault) }}" class="form-control">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col">
@@ -256,7 +277,7 @@
                 <span class="text-danger text-sm">{{ $errors->first('delivery_address') }}</span>
             @endif
         </div>
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
                     <label>Mulai Acara</label>
@@ -293,7 +314,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
                     <label>Discount</label>
@@ -324,7 +345,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row g-2">
             <div class="col">
                 <div class="form-group">
                     <label>Bayar Lunas</label>

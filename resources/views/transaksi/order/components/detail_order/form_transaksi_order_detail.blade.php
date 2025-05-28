@@ -52,7 +52,8 @@
             $totalAkhir = $totalNominal;
             $diskon = 0;
             $dp = 0;
-            $pajak = 0;
+            $pajakPph = 0;
+            $pajakPpn = 0;
             $billPayment = 0;
             if ($order->discount_rate) {
                 $diskon = $order->discount_rate;
@@ -62,11 +63,14 @@
                 $dp = $order->dp;
                 $totalAkhir -= $dp;
             }
-            if ($order->pajak) {
-                $pajak = $order->pajak;
-                $totalAkhir += $pajak;
+            if ($order->pajak_pph) {
+                $pajakPph = $order->pajak_pph ?? 0;
+                $totalAkhir += $pajakPph;
             }
-
+            if ($order->pajak_ppn) {
+                $pajakPpn = $order->pajak_ppn ?? 0;
+                $totalAkhir += $pajakPpn;
+            }
             if ($order->pembayaran) {
                 $billPayment = $order->pembayaran;
                 $totalAkhir -= $billPayment;
@@ -88,10 +92,16 @@
                 <th>{{ 'Rp ' . number_format($dp, 2, ',', '.') }}</th>
             </tr>
         @endif
-        @if ($pajak)
+        @if ($pajakPph)
             <tr>
-                <th colspan="7" class="text-right">Pajak ({{ $order->jenis_pajak }})</th>
-                <th>{{ 'Rp ' . number_format($pajak, 2, ',', '.') }}</th>
+                <th colspan="7" class="text-right">Pajak PPH</th>
+                <th>{{ 'Rp ' . number_format($pajakPph, 2, ',', '.') }}</th>
+            </tr>
+        @endif
+        @if ($pajakPpn)
+            <tr>
+                <th colspan="7" class="text-right">Pajak PPN</th>
+                <th>{{ 'Rp ' . number_format($pajakPpn, 2, ',', '.') }}</th>
             </tr>
         @endif
         @if ($billPayment)

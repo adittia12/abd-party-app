@@ -89,7 +89,8 @@
                     $totalAkhir = $totalNominal;
                     $diskon = 0;
                     $dp = 0;
-                    $pajak = 0;
+                    $pajakPph = 0;
+                    $pajakPpn = 0;
                     $billPayment = 0;
                     if ($cetakInvoice->discount_rate) {
                         $diskon = $cetakInvoice->discount_rate;
@@ -99,9 +100,13 @@
                         $dp = $cetakInvoice->dp;
                         $totalAkhir -= $dp;
                     }
-                    if ($cetakInvoice->pajak) {
-                        $pajak = $cetakInvoice->pajak;
-                        $totalAkhir += $pajak;
+                    if ($cetakInvoice->pajak_pph) {
+                        $pajakPph = $cetakInvoice->pajak_pph ?? 0;
+                        $totalAkhir += $pajakPph;
+                    }
+                    if ($cetakInvoice->pajak_ppn) {
+                        $pajakPpn = $cetakInvoice->pajak_ppn ?? 0;
+                        $totalAkhir += $pajakPpn;
                     }
                     if ($cetakInvoice->pembayaran) {
                         $billPayment = $cetakInvoice->pembayaran;
@@ -124,10 +129,16 @@
                         <th>{{ number_format($dp, 0, ',', '.') }}</th>
                     </tr>
                 @endif
-                @if ($pajak)
+                @if ($pajakPph)
                     <tr>
-                        <th colspan="3" class="text-right">Pajak ({{ $cetakInvoice->jenis_pajak }})</th>
-                        <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                        <th colspan="3" class="text-right">Pajak PPH</th>
+                        <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                    </tr>
+                @endif
+                @if ($pajakPpn)
+                    <tr>
+                        <th colspan="3" class="text-right">Pajak PPN</th>
+                        <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                     </tr>
                 @endif
                 @if ($billPayment)

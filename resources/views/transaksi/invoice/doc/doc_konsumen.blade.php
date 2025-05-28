@@ -123,15 +123,20 @@
                             $totalAkhir = $totalNominal;
                             $diskon = 0;
                             $dp = 0;
-                            $pajak = 0;
+                            $pajakPph = 0;
+                            $pajakPpn = 0;
 
                             if ($cetakonsumen->discount_rate) {
                                 $diskon = $cetakonsumen->discount_rate;
                                 $totalAkhir -= $diskon;
                             }
-                            if ($cetakonsumen->dp) {
-                                $dp = $cetakonsumen->dp;
-                                $totalAkhir -= $dp;
+                            if ($cetakonsumen->pajak_pph) {
+                                $pajakPph = $cetakonsumen->pajak_pph ?? 0;
+                                $totalAkhir += $pajakPph;
+                            }
+                            if ($cetakonsumen->pajak_ppn) {
+                                $pajakPpn = $cetakonsumen->pajak_ppn ?? 0;
+                                $totalAkhir += $pajakPpn;
                             }
 
                             if ($cetakonsumen->pajak) {
@@ -155,10 +160,16 @@
                                 <th>{{ number_format($dp, 0, ',', '.') }}</th>
                             </tr>
                         @endif
-                        @if ($pajak)
+                        @if ($pajakPph)
                             <tr>
-                                <th colspan="4" class="text-right">Pajak ({{ $cetakonsumen->jenis_pajak }})</th>
-                                <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                                <th colspan="4" class="text-right">Pajak PPH</th>
+                                <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                            </tr>
+                        @endif
+                        @if ($pajakPpn)
+                            <tr>
+                                <th colspan="4" class="text-right">Pajak PPN</th>
+                                <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                             </tr>
                         @endif
                         <tr>
@@ -248,7 +259,8 @@
                         $totalAkhir = $totalNominal;
                         $diskon = 0;
                         $dp = 0;
-                        $pajak = 0;
+                        $pajakPph = 0;
+                        $pajakPpn = 0;
                         $billPayment = 0;
                         if ($cetakonsumen->discount_rate) {
                             $diskon = $cetakonsumen->discount_rate;
@@ -258,9 +270,13 @@
                             $dp = $cetakonsumen->dp;
                             $totalAkhir -= $dp;
                         }
-                        if ($cetakonsumen->pajak) {
-                            $pajak = $cetakonsumen->pajak;
-                            $totalAkhir += $pajak;
+                        if ($cetakonsumen->pajak_pph) {
+                            $pajakPph = $cetakonsumen->pajak_pph ?? 0;
+                            $totalAkhir += $pajakPph;
+                        }
+                        if ($cetakonsumen->pajak_ppn) {
+                            $pajakPpn = $cetakonsumen->pajak_ppn ?? 0;
+                            $totalAkhir += $pajakPpn;
                         }
                         if ($cetakonsumen->pembayaran) {
                             $billPayment = $cetakonsumen->pembayaran;
@@ -283,11 +299,18 @@
                             <th>{{ number_format($dp, 0, ',', '.') }}</th>
                         </tr>
                     @endif
-                    @if ($pajak)
+                    @if ($pajakPph)
                         <tr>
-                            <th colspan="3" class="text-right">Pajak ({{ $cetakonsumen->jenis_pajak }})
+                            <th colspan="3" class="text-right">Pajak PPH
                             </th>
-                            <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                            <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                        </tr>
+                    @endif
+                    @if ($pajakPpn)
+                        <tr>
+                            <th colspan="3" class="text-right">Pajak PPN
+                            </th>
+                            <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                         </tr>
                     @endif
                     @if ($billPayment)
