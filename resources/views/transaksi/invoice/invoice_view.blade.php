@@ -121,7 +121,8 @@
                                         $totalAkhir = $totalNominal;
                                         $diskon = 0;
                                         $dp = 0;
-                                        $pajak = 0;
+                                        $pajakPph = 0;
+                                        $pajakPpn = 0;
                                         $billPayment = 0;
                                         if ($dataInvoice->discount_rate) {
                                             $diskon = $dataInvoice->discount_rate;
@@ -131,9 +132,13 @@
                                             $dp = $dataInvoice->dp;
                                             $totalAkhir -= $dp;
                                         }
-                                        if ($dataInvoice->pajak) {
-                                            $pajak = $dataInvoice->pajak;
-                                            $totalAkhir += $pajak;
+                                        if ($dataInvoice->pajak_pph) {
+                                            $pajakPph = $dataInvoice->pajak_pph ?? 0;
+                                            $totalAkhir += $pajakPph;
+                                        }
+                                        if ($dataInvoice->pajak_ppn) {
+                                            $pajakPpn = $dataInvoice->pajak_ppn ?? 0;
+                                            $totalAkhir += $pajakPpn;
                                         }
                                         if ($dataInvoice->pembayaran) {
                                             $billPayment = $dataInvoice->pembayaran;
@@ -161,11 +166,19 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if ($pajak)
+                                    @if ($pajakPph)
                                         <div class="invoice-detail-item">
-                                            <div class="invoice-detail-name">Pajak ({{ $dataInvoice->jenis_pajak }})</div>
+                                            <div class="invoice-detail-name">Pajak PPH</div>
                                             <div class="invoice-detail-value">
-                                                {{ 'Rp ' . number_format($pajak, 2, ',', '.') }}
+                                                {{ 'Rp ' . number_format($pajakPph, 2, ',', '.') }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($pajakPpn)
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Pajak PPN</div>
+                                            <div class="invoice-detail-value">
+                                                {{ 'Rp ' . number_format($pajakPpn, 2, ',', '.') }}
                                             </div>
                                         </div>
                                     @endif

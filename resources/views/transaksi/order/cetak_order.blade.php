@@ -212,7 +212,8 @@
                                 $totalAkhir = $totalNominal;
                                 $diskon = 0;
                                 $dp = 0;
-                                $pajak = 0;
+                                $pajakPph = 0;
+                                $pajakPpn = 0;
 
                                 if ($cetakOrder->discount_rate) {
                                     $diskon = $cetakOrder->discount_rate;
@@ -221,6 +222,14 @@
                                 if ($cetakOrder->dp) {
                                     $dp = $cetakOrder->dp;
                                     $totalAkhir -= $dp;
+                                }
+                                if ($cetakOrder->pajak_pph) {
+                                    $pajakPph = $cetakOrder->pajak_pph ?? 0;
+                                    $totalAkhir += $pajakPph;
+                                }
+                                if ($cetakOrder->pajak_ppn) {
+                                    $pajakPpn = $cetakOrder->pajak_ppn ?? 0;
+                                    $totalAkhir += $pajakPpn;
                                 }
 
                                 if ($cetakOrder->pajak) {
@@ -244,10 +253,16 @@
                                     <th>{{ number_format($dp, 0, ',', '.') }}</th>
                                 </tr>
                             @endif
-                            @if ($pajak)
+                            @if ($pajakPph)
                                 <tr>
-                                    <th colspan="4" class="text-right">Pajak ({{ $cetakOrder->jenis_pajak }})</th>
-                                    <th>{{ number_format($pajak, 0, ',', '.') }}</th>
+                                    <th colspan="4" class="text-right">Pajak PPH</th>
+                                    <th>{{ number_format($pajakPph, 0, ',', '.') }}</th>
+                                </tr>
+                            @endif
+                            @if ($pajakPpn)
+                                <tr>
+                                    <th colspan="4" class="text-right">Pajak PPN</th>
+                                    <th>{{ number_format($pajakPpn, 0, ',', '.') }}</th>
                                 </tr>
                             @endif
                             <tr>

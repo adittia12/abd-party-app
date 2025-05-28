@@ -23,8 +23,20 @@
                         @endif
                     </div>
                     <div class="mb-3">
+                        <label class="form-label" for="descript_payment">Pembayaran Pelanggan</label>
+                        <small class="form-text text-danger badeg">Masukkan deskripsi pembayaran, contoh:<strong> Tf 28
+                                Mei 2025 ke BCA Pak
+                                Abdul.</strong></small>
+                        <input type="text" class="form-control @error('descript_payment') is-invalid @enderror"
+                            id="descript_payment" name="descript_payment" value="{{ old('descript_payment') }}"
+                            placeholder="Masukkan Deskripsi Pembayaran Pelanggan">
+                        @if ($errors->has('descript_payment'))
+                            <span class="text-danger text-sm">{{ $errors->first('descript_payment') }}</span>
+                        @endif
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label" for="status_driver">Status Kirim</label>
-                        <small class="form-text text-muted badeg">Pilih metode pengiriman, jika memilih <b>Ambil
+                        <small class="form-text text-danger badeg">Pilih metode pengiriman, jika memilih <b>Ambil
                                 langsung</b>
                             pastikan pelanggan melampirkan KTP</small>
                         <select name="status_driver" id="status_driver"

@@ -243,6 +243,9 @@ namespace App\Models{
  * @property int|null $dp
  * @property string|null $jenis_pajak
  * @property int|null $pajak
+ * @property int|null $pajak_pph
+ * @property int|null $pajak_ppn
+ * @property string|null $descript_payment
  * @property int|null $pembayaran
  * @property string|null $status_order
  * @property string|null $status_driver
@@ -259,6 +262,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDateDriver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDatePasang($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDeliveryAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDescriptPayment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDiscountRate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereEndEvent($value)
@@ -271,6 +275,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereNoPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereOrderNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajak($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajakPph($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePajakPpn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePembayaran($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)

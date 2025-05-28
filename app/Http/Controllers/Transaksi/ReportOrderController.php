@@ -19,7 +19,7 @@ class ReportOrderController extends Controller
         $filterDate = $request->input('filterDate');
         $perPage = $request->input('per_page', 10); // Default 10 jika tidak ada input
 
-        $datasetOrder = Orders::when($request->input('q'), function($query, $q) {
+        $datasetOrder = Orders::when($request->input('q'), function ($query, $q) {
             $timestamp = strtotime($q);
 
             if ($timestamp) {
@@ -27,13 +27,13 @@ class ReportOrderController extends Controller
                 $formattedQYearMonth = date('Y-m', $timestamp); // Tahun-Bulan
 
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                            ->orWhereDate('start_event', $formattedQDate)
-                            ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
-                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                    ->orWhereDate('start_event', $formattedQDate)
+                    ->orWhere('start_event', 'LIKE', '%' . $formattedQYearMonth . '%')
+                    ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             } else {
                 return $query->where('name_customer', 'LIKE', '%' . $q . '%')
-                            ->orWhere('start_event', 'LIKE', '%' . $q . '%')
-                            ->orWhere('order_number', 'LIKE', '%' . $q . '%');
+                    ->orWhere('start_event', 'LIKE', '%' . $q . '%')
+                    ->orWhere('order_number', 'LIKE', '%' . $q . '%');
             }
         });
 
@@ -63,11 +63,12 @@ class ReportOrderController extends Controller
 
             $diskon = $order->discount_rate ?? 0;
             $dp = $order->dp ?? 0;
-            $pajak = $order->pajak ?? 0;
+            $pajakPph = $order->pajak_pph ?? 0;
+            $pajakPpn = $order->pajak_ppn ?? 0;
             $lunas = $order->pembayaran ?? 0;
 
             // Total akhir = total tagihan - diskon - dp + pajak
-            $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajak;
+            $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajakPph + $pajakPpn;
         }
 
         return view('transaksi.order.components.reports.view_report_order',  compact('orderData', 'filterMonth'));
@@ -99,10 +100,10 @@ class ReportOrderController extends Controller
 
         // Mengambil transaksi terkait dengan order yang sesuai
         $dataTransaksiDetail = Transactions::join('orders', 'transactions.id_order', '=', 'orders.id')
-                                        ->join('products', 'transactions.id_product', '=', 'products.id')
-                                        ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
-                                        ->where('transactions.id_order', $order->id)
-                                        ->get();
+            ->join('products', 'transactions.id_product', '=', 'products.id')
+            ->select('transactions.*', 'orders.order_number', 'products.name_product', 'products.inter_ref')
+            ->where('transactions.id_order', $order->id)
+            ->get();
         return view('transaksi.order.components.reports.view_report_order_detail', compact(['order', 'dataTransaksiDetail']));
     }
 

@@ -30,6 +30,9 @@ class Orders extends Model
         'dp',
         'jenis_pajak',
         'pajak',
+        'pajak_pph',
+        'pajak_ppn',
+        'descript_payment',
         'pembayaran',
         'status_order',
         'status_driver',
@@ -71,9 +74,18 @@ class Orders extends Model
 
             // Daftar bulan Romawi
             $romanMonths = [
-                '01' => 'I', '02' => 'II', '03' => 'III', '04' => 'IV',
-                '05' => 'V', '06' => 'VI', '07' => 'VII', '08' => 'VIII',
-                '09' => 'IX', '10' => 'X', '11' => 'XI', '12' => 'XII'
+                '01' => 'I',
+                '02' => 'II',
+                '03' => 'III',
+                '04' => 'IV',
+                '05' => 'V',
+                '06' => 'VI',
+                '07' => 'VII',
+                '08' => 'VIII',
+                '09' => 'IX',
+                '10' => 'X',
+                '11' => 'XI',
+                '12' => 'XII'
             ];
 
             // Format bulan menjadi Romawi
@@ -92,6 +104,4 @@ class Orders extends Model
             $model->order_number = $orderNumber;
         });
     }
-
-
 }
