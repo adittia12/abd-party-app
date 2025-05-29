@@ -22,7 +22,7 @@ class StoreOperTransRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tgl_opartional' => ['required', 'date'],
+            'tgl_opartional' => ['required', 'date', 'unique:operational_money,tgl_opartional'],
             'name_operational' => ['required', 'string'],
             'jenis_pemasukan' => ['required'],
             'budget' => ['required'],
@@ -34,7 +34,8 @@ class StoreOperTransRequest extends FormRequest
         return [
             'tgl_opartional' => [
                 'required' => 'Tanggal Operasional Wajib diisi',
-                'date' => 'Tanggal Operasional Harus dalam format tanggal'
+                'date' => 'Tanggal Operasional Harus dalam format tanggal',
+                'unique:operational_money,tgl_opartional' => 'Tanggal Operasional sudah ada.'
             ],
             'name_operational' => [
                 'required' => 'Nama Operasional Wajib diisi'
