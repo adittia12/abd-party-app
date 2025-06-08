@@ -102,8 +102,9 @@
 
 <script>
     $(document).ready(function() {
-        // Delete transaction row
-        $('.remove-trans').click(function() {
+        $('.remove-trans').click(function(e) {
+            e.preventDefault(); // penting jika tombol di form
+
             var transactionId = $(this).data('id');
             var row = $(this).closest('tr');
 
@@ -114,7 +115,10 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, delete it!',
+                allowOutsideClick: false, // ⛔ Tidak bisa klik di luar
+                allowEscapeKey: false, // ⛔ Tidak bisa tekan ESC
+                allowEnterKey: false // ⛔ Tidak bisa tekan Enter
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -151,7 +155,7 @@
                 }
             });
         });
-    })
+    });
 </script>
 
 <script>
