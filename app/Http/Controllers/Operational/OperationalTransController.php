@@ -88,6 +88,7 @@ class OperationalTransController extends Controller
                 ->leftJoin('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
                 ->select('transaction_oprational.*', 'employess.name', 'list_bugeting.list_budget')
                 ->where('transaction_oprational.id_operational', $transOpera->id)
+                ->whereNotNull('transaction_oprational.id_list_budget') // <-- Tambahkan ini
                 ->get();
 
             // Filter hanya transaksi yang BUKAN "Budget Baru" atau "Bayar Hutang"
@@ -228,6 +229,7 @@ class OperationalTransController extends Controller
                 'list_bugeting.id as id_jen_pemasuk'
             ])
             ->where('operational_money.tgl_opartional', $formattedDate)
+            ->whereNotNull('transaction_oprational.id_list_budget') // <-- Tambahkan ini
             ->get();
 
         $budget = $operational->budget ?? 0;
@@ -471,6 +473,7 @@ class OperationalTransController extends Controller
                 'list_bugeting.id as id_jen_pemasuk'
             ])
             ->where('transaction_oprational.id_operational', $operational->id)
+            ->whereNotNull('transaction_oprational.id_list_budget') // <-- Tambahkan ini
             ->get();
 
 
@@ -493,6 +496,7 @@ class OperationalTransController extends Controller
             ->join('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
             ->select('transaction_oprational.*', 'operational_money.tgl_opartional', 'operational_money.name_operational', 'employess.name as employee_name', 'groupss.name_group', 'list_bugeting.list_budget', 'list_bugeting.id as id_jen_pemasuk')
             ->where('transaction_oprational.id_operational', $operational->id)
+            ->whereNotNull('transaction_oprational.id_list_budget') // <-- Tambahkan ini
             ->get();
 
         return view('transaksi.operational.edit_operational', compact(['operational', 'listEmploye', 'transOperational', 'listBudget']));
