@@ -27,7 +27,7 @@
             </td>
             <td>
                 <select name="jenis_pemasukan[]" id="jenis_pemasukan"
-                    class="select2 @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
+                    class="select2 select-jenis @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
                     <option value="">Pilih Jenis</option>
                     @foreach ($listBudget as $item)
                         <option value="{{ $item->id }}">
@@ -42,8 +42,8 @@
             <td style="position: relative;">
                 <!-- Input untuk angka mentah -->
                 <input type="number" name="expend[]" id="expend" value="{{ old('expend[]') }}"
-                    class="form-control expend-input @error('expend.*') is-invalid @enderror number-input"
-                    placeholder="Nominal" style="width: 70%; padding-right: 30px;">
+                    class="form-control nominal-expend expend-input @error('expend.*') is-invalid @enderror number-input"
+                    placeholder="Nominal" style="width: 70%; padding-right: 30px;" disabled>
 
                 <!-- Elemen overlay untuk menampilkan format Rupiah -->
                 <div class="formatted-text"
