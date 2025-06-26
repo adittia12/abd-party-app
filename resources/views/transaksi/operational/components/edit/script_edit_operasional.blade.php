@@ -22,7 +22,7 @@
         </td>
             <td>
                 <select name="new_id_list_budget[]" id="new_id_list_budget"
-                    class="select2 @error('new_id_list_budget.*') is-invalid @enderror" style="width: 100%">
+                    class="select2 select-jenis @error('new_id_list_budget.*') is-invalid @enderror" style="width: 100%">
                     <option value="">Pilih Pemasukkan</option>
                     @foreach ($listBudget as $item)
                         <option value="{{ $item->id }}">
@@ -38,9 +38,9 @@
                 <!-- Input untuk angka mentah -->
                 <input type="number" name="new_expend[]" id="expend"
                     value="{{ old('new_expend[]') }}"
-                    class="form-control expend-input @error('new_expend.*') is-invalid @enderror number-input"
+                    class="form-control nominal-expend expend-input @error('new_expend.*') is-invalid @enderror number-input"
                     placeholder="Nominal"
-                    style="width: 70%; padding-right: 30px;">
+                    style="width: 70%; padding-right: 30px;" disabled>
 
                 <!-- Elemen overlay untuk menampilkan format Rupiah -->
                 <div class="formatted-text"
@@ -97,6 +97,45 @@
                 $(this).find(".row-index").text(index + 1);
             });
         }
+    });
+</script>
+
+<script>
+    function updateNominalState(row) {
+        const select = row.querySelector('.select-jenis');
+        const input = row.querySelector('.expend-input');
+
+        if (select && input) {
+            input.disabled = (select.value === '');
+        }
+    }
+
+    function initRowListeners(row) {
+        const select = row.querySelector('.select-jenis');
+
+        if (select) {
+            $(select).on('change', function() {
+                updateNominalState(row);
+            });
+        }
+
+        updateNominalState(row); // inisialisasi awal
+    }
+
+    // Untuk baris yang sudah ada saat load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#transactionTable tbody tr').forEach(function(row) {
+            initRowListeners(row);
+        });
+    });
+
+    // Untuk baris baru
+    document.getElementById('addRow').addEventListener('click', function() {
+        setTimeout(function() {
+            const newRow = document.querySelector('#transactionTable tbody tr:last-child');
+            $(newRow).find('.select2').select2(); // inisialisasi select2
+            initRowListeners(newRow);
+        }, 100); // Tunggu select2 terpasang
     });
 </script>
 

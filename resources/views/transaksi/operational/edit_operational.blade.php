@@ -141,7 +141,7 @@
 
                                                     <td>
                                                         <select name="jenis_pemasukan[]" id="jenis_pemasukan"
-                                                            class="select2 @error('jenis_pemasukan.*') is-invalid @enderror"
+                                                            class="select2 select-jenis @error('jenis_pemasukan.*') is-invalid @enderror"
                                                             style="width: 100%">
                                                             <option value="{{ $transaksi->id_list_budget }}">
                                                                 {{ $transaksi->list_budget }}</option>
@@ -159,9 +159,9 @@
                                                     <td style="position: relative;">
                                                         <!-- Input untuk angka mentah -->
                                                         <input type="number" name="expend[]"
-                                                            class="form-control expend-input number-input"
+                                                            class="form-control nominal-expend expend-input number-input"
                                                             value="{{ $transaksi->expend }}" placeholder="Nominal"
-                                                            style="width: 70%; padding-right: 30px;">
+                                                            style="width: 70%; padding-right: 30px;" disabled>
 
                                                         <!-- Elemen overlay untuk menampilkan format Rupiah -->
                                                         <div class="formatted-text"
@@ -189,7 +189,7 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                        <tfoot>
+                                        <tfoot>z
                                             <tr>
                                                 <td colspan="2">Total Pengeluaran</td>
                                                 <td id="totalExpend">Rp 0</td>
