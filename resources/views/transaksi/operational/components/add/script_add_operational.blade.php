@@ -1,8 +1,10 @@
 <script>
     document.getElementById('addRow').addEventListener('click', function() {
         const tableBody = document.querySelector('#transactionTable tbody');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
+        const count = parseInt(document.getElementById('rowCount').value) || 1;
+        for (let i = 0; i < count; i++) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
         <td>
             <select name="id_employe[]"
                     class="employeSearch select2 @error('id_employe.*') is-invalid @enderror"
@@ -20,47 +22,24 @@
         </td>
 
             <td>
-                <select name="jenis_pemasukan[]" id="jenis_pemasukan"
-                    class="select2 select-jenis @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
-                    <option value="">Pilih Jenis</option>
-                    @foreach ($listBudget as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->list_budget }}
-                        </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('jenis_pemasukan.*'))
-                    <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
-                @endif
-            </td>
+                    <select name="jenis_pemasukan[]" class="select2 select-jenis @error('jenis_pemasukan.*') is-invalid @enderror" style="width: 100%">
+                        <option value="">Pilih Jenis</option>
+                        @foreach ($listBudget as $item)
+                            <option value="{{ $item->id }}">{{ $item->list_budget }}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('jenis_pemasukan.*'))
+                        <span class="text-danger text-sm">{{ $errors->first('jenis_pemasukan.*') }}</span>
+                    @endif
+                </td>
 
-            <td style="position: relative;">
-                <!-- Input untuk angka mentah -->
-                <input type="number" name="expend[]" id="expend"
-                    value="{{ old('expend[]') }}"
-                    class="form-control nominal-expend expend-input @error('expend.*') is-invalid @enderror number-input"
-                    placeholder="Nominal"
-                    style="width: 70%; padding-right: 30px;" disabled>
-
-                <!-- Elemen overlay untuk menampilkan format Rupiah -->
-                <div class="formatted-text"
-                    style="
-                    position: absolute;
-                    top: 50%;
-                    right: 10px;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    color: gray;
-                    font-size: 0.9em;
-                ">
-                    <b>Rp 0</b>
-                </div>
-
-                @if ($errors->has('expend.*'))
-                    <span
-                        class="text-danger text-sm">{{ $errors->first('expend.*') }}</span>
-                @endif
-            </td>
+                <td style="position: relative;">
+                    <input type="number" name="expend[]" class="form-control nominal-expend expend-input @error('expend.*') is-invalid @enderror number-input" placeholder="Nominal" style="width: 70%; padding-right: 30px;" disabled>
+                    <div class="formatted-text" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: gray; font-size: 0.9em;"><b>Rp 0</b></div>
+                    @if ($errors->has('expend.*'))
+                        <span class="text-danger text-sm">{{ $errors->first('expend.*') }}</span>
+                    @endif
+                </td>
             <td>
                 <input type="text" name="description[]" id="description" value="{{ old('description[]') }}"
                     class="form-control @error('description.*') is-invalid @enderror" placeholder="Deskripsi">
@@ -72,8 +51,8 @@
             <button type="button" class="btn btn-danger removeRow">Hapus</button>
         </td>
     `;
-        tableBody.appendChild(newRow);
-
+            tableBody.appendChild(newRow);
+        }
         // Inisialisasi ulang Select2 untuk elemen baru
         $('.select2').select2();
     });
@@ -107,20 +86,25 @@
         updateNominalState(row); // inisialisasi awal
     }
 
-    // Untuk baris yang sudah ada saat load
+    // Untuk baris yang sudah ada saat page load
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('#transactionTable tbody tr').forEach(function(row) {
             initRowListeners(row);
         });
     });
 
-    // Untuk baris baru
+    // Perbarui agar bisa menangani banyak baris yang baru ditambahkan
     document.getElementById('addRow').addEventListener('click', function() {
         setTimeout(function() {
-            const newRow = document.querySelector('#transactionTable tbody tr:last-child');
-            $(newRow).find('.select2').select2(); // inisialisasi select2
-            initRowListeners(newRow);
-        }, 100); // Tunggu select2 terpasang
+            // Ambil semua baris (tr) yang belum diinisialisasi
+            document.querySelectorAll('#transactionTable tbody tr').forEach(function(row) {
+                if (!row.classList.contains('initialized')) {
+                    $(row).find('.select2').select2(); // Inisialisasi select2
+                    initRowListeners(row); // Inisialisasi listener change
+                    row.classList.add('initialized'); // Tandai sudah diproses
+                }
+            });
+        }, 100); // Tunggu DOM update
     });
 </script>
 

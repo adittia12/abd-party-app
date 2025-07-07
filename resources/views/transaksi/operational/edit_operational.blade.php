@@ -94,9 +94,22 @@
                         </div>
                         <div class="card">
                             <div class="card-header">
-                                <h4>Transaction</h4>
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm" title="Add"
-                                    id="addRow">Add Row</a>
+                                <div class="row align-items-end g-3 mb-3">
+                                    <div class="col-auto">
+                                        <h4>Transaction</h4>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="number" id="rowCount" class="form-control shadow-sm border-success"
+                                            value="1" min="1" style="width: 100px;">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label class="d-block invisible">.</label>
+                                        <!-- Agar tombol sejajar dengan input -->
+                                        <button type="button" class="btn btn-success shadow-sm px-4" id="addRow">
+                                            <i class="bi bi-plus-circle me-1"></i> Tambah Baris
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
