@@ -1,9 +1,11 @@
 <script>
     document.getElementById('addRow').addEventListener('click', function() {
         const tableBody = document.querySelector('#transactionTable tbody');
-        const newRow = document.createElement('tr');
-        newRow.setAttribute('data-new', 'true'); // << ini yang kamu butuhkan
-        newRow.innerHTML = `
+        const count = parseInt(document.getElementById('rowCount').value) || 1;
+        for (let i = 0; i < count; i++) {
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-new', 'true');
+            newRow.innerHTML = `
         <td class="row-index">${$('#transactionTable tbody tr').length + 1}</td>
         <td>
             <select name="new_id_employe[]"
@@ -75,29 +77,27 @@
             <button type="button" class="btn btn-danger btn-sm removeRow">Hapus</button>
         </td>
     `;
-        tableBody.appendChild(newRow);
+            tableBody.appendChild(newRow);
+        }
 
-        // Inisialisasi ulang Select2 untuk elemen baru
+        // Inisialisasi ulang semua .select2
         $('.select2').select2();
 
-        // Delete new row
-        $("#transactionTable tbody").on("click", ".removeRow", function() {
-            var child = $(this).closest("tr").nextAll();
-            child.each(function() {
-                var idx = $(this).children(".row-index");
-                var currentIndex = parseInt(idx.text());
-                idx.text(currentIndex - 1);
-            });
-            $(this).closest("tr").remove();
-            updateRowNumbers();
-        });
-        // Function to update row numbers
-        function updateRowNumbers() {
-            $("#transactionTable tbody tr").each(function(index) {
-                $(this).find(".row-index").text(index + 1);
-            });
-        }
+        updateRowNumbers(); // Perbarui nomor urutan
     });
+
+    // Hapus baris
+    $("#transactionTable tbody").on("click", ".removeRow", function() {
+        $(this).closest("tr").remove();
+        updateRowNumbers();
+    });
+
+    // Update nomor baris
+    function updateRowNumbers() {
+        $("#transactionTable tbody tr").each(function(index) {
+            $(this).find(".row-index").text(index + 1);
+        });
+    }
 </script>
 
 <script>
@@ -122,20 +122,25 @@
         updateNominalState(row); // inisialisasi awal
     }
 
-    // Untuk baris yang sudah ada saat load
+    // Untuk baris yang sudah ada saat page load
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('#transactionTable tbody tr').forEach(function(row) {
             initRowListeners(row);
         });
     });
 
-    // Untuk baris baru
+    // Perbarui agar bisa menangani banyak baris yang baru ditambahkan
     document.getElementById('addRow').addEventListener('click', function() {
         setTimeout(function() {
-            const newRow = document.querySelector('#transactionTable tbody tr:last-child');
-            $(newRow).find('.select2').select2(); // inisialisasi select2
-            initRowListeners(newRow);
-        }, 100); // Tunggu select2 terpasang
+            // Ambil semua baris (tr) yang belum diinisialisasi
+            document.querySelectorAll('#transactionTable tbody tr').forEach(function(row) {
+                if (!row.classList.contains('initialized')) {
+                    $(row).find('.select2').select2(); // Inisialisasi select2
+                    initRowListeners(row); // Inisialisasi listener change
+                    row.classList.add('initialized'); // Tandai sudah diproses
+                }
+            });
+        }, 100); // Tunggu DOM update
     });
 </script>
 
