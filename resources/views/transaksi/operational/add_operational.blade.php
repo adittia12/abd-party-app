@@ -102,11 +102,21 @@
                                     <div class="tab-pane fade" id="transaction" role="tabpanel"
                                         aria-labelledby="transaction-tab">
                                         <div class="mt-3">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <button type="button" class="mb-3 btn btn-success"
-                                                        id="addRow">Tambah
-                                                        Baris</button>
+                                            <div class="row align-items-end g-3 mb-3">
+                                                <div class="col-auto">
+                                                    <label for="rowCount" class="form-label fw-semibold mb-1">Jumlah
+                                                        Baris</label>
+                                                    <input type="number" id="rowCount"
+                                                        class="form-control shadow-sm border-success" value="1"
+                                                        min="1" style="width: 100px;">
+                                                </div>
+                                                <div class="col-auto">
+                                                    <label class="d-block invisible">.</label>
+                                                    <!-- Agar tombol sejajar dengan input -->
+                                                    <button type="button" class="btn btn-success shadow-sm px-4"
+                                                        id="addRow">
+                                                        <i class="bi bi-plus-circle me-1"></i> Tambah Baris
+                                                    </button>
                                                 </div>
                                             </div>
                                             @include('transaksi.operational.components.add.form_transaksi_operational')
