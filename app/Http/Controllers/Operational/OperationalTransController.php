@@ -407,9 +407,15 @@ class OperationalTransController extends Controller
 
         // Ambil semua data operational yang masih memiliki sisa budget
         $operationalWithRemainingBudget = OperationalMoney::whereRaw(
-            'budget > (SELECT COALESCE(SUM(expend), 0) FROM transaction_oprational WHERE transaction_oprational.id_operational = operational_money.id)'
+            'budget > (
+            SELECT COALESCE(SUM(expend), 0)
+            FROM transaction_oprational
+            LEFT JOIN list_bugeting ON transaction_oprational.id_list_budget = list_bugeting.id
+            WHERE transaction_oprational.id_operational = operational_money.id
+            AND (list_bugeting.list_budget IS NULL OR list_bugeting.list_budget NOT IN ("Budget Baru", "Bayar Hutang"))
+        )'
         )
-            ->orderBy('tgl_opartional', 'asc') // Ambil dari tanggal terlama ke terbaru
+            ->orderBy('tgl_opartional', 'asc')
             ->get();
 
         if ($operationalWithRemainingBudget->isEmpty()) {
@@ -420,25 +426,28 @@ class OperationalTransController extends Controller
         $totalRemainingBudget = 0;
 
         foreach ($operationalWithRemainingBudget as $operational) {
-            // Hitung total pengeluaran pada tanggal tersebut
+            // Hitung total pengeluaran yang bukan Budget Baru atau Bayar Hutang
             $totalExpenditures = TransactionOperational::where('id_operational', $operational->id)
+                ->leftJoin('list_bugeting', 'transaction_oprational.id_list_budget', '=', 'list_bugeting.id')
+                ->where(function ($query) {
+                    $query->whereNull('list_bugeting.list_budget')
+                        ->orWhereNotIn('list_bugeting.list_budget', ['Budget Baru', 'Bayar Hutang']);
+                })
                 ->sum('expend');
 
-            // Hitung sisa budget
             $remainingBudget = $operational->budget - $totalExpenditures;
 
             if ($remainingBudget > 0) {
                 $totalRemainingBudget += $remainingBudget;
 
-                // Update budget lama agar sesuai dengan total pengeluaran
+                // Update budget agar sesuai dengan pengeluaran sebenarnya
                 $operational->update(['budget' => $totalExpenditures]);
             }
         }
 
         if ($totalRemainingBudget > 0) {
-            // Buat transaksi baru dengan sisa budget yang terkumpul untuk tanggal besok
             OperationalMoney::create([
-                'tgl_opartional' => $tomorrow, // **Tanggal selalu besok dari hari ini**
+                'tgl_opartional' => $tomorrow,
                 'name_operational' => 'Akumulasi Sisa Budget per ' . Carbon::now()->format('Y-m-d'),
                 'budget' => $totalRemainingBudget,
                 'time_date' => $currentTime->format('H:i:s'),
