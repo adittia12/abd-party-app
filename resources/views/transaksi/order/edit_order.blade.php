@@ -43,9 +43,15 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>Transaction</h4>
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm" title="Add"
-                                    id="addBtn">Add Row</a>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="number" id="rowCountInput" class="form-control form-control-sm"
+                                        style="width: 100px;" placeholder="Jumlah" min="1">
+                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" title="Add"
+                                        id="addBtn">Add Row</a>
+                                </div>
                             </div>
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @include('transaksi.order.components.edit_order.form_transaksi_order_edit')

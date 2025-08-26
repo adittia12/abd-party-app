@@ -202,7 +202,7 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                        <tfoot>z
+                                        <tfoot>
                                             <tr>
                                                 <td colspan="2">Total Pengeluaran</td>
                                                 <td id="totalExpend">Rp 0</td>

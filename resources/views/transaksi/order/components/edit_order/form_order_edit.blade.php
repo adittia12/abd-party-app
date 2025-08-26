@@ -391,5 +391,42 @@
             </div>
         </div>
 
+        <div class="row g-2">
+            <div class="col">
+                <div class="form-group">
+                    <label>Nama Pengirim</label>
+                    <small class="text-danger mb-2">
+                        (Untuk surat Jalan)
+                    </small>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="sender_name" id="sender_name" value="{{ $order->sender_name }}"
+                            class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Nama Pengembalian</label>
+                    <small class="text-danger mb-2">
+                        (Untuk Surat Kembali)
+                    </small>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fas fa-pen"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="demolition_name" id="demolition_name"
+                            value="{{ $order->demolition_name }}" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

@@ -468,6 +468,7 @@ class OperationalTransController extends Controller
     public function show($operationalIds)
     {
         $operational = OperationalMoney::findOrFail(decrypt($operationalIds));
+
         $transOperational = TransactionOperational::join('operational_money', 'transaction_oprational.id_operational', '=', 'operational_money.id')
             ->join('employess', 'transaction_oprational.id_employe', '=', 'employess.id')
             ->join('groupss', 'employess.id_group', '=', 'groupss.id')
@@ -482,11 +483,29 @@ class OperationalTransController extends Controller
                 'list_bugeting.id as id_jen_pemasuk'
             ])
             ->where('transaction_oprational.id_operational', $operational->id)
-            ->whereNotNull('transaction_oprational.id_list_budget') // <-- Tambahkan ini
+            ->whereNotNull('transaction_oprational.id_list_budget')
             ->get();
 
+        // Ambil budget dari model operational_money
+        $budget = (int) $operational->budget; // pastikan field 'budget' ada
 
-        return view('transaksi.operational.show_operational_finance', compact(['transOperational', 'operational']));
+        // Hitung total pengeluaran (exclude 'budget baru' & 'bayar hutang')
+        $totalExpend = $transOperational
+            ->filter(function ($item) {
+                $listBudget = strtolower($item->list_budget);
+                return $listBudget !== 'budget baru' && $listBudget !== 'bayar hutang';
+            })
+            ->sum('expend'); // pastikan kolom expend ada di tabel transaction_oprational
+
+        $remainingIncome = $budget - $totalExpend;
+
+        return view('transaksi.operational.show_operational_finance', compact([
+            'transOperational',
+            'operational',
+            'budget',
+            'totalExpend',
+            'remainingIncome'
+        ]));
     }
 
     /**

@@ -25,6 +25,7 @@ use App\Http\Controllers\SettingCompanyProfile\ServiceStrategyController;
 use App\Http\Controllers\SettingCompanyProfile\SkillsController;
 use App\Http\Controllers\Transaksi\InvoiceController;
 use App\Http\Controllers\Transaksi\OrderController;
+use App\Http\Controllers\Transaksi\PayrollController;
 use App\Http\Controllers\Transaksi\ReportOrderController;
 use App\Http\Controllers\Transaksi\ReportTransController;
 use App\Http\Controllers\UserManagementController;
@@ -138,6 +139,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/order/cetak_surat_kembali/{id}', 'suratKembali')->name('order.suratKembali');
         Route::post('/order/bill_payment', 'billPayment')->name('order.billPaymentOrder');
     });
+    Route::post('/order/update-sender-jalan', [OrderController::class, 'updateSenderJalan'])->name('order.updateSenderSuratJalan');
+    Route::post('/order/update-sender-kembali', [OrderController::class, 'updateSenderKembali'])->name('order.updateSenderSuratKembali');
 
     Route::resource('/report_order', ReportOrderController::class);
 
@@ -163,6 +166,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/operational/update', 'update')->name('operational.update_operational');
         Route::delete('/operational/detele-operational-trans/{id}', 'deleteOperationalTrans')->name('operational.deleteTransOperational');
         Route::post('/generate-budget', 'generateBudget')->name('operational.generateBudget');
+    });
+
+    Route::resource('/payrolls', PayrollController::class);
+    Route::controller(PayrollController::class)->group(function () {
+        Route::post('/payrolls/generate-period', 'generatePayrollPeriod')->name('payrolls.generatePeriod');
+        Route::get('/payrolls/create/{id}', 'create')->name('payrolls.create');
+        Route::get('/payrolls/{payroll}', 'show')->name('payrolls.show');
+        Route::post('/payrolls/{id}', 'store')->name('payrolls.store');
+        Route::get('/payrolls/{periode}/edit/{idTransPay}', 'edit')->name('payrolls.edit_payroll');
+        Route::put('/payrolls/{periode}/update/{idTransPay}', 'update')->name('payrolls.update_transpay');
+        Route::get('/payrolls/cetak-slip/{periode}/{idTransPay}', 'cetak_slip')->name('payrolls.cetak_slip');
+        Route::get('/payrolls/report-payroll/{periode}', 'reportPayroll')->name('payrolls.report_gaji');
+        Route::delete('/payrolls/delete/{id}', 'destroyTransPay')->name('payrolls.delete_pay');
     });
 
     // Route Sett Company Profile

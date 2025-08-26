@@ -14,7 +14,7 @@
                         href="{{ route('home') }}">Dashboard</a></li>
             </ul>
         </li>
-        @if (Auth::user()->role_name == 'Admin')
+        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Administrator Developer')
             <li class="menu-header">Management Admin</li>
             <li
                 class="dropdown {{ Request::is(['userManagement', 'activity/log', 'activity/login/logout', 'user_role*']) ? 'active' : '' }}">
@@ -24,8 +24,10 @@
                     <li class="{{ Request::is('userManagement') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('userManagement') }}">All
                             User</a></li>
-                    <li class="{{ Request::is('user_role*') ? 'active' : '' }}"><a class="nav-link"
-                            href="{{ route('user_role.index') }}">Role Type</a></li>
+                    @if (Auth::user()->role_name == 'Administrator Developer')
+                        <li class="{{ Request::is('user_role*') ? 'active' : '' }}"><a class="nav-link"
+                                href="{{ route('user_role.index') }}">Role Type</a></li>
+                    @endif
                     <li class="{{ Request::is('activity/log') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('activity/log') }}">Activity Log</a></li>
                     <li class="{{ Request::is('activity/login/logout') ? 'active' : '' }}"><a class="nav-link"
@@ -117,17 +119,22 @@
                         href="{{ route('report_order.index') }}">Laporan</a></li>
             </ul>
         </li>
-        <li class="dropdown {{ Request::is(['operational*']) ? 'active' : '' }}">
+        <li class="dropdown {{ Request::is(['operational*', 'payrolls*']) ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-file-invoice"></i>
                 <span>Operasional & Gaji</span></a>
             <ul class="dropdown-menu">
                 <li class="{{ Request::is('operational*') ? 'active' : '' }}"><a class="nav-link"
                         href="{{ route('operational.index') }}">Trans. Operasional</a>
                 </li>
-                <li class="#">
+                @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Administrator Developer')
+                    <li class="{{ Request::is('payrolls*') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('payrolls.index') }}">Trans. Gaji</a>
+                    </li>
+                @endif
+                {{-- <li class="#">
                     <a class="nav-link" href="javascript:void(0);" onclick="comingSoon()">Gaji (Coming
                         Soon)</a>
-                </li>
+                </li> --}}
             </ul>
         </li>
     </ul>
