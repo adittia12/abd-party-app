@@ -116,6 +116,8 @@
                                             <b>Pengirim</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -125,6 +127,8 @@
                                             <b>Penerima</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -133,6 +137,8 @@
                                         <p>
                                             <b>Hormat kami</b>
                                         </p>
+                                        <br>
+                                        <br>
                                         <br>
                                         <p>(Abdul Basit)</p>
                                     </div>
@@ -239,6 +245,8 @@
                                             <b>Pengirim</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -248,6 +256,8 @@
                                             <b>Penerima</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -256,6 +266,8 @@
                                         <p>
                                             <b>Hormat kami</b>
                                         </p>
+                                        <br>
+                                        <br>
                                         <br>
                                         <p>(Abdul Basit)</p>
                                     </div>

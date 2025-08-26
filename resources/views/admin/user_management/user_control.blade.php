@@ -67,15 +67,31 @@
                                             <td class="email">{{ $user->email }}</td>
                                             <td>{{ $user->join_date }}</td>
                                             <td>{{ Carbon::parse($user->last_login)->diffForHumans() }}</td>
-                                            <td>
+                                            <td style="max-width: 150px;">
                                                 @if ($user->role_name == 'Admin')
-                                                    <span
-                                                        class="badge badge-success role_name">{{ $user->role_name }}</span>
+                                                    <span class="badge badge-success role_name text-truncate d-inline-block"
+                                                        style="max-width: 120px;">
+                                                        {{ $user->role_name }}
+                                                    </span>
                                                 @elseif ($user->role_name == 'Super Admin')
+                                                    <span class="badge badge-warning role_name text-truncate d-inline-block"
+                                                        style="max-width: 120px;">
+                                                        {{ $user->role_name }}
+                                                    </span>
+                                                @elseif ($user->role_name == 'Administrator Developer')
+                                                    <span class="badge badge-danger role_name text-truncate d-inline-block"
+                                                        style="max-width: 140px;">
+                                                        {{ $user->role_name }}
+                                                    </span>
+                                                @else
                                                     <span
-                                                        class="badge badge-warning role_name">{{ $user->role_name }}</span>
+                                                        class="badge badge-secondary role_name text-truncate d-inline-block"
+                                                        style="max-width: 120px;">
+                                                        {{ $user->role_name }}
+                                                    </span>
                                                 @endif
                                             </td>
+
                                             <td>
                                                 @if ($user->status == 'Active')
                                                     <span class="badge badge-success statuss">{{ $user->status }}</span>

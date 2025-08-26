@@ -32,6 +32,10 @@
                                             role="tab" aria-controls="order" aria-selected="true">Pembayaran</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link" id="send-tab" data-bs-toggle="tab" href="#send_kurir"
+                                            role="tab" aria-controls="order" aria-selected="true">Pengiriman</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" id="transaction-tab" data-bs-toggle="tab" href="#transaction"
                                             role="tab" aria-controls="transaction" aria-selected="false">Transaction</a>
                                     </li>
@@ -64,6 +68,23 @@
                                                 <i class="fas fa-arrow-left"></i> Back
                                             </button>
                                             <div>
+                                                <button type="button" class="btn btn-primary" id="toSenderTab">
+                                                    Next <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="send_kurir" role="tabpanel"
+                                        aria-labelledby="send-tab">
+                                        <div class="section-title mt-0">Pengiriman</div>
+                                        <div class="container">
+                                            @include('transaksi.order.components.add_order.form_order_send')
+                                        </div>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <button type="button" class="btn btn-secondary" id="toPaymentTabBackTwo">
+                                                <i class="fas fa-arrow-left"></i> Back
+                                            </button>
+                                            <div>
                                                 <button type="button" class="btn btn-primary" id="toTransactionTab">
                                                     Next <i class="fas fa-arrow-right"></i>
                                                 </button>
@@ -79,7 +100,7 @@
                                             @include('transaksi.order.components.add_order.form_transaksi_order')
                                         </div>
                                         <div class="d-flex justify-content-between mt-3">
-                                            <button type="button" class="btn btn-secondary" id="toPaymentTabBack">
+                                            <button type="button" class="btn btn-secondary" id="toSendTabBack">
                                                 <i class="fas fa-arrow-left"></i> Back
                                             </button>
                                             <div>
@@ -104,9 +125,18 @@
             const paymentTab = new bootstrap.Tab(document.getElementById('payment-tab'));
             paymentTab.show();
         });
+        document.getElementById('toSenderTab').addEventListener('click', function() {
+            const paymentTab = new bootstrap.Tab(document.getElementById('send-tab'));
+            paymentTab.show();
+        });
 
-        document.getElementById('toPaymentTabBack').addEventListener('click', function() {
+        document.getElementById('toPaymentTabBackTwo').addEventListener('click', function() {
             const paymentTab = new bootstrap.Tab(document.getElementById('payment-tab'));
+            paymentTab.show();
+        });
+
+        document.getElementById('toSendTabBack').addEventListener('click', function() {
+            const paymentTab = new bootstrap.Tab(document.getElementById('send-tab'));
             paymentTab.show();
         });
 

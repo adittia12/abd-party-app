@@ -137,17 +137,20 @@
                                         <tfoot class="bg-light">
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Total Pengeluaran</td>
-                                                <td class="text-right text-danger" id="totalExpend">Rp 0</td>
+                                                <td class="text-right text-danger">Rp
+                                                    {{ number_format($totalExpend, 0, ',', '.') }}</td>
                                                 <td colspan="2"></td>
                                             </tr>
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Budget</td>
-                                                <td class="text-right text-success" id="displayBudget">Rp 0</td>
+                                                <td class="text-right text-success">Rp
+                                                    {{ number_format($budget, 0, ',', '.') }}</td>
                                                 <td colspan="2"></td>
                                             </tr>
                                             <tr class="font-weight-bold">
                                                 <td colspan="2" class="text-right">Sisa Pemasukkan</td>
-                                                <td class="text-right text-primary" id="remainingIncome">Rp 0</td>
+                                                <td class="text-right text-primary">Rp
+                                                    {{ number_format($remainingIncome, 0, ',', '.') }}</td>
                                                 <td colspan="2"></td>
                                             </tr>
                                         </tfoot>
@@ -167,7 +170,7 @@
 @endsection
 
 
-@section('script')
+{{-- @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let totalExpend = 0;
@@ -207,4 +210,4 @@
             return "Rp " + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
     </script>
-@endsection
+@endsection --}}

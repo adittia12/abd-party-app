@@ -55,12 +55,13 @@
 </script>
 <script>
     let rowIdx = 1;
-    $("#addBtn").on("click", function() {
-        $("#transaksiOrder tbody").append(`
-        <tr id="R${++rowIdx}">
-            <td class="row-index text-center"><p>${rowIdx}</p></td>
+
+    function generateRow(rowIndex) {
+        return `
+        <tr id="R${rowIndex}">
+            <td class="row-index text-center"><p>${rowIndex}</p></td>
             <td>
-                <select name="id_product[]" id="id_product" class="productSearch select2 @error('id_product.*') is-invalid @enderror" style="width: 100%">
+                <select name="id_product[]" class="productSearch select2 @error('id_product.*') is-invalid @enderror" style="width: 100%">
                     <option value="">Select Product (Barang)</option>
                     @foreach ($dataProduct as $item)
                         <option value="{{ $item->id }}">
@@ -69,56 +70,50 @@
                     @endforeach
                 </select>
                 @if ($errors->has('id_product.*'))
-                    <span
-                        class="text-danger text-sm">{{ $errors->first('id_product.*') }}</span>
+                    <span class="text-danger text-sm">{{ $errors->first('id_product.*') }}</span>
                 @endif
             </td>
             <td>
-                <input type="text" name="description[]" id="description"
-                    value="{{ old('description[]') }}" placeholder="Ketik Deskripsi"
+                <input type="text" name="description[]" value="{{ old('description[]') }}" placeholder="Ketik Deskripsi"
                     class="@error('description.*') is-invalid @enderror">
                 @if ($errors->has('description.*'))
-                    <span
-                        class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
+                    <span class="text-danger text-sm">{{ $errors->first('description.*') }}</span>
                 @endif
             </td>
-            <td hidden>
-                <input type="number" name="days[]" id="days" placeholder="Hari">
-            </td>
+            <td hidden><input type="number" name="days[]" placeholder="Hari"></td>
             <td>
-                <input type="number" name="qty[]" id="qty"
-                    value="{{ old('qty[]') }}"
-                    class="@error('qty.*') is-invalid @enderror"
+                <input type="number" name="qty[]" value="{{ old('qty[]') }}" class="@error('qty.*') is-invalid @enderror"
                     placeholder="Quantity" style="width: 100px;">
                 @if ($errors->has('qty.*'))
-                    <span
-                        class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
+                    <span class="text-danger text-sm">{{ $errors->first('qty.*') }}</span>
                 @endif
             </td>
-            <td hidden>
-                <input type="text" name="measure_list[]" id="measure_list" placeholder="Jenis Satuan">
-            </td>
+            <td hidden><input type="text" name="measure_list[]" placeholder="Jenis Satuan"></td>
             <td>
-                <input type="number" name="price[]" id="price"
-                    class="@error('price.*') is-invalid @enderror"
+                <input type="number" name="price[]" class="@error('price.*') is-invalid @enderror"
                     placeholder="Ketik harga" style="width: 150px;">
                 @if ($errors->has('price.*'))
-                    <span
-                        class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
+                    <span class="text-danger text-sm">{{ $errors->first('price.*') }}</span>
                 @endif
             </td>
-            <td>
-                <input type="text" name="total_harga" placeholder="Jumlah Harga" style="width: 150px;" readonly>
-            </td>
-            <td>
-                <a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a>
-            </td>
-        </tr>`);
+            <td><input type="text" name="total_harga" placeholder="Jumlah Harga" style="width: 150px;" readonly></td>
+            <td><a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a></td>
+        </tr>`;
+    }
+
+    $("#addBtn").on("click", function() {
+        let jumlah = parseInt($("#jumlahBaris").val()) || 1;
+        for (let i = 0; i < jumlah; i++) {
+            $("#transaksiOrder tbody").append(generateRow(++rowIdx));
+        }
+
+        // Initialize select2 again
         $(".productSearch").select2({
             allowClear: true
         });
     });
 
+    // Delete Row
     $("#transaksiOrder tbody").on("click", ".remove", function() {
         var child = $(this).closest("tr").nextAll();
         child.each(function() {
@@ -132,6 +127,7 @@
         rowIdx--;
     });
 </script>
+
 
 <script>
     document.getElementById('start_event').addEventListener('change', function() {

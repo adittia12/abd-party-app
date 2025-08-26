@@ -1,3 +1,9 @@
+<div class="d-flex align-items-center mb-2">
+    <input type="number" id="jumlahBaris" value="1" min="1" style="width: 80px;"
+        class="form-control form-control-sm mr-2">
+    <button type="button" class="btn btn-success btn-sm" id="addBtn">Add Row</button>
+</div>
+
 <table class="table table-hover table-striped" id="transaksiOrder">
     <thead class="thead-light">
         <tr>

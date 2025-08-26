@@ -251,6 +251,8 @@ namespace App\Models{
  * @property string|null $status_driver
  * @property string|null $date_driver
  * @property string|null $payment_type
+ * @property string|null $sender_name
+ * @property string|null $demolition_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Orders newModelQuery()
@@ -262,6 +264,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDateDriver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDatePasang($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDeliveryAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDemolitionName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDescriptPayment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDiscountRate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereDp($value)
@@ -280,6 +283,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePaymentType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePembayaran($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders wherePriceList($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Orders whereSenderName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStartEvent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStatusDriver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereStatusOrder($value)
@@ -288,6 +292,25 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Orders whereWarehouse($value)
  */
 	class Orders extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $month_period
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod whereMonthPeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayrollPeriod whereUpdatedAt($value)
+ */
+	class PayrollPeriod extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -433,6 +456,41 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TransactionOperational whereUpdatedAt($value)
  */
 	class TransactionOperational extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $id_periode_pay
+ * @property int $id_employe
+ * @property int|null $id_trans_operational_kasbon
+ * @property int|null $payroll
+ * @property int|null $another_piece
+ * @property string|null $desc_payroll
+ * @property string|null $list_payroll
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Employes $employe
+ * @property-read \App\Models\Groupss|null $group
+ * @property-read \App\Models\TransactionOperational|null $operational
+ * @property-read \App\Models\PayrollPeriod $periode
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereAnotherPiece($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereDescPayroll($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereIdEmploye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereIdPeriodePay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereIdTransOperationalKasbon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereListPayroll($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls wherePayroll($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TransactionPayrolls whereUpdatedAt($value)
+ */
+	class TransactionPayrolls extends \Eloquent {}
 }
 
 namespace App\Models{

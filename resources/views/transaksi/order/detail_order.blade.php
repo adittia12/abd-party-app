@@ -44,18 +44,32 @@
                                     </div>
                                 @endif
                                 @if ($order->status_order == 'Sudah Ok' || $order->status_order == 'Invoice' || $order->status_order == 'Lunas')
-                                    {{-- @elseif ($order->status_order == 'Invoice' || $order->status_order == 'Lunas' || $order->status_driver == 'Surat Kembali') --}}
+                                    {{-- Tombol Surat Jalan --}}
                                     <div class="p-1">
-                                        <a href="{{ route('order.suratJalan', Crypt::encrypt($order->id)) }}"
-                                            class="btn btn-warning" target="_blank">
-                                            <i class="fas fa-print"></i> Surat Jalan
-                                        </a>
+                                        @if (!$order->sender_name)
+                                            <button class="btn btn-warning" onclick="openModalJalan({{ $order->id }})">
+                                                <i class="fas fa-print"></i> Surat Jalan
+                                            </button>
+                                        @else
+                                            <a href="{{ route('order.suratJalan', Crypt::encrypt($order->id)) }}"
+                                                class="btn btn-warning" target="_blank">
+                                                <i class="fas fa-print"></i> Surat Jalan
+                                            </a>
+                                        @endif
                                     </div>
+
+                                    {{-- Tombol Surat Kembali --}}
                                     <div class="p-1">
-                                        <a href="{{ route('order.suratKembali', Crypt::encrypt($order->id)) }}"
-                                            class="btn btn-success" target="_blank">
-                                            <i class="fas fa-print"></i> Surat Kembali
-                                        </a>
+                                        @if (!$order->demolition_name)
+                                            <button class="btn btn-success" onclick="openModalKembali({{ $order->id }})">
+                                                <i class="fas fa-print"></i> Surat Kembali
+                                            </button>
+                                        @else
+                                            <a href="{{ route('order.suratKembali', Crypt::encrypt($order->id)) }}"
+                                                class="btn btn-success" target="_blank">
+                                                <i class="fas fa-print"></i> Surat Kembali
+                                            </a>
+                                        @endif
                                     </div>
                                 @else
                                     <div class="p-1">
@@ -76,4 +90,25 @@
             </div>
         </section>
     </section>
+
+    @include('transaksi.order.components.add_order.modal_surat_kembali')
+    @include('transaksi.order.components.add_order.modal_surat_jalan')
+
+@section('script')
+    <script>
+        function openModalJalan(orderId) {
+            document.getElementById('orderIdJalan').value = orderId;
+            var modal = new bootstrap.Modal(document.getElementById('modalJalan'));
+            modal.show();
+        }
+
+        function openModalKembali(orderId) {
+            document.getElementById('orderIdKembali').value = orderId;
+            var modal = new bootstrap.Modal(document.getElementById('modalKembali'));
+            modal.show();
+        }
+    </script>
+
+    </script>
+@endsection
 @endsection
