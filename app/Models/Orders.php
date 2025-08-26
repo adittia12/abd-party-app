@@ -37,7 +37,9 @@ class Orders extends Model
         'status_order',
         'status_driver',
         'date_driver',
-        'payment_type'
+        'payment_type',
+        'sender_name',
+        'demolition_name',
     ];
 
     protected $hidden = [

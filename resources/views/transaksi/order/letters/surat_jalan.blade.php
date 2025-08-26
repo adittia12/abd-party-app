@@ -54,6 +54,11 @@
                         <input type="hidden" name="id" value="{{ Crypt::encrypt($cetakOrder->id) }}">
                         <div class="section-title "><b class="text-info-jalan">Surat Jalan</b></div>
                         <div class="section-title text-info-jalan">Order : <b>{{ $cetakOrder->order_number }}</b></div>
+                        @if ($cetakOrder->sender_name)
+                            <div class="section-title text-info-jalan">Nama Pengirim :
+                                <b>{{ $cetakOrder->sender_name }}</b>
+                            </div>
+                        @endif
                         <small class="text-info-jalan"><b>Berikut kami kirimkan barang - barang tersebut dibawah sebagai
                                 berikut :</b></small>
                     </div>
@@ -115,6 +120,8 @@
                                             <b>Pengirim</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -124,6 +131,8 @@
                                             <b>Penerima</b>
                                         </p>
                                         <br>
+                                        <br>
+                                        <br>
                                         <p>____________________</p>
                                     </div>
                                 </td>
@@ -132,6 +141,8 @@
                                         <p>
                                             <b>Hormat kami</b>
                                         </p>
+                                        <br>
+                                        <br>
                                         <br>
                                         <p>(Abdul Basit)</p>
                                     </div>

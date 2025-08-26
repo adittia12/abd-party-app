@@ -14,16 +14,32 @@
 
         <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative"
             data-aos="zoom-out">
+
             <img src="{{ asset('admin/assets/img/logo_abd-removebg-preview.png') }}" width="380px" class="img-fluid animated"
                 alt="">
+
             <h1>Welcome to <span>ABD-KAUM</span></h1>
-            <p>ABD Rental merupakan perusahaan jasa yang bergerak di bidang sewa tenda, dekorasi, wedding organizer,
+
+            <p>
+                ABD Rental merupakan perusahaan jasa yang bergerak di bidang sewa tenda, dekorasi, wedding organizer,
                 sewa kursi, dan sewa alat pesta lainnya. Berdiri di Karawang, Jawa Barat, sejak 1985, kami secara konsisten
                 mengembangkan usaha dengan totalitas. Alhamdulillah, kerja keras kami berbuah manis, ditandai dengan adanya
-                peningkatan pada jumlah pengguna jasa kami hingga saat ini.</p>
+                peningkatan pada jumlah pengguna jasa kami hingga saat ini.
+            </p>
+
+            <!-- Tombol Link ke Company Profile (Google Slides) -->
+            <a href="https://docs.google.com/presentation/d/e/2PACX-1vTGrPhakQI2o6rWPEjfMsmzEY7v89Iw5Mp5lNZZZDnEAZ6w16p5H07KH_I1kWY7x3uqEPKW8tRsXRml/pub?start=false&loop=false&delayms=3000"
+                target="_blank" rel="noopener noreferrer"
+                class="btn btn-lg btn-gradient-primary d-inline-flex align-items-center gap-2 mt-4 shadow-sm"
+                style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; border: none; border-radius: 50px; padding: 12px 24px; transition: all 0.3s ease;">
+                <i class="fas fa-file-powerpoint"></i>
+                <span>Lihat Company Profile</span>
+            </a>
+
         </div>
 
     </section><!-- /Hero Section -->
+
 
     <!-- About Section -->
     <section id="about" class="about section">

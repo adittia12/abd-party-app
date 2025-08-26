@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="filterData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Filter Data</h5>
@@ -20,6 +20,11 @@
                         <label for="">Filter Tanggal Berdasarkan Tanggal Acara</label>
                         <input type="date" class="form-control" id="filterDate" name="filterDate"
                             aria-describedby="filterDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Filter Tanggal Order</label>
+                        <input type="date" class="form-control" id="filterOrderDate" name="filterOrderDate"
+                            aria-describedby="filterOrderDate">
                     </div>
                 </div>
                 <div class="modal-footer">

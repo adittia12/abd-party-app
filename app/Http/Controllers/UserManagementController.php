@@ -16,7 +16,7 @@ class UserManagementController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->role_name == 'Admin') {
+        if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Administrator Developer') {
             $result = DB::table('users')->get();
             $role_name = DB::table('role_type_users')->get();
             $status_user = DB::table('user_types')->get();
@@ -30,7 +30,7 @@ class UserManagementController extends Controller
     public function activityLog()
     {
         $activityLog = DB::table('user_activity_logs')->orderBy('id', 'desc')->get();
-        return view('admin.activity_user.user_activity_log',compact('activityLog'));
+        return view('admin.activity_user.user_activity_log', compact('activityLog'));
     }
 
     public function activityLogInLogOut()
@@ -103,19 +103,15 @@ class UserManagementController extends Controller
             $todayDate = $dt->toDayDateTimeString();
             $image_name = $request->hidden_image;
             $image = $request->file('images');
-            if($image_name =='avatar-1.png')
-            {
-                if($image != '')
-                {
+            if ($image_name == 'avatar-1.png') {
+                if ($image != '') {
                     $image_name = rand() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('/admin/assets/img/avatar/'), $image_name);
                 }
-            }
-            else{
+            } else {
 
-                if($image != '')
-                {
-                    unlink('admin/assets/img/avatar/'.$image_name);
+                if ($image != '') {
+                    unlink('admin/assets/img/avatar/' . $image_name);
                     $image_name = rand() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('/admin/assets/img/avatar/'), $image_name);
                 }

@@ -76,60 +76,76 @@
             $row.find('input[name="new_total_harga[]"]').val(formatRupiah(totalHarga));
         }
 
-        // Add new row for transaction
+        // Add new rows based on input
         $("#addBtn").on("click", function() {
+            var count = parseInt($("#rowCountInput").val()) || 1; // Default 1 if empty or invalid
+            for (let i = 0; i < count; i++) {
+                addNewRow();
+            }
+            updateRowNumbers(); // Update numbering after adding
+        });
+
+        // Fungsi untuk menambahkan 1 baris
+        function addNewRow() {
             var newRow = `
-                <tr>
-                    <td class="row-index">${$('#transaksiOrder tbody tr').length + 1}</td>
-                    <td>
-                        <select name="new_id_product[]" class="product_search select2">
-                            <option value="">Select Product (Barang)</option>
-                            @foreach ($dataProduct as $item)
-                                <option value="{{ $item->id }}">
-                                    ({{ $item->inter_ref }}) - {{ $item->name_product }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('new_id_product.*')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <input type="text" name="new_description[]" value="{{ old('new_description[]') }}" placeholder="Ketik Deskripsi" class="@error('new_description.*') is-invalid @enderror">
-                        @error('new_description.*')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td hidden>
-                        <input type="number" name="new_days[]" placeholder="Hari">
-                    </td>
-                    <td>
-                        <input type="number" name="new_qty[]" value="{{ old('new_qty[]') }}" class="@error('new_qty.*') is-invalid @enderror" style="width: 50px" placeholder="Quantity">
-                        @error('new_qty.*')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td hidden>
-                        <input type="text" name="new_measure_list[]" placeholder="Jenis Satuan">
-                    </td>
-                    <td>
-                        <input type="number" name="new_price[]" class="@error('new_price.*') is-invalid @enderror" style="width: 120px" placeholder="Ketik harga">
-                        @error('new_price.*')
-                            <span class="text-danger text-sm">{{ $message }}</span>
-                        @enderror
-                    </td>
-                    <td>
-                        <input type="text" name="new_total_harga[]" placeholder="Jumlah Harga" style="width: 150px" readonly>
-                    </td>
-                    <td>
-                        <a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a>
-                    </td>
-                </tr>`;
+        <tr>
+            <td class="row-index">${$('#transaksiOrder tbody tr').length + 1}</td>
+            <td>
+                <select name="new_id_product[]" class="product_search select2">
+                    <option value="">Select Product (Barang)</option>
+                    @foreach ($dataProduct as $item)
+                        <option value="{{ $item->id }}">
+                            ({{ $item->inter_ref }}) - {{ $item->name_product }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('new_id_product.*')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </td>
+            <td>
+                <input type="text" name="new_description[]" value="{{ old('new_description[]') }}" placeholder="Ketik Deskripsi" class="@error('new_description.*') is-invalid @enderror">
+                @error('new_description.*')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </td>
+            <td hidden>
+                <input type="number" name="new_days[]" placeholder="Hari">
+            </td>
+            <td>
+                <input type="number" name="new_qty[]" value="{{ old('new_qty[]') }}" class="@error('new_qty.*') is-invalid @enderror" style="width: 50px" placeholder="Quantity">
+                @error('new_qty.*')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </td>
+            <td hidden>
+                <input type="text" name="new_measure_list[]" placeholder="Jenis Satuan">
+            </td>
+            <td>
+                <input type="number" name="new_price[]" class="@error('new_price.*') is-invalid @enderror" style="width: 120px" placeholder="Ketik harga">
+                @error('new_price.*')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </td>
+            <td>
+                <input type="text" name="new_total_harga[]" placeholder="Jumlah Harga" style="width: 150px" readonly>
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="btn btn-danger remove btn-sm" title="Remove">Delete</a>
+            </td>
+        </tr>`;
             $("#transaksiOrder tbody").append(newRow);
             $(".product_search").select2({
                 allowClear: true
             });
-        });
+        }
+
+        function updateRowNumbers() {
+            $('#transaksiOrder tbody tr').each(function(index) {
+                $(this).find('.row-index').text(index + 1);
+            });
+        }
+
 
         // Delete new row
         $("#transaksiOrder tbody").on("click", ".remove", function() {

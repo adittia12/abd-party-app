@@ -14,6 +14,7 @@ use App\Http\Requests\Transasksi\OrderUpdateRequest;
 use App\Models\Invoices;
 use Auth;
 use Carbon\Carbon;
+use Crypt;
 use Illuminate\Support\Facades\Session;
 use PDF;
 
@@ -23,6 +24,7 @@ class OrderController extends Controller
     {
         $filterMonth = $request->input('filteringMonth');
         $filterDate = $request->input('filterDate');
+        $filterOrderDate = $request->input('filterOrderDate');
         $perPage = $request->input('per_page', 10); // Default 10 jika tidak ada input
 
         $datasetOrder = Orders::when($request->input('q'), function ($query, $q) {
@@ -51,9 +53,26 @@ class OrderController extends Controller
             $filterDate = date('Y-m-d', strtotime($filterDate));
             $datasetOrder->whereDate('start_event', $filterDate);
         }
+        if ($filterOrderDate) {
+            $filterOrderDate = date('Y-m-d', strtotime($filterOrderDate));
+            $datasetOrder->whereDate('tgl_order', $filterOrderDate);
+        }
+
+        $dataChartOrder = Orders::selectRaw('DATE(tgl_order) as tanggal, COUNT(*) as total_order')
+            ->where('status_order', '!=', 'Order Cancel') // Tambahkan pengecualian cancel
+            ->groupBy(DB::raw('DATE(tgl_order)'))
+            ->orderBy('tanggal', 'desc')
+            ->limit(13)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tanggal' => Carbon::parse($item->tanggal)->translatedFormat('d F Y'), // hasil: 07 Agustus 2025
+                    'total_order' => $item->total_order,
+                ];
+            });
 
         // Ambil data order yang dipaginate
-        $orderData = $datasetOrder->orderBy('start_event', 'asc')->paginate($perPage);
+        $orderData = $datasetOrder->orderBy('start_event', 'desc')->paginate($perPage);
 
         // Ambil data transaksi terkait setiap order
         foreach ($orderData as $order) {
@@ -77,7 +96,7 @@ class OrderController extends Controller
             $order->sisa_tagihan = $totalTagihan - $diskon - $dp - $lunas + $pajakPph + $pajakPpn;
         }
 
-        return view('transaksi.order.index', compact('orderData', 'filterMonth'));
+        return view('transaksi.order.index', compact('orderData', 'filterMonth', 'dataChartOrder'));
     }
 
     public function billPayment(Request $request)
@@ -154,6 +173,8 @@ class OrderController extends Controller
                 'status_driver'   => $request['status_driver'],
                 'date_driver'   => $request['date_driver'],
                 'payment_type'   => $request['payment_type'],
+                'sender_name' => $request['sender_name'],
+                'demolition_name' => $request['demolition_name']
             ]);
 
             if ($order && $order->status_order == 'Invoice' || $order->status_order == 'Lunas') {
@@ -299,6 +320,8 @@ class OrderController extends Controller
                 'status_driver' => $request->status_driver,
                 'date_driver' => $request->date_driver,
                 'payment_type' => $request->payment_type,
+                'sender_name' => $request->sender_name,
+                'demolition_name' => $request->demolition_name,
             ]);
 
             if ($order && $order->status_order == 'Invoice') {
@@ -451,6 +474,37 @@ class OrderController extends Controller
             return redirect()->back();
         }
     }
+
+    public function updateSenderJalan(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'sender_name' => 'required|string',
+        ]);
+
+        $order = Orders::findOrFail($request->order_id);
+        $order->update([
+            'sender_name' => $request->sender_name,
+        ]);
+
+        return redirect()->route('order.suratJalan', Crypt::encrypt($order->id));
+    }
+
+    public function updateSenderKembali(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'demolition_name' => 'required|string',
+        ]);
+
+        $order = Orders::findOrFail($request->order_id);
+        $order->update([
+            'demolition_name' => $request->demolition_name,
+        ]);
+
+        return redirect()->route('order.suratKembali', Crypt::encrypt($order->id));
+    }
+
 
     public function suratJalan($id)
     {

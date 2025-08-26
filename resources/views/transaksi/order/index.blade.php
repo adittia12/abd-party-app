@@ -11,11 +11,17 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    {{-- Chart Section Modern --}}
+                    <div class="card shadow-sm mb-4 border-0">
+                        <div class="card-header bg-white border-0">
+                            <h4 class="mb-0 text-primary">📊 Statistik Order per Tanggal</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="ordersChart" height="65"></canvas>
+                        </div>
+                    </div>
                     <div class="card-header mt-2">
                         <div class="row align-items-center">
-                            <div class="col">
-                                <h3 class="">Order list</h3>
-                            </div>
                             <div class="col-auto float-right ml-auto">
                                 <a href="{{ route('order.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add
                                     Order</a>
@@ -95,7 +101,9 @@
                                                             <span
                                                                 class="badge badge-secondary">{{ $item->status_order }}</span>
                                                         </div>
-                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                        @if (Auth::user()->role_name == 'Admin' ||
+                                                                Auth::user()->role_name == 'Super Admin' ||
+                                                                Auth::user()->role_name == 'Administrator Developer')
                                                             <div class="p-1">
                                                                 <form action="{{ route('order.approve_ok') }}"
                                                                     method="POST">
@@ -131,7 +139,9 @@
                                                             <span
                                                                 class="badge badge-primary">{{ $item->status_order }}</span>
                                                         </div>
-                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                        @if (Auth::user()->role_name == 'Admin' ||
+                                                                Auth::user()->role_name == 'Super Admin' ||
+                                                                Auth::user()->role_name == 'Administrator Developer')
                                                             <div class="p-2">
                                                                 <form action="{{ route('order.approve_invoice') }}"
                                                                     method="POST">
@@ -149,7 +159,9 @@
                                                         <div class="p-1">
                                                             <span class="badge badge-info">{{ $item->status_order }}</span>
                                                         </div>
-                                                        @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Super Admin')
+                                                        @if (Auth::user()->role_name == 'Admin' ||
+                                                                Auth::user()->role_name == 'Super Admin' ||
+                                                                Auth::user()->role_name == 'Administrator Developer')
                                                             <div class="p-1">
                                                                 <button type="button"
                                                                     class="btn btn-danger btn-sm rounded-full"
@@ -223,22 +235,24 @@
                                                                             @disabled(true)><i
                                                                                 class="fas fa-pen-square"></i>
                                                                             Edit</a></li>
-                                                                @elseif (Auth::user()->role_name == 'Admin')
+                                                                @elseif (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Administrator Developer')
                                                                     <li><a class="dropdown-item"
                                                                             href="{{ route('order.edit', $item->id) }}"><i
                                                                                 class="fas fa-pen-square"></i>
                                                                             Edit</a></li>
                                                                 @endif
-                                                                <form action="{{ route('order.destroy', $item->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <li><a type="button"
-                                                                            class="dropdown-item delete-button"
-                                                                            data-id-order="{{ $item->id }}"><i
-                                                                                class="fas fa-trash"></i>
-                                                                            Delete</a></li>
-                                                                </form>
+                                                                @if (Auth::user()->role_name == 'Admin' || Auth::user()->role_name == 'Administrator Developer')
+                                                                    <form action="{{ route('order.destroy', $item->id) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <li><a type="button"
+                                                                                class="dropdown-item delete-button"
+                                                                                data-id-order="{{ $item->id }}"><i
+                                                                                    class="fas fa-trash"></i>
+                                                                                Delete</a></li>
+                                                                    </form>
+                                                                @endif
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -261,5 +275,6 @@
     @include('transaksi.order.components.modal_bill_payment')
 @section('script')
     @include('transaksi.order.components.script_order')
+    @include('transaksi.order.components.script_char_orderdata')
 @endsection
 @endsection
