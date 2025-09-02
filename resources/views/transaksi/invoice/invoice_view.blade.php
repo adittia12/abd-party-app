@@ -48,6 +48,7 @@
                                             Mandiri : 1730020030095<br>
                                         @else
                                             Mandiri : 1730043222224<br>
+                                            BCA :1093126801 <br>
                                         @endif
                                         <a href="abdulbasitabdkaum1@gmail.com">abdulbasitabdkaum1@gmail.com</a>
                                     </address>
