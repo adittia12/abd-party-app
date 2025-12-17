@@ -17,6 +17,9 @@
 -   Graphic Base Reporting
 -   Transaction Invoice by digital
 -   Proses Approvel Order product
+-   Laporan Tagihan
+-   Transaksi Operasional harian
+-   Proses Payroll
 -   Export
 
 # Storage Setting Company Profile
