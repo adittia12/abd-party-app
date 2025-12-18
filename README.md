@@ -29,7 +29,9 @@
 ## 🛠 Teknologi
 
 -   [Laravel v10](https://laravel.com/docs/10.x)
+-   [PHP](https://www.php.net/)
 -   [Bootstrap](https://getbootstrap.com/)
+-   [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 Untuk menjalankan aplikasi ini, sistem minimal yang dibutuhkan adalah sebagai berikut:
 
